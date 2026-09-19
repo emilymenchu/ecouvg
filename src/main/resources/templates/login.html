@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | EcoUVG</title>
+</head>
+
+<body>
+
+    <main>
+
+        <h1>EcoUVG</h1>
+
+        <h2>Iniciar sesión</h2>
+
+        <div th:if="${param.error}">
+            <p>
+                Carné o contraseña incorrectos.
+            </p>
+        </div>
+
+        <div th:if="${param.logout}">
+            <p>
+                Sesión cerrada correctamente.
+            </p>
+        </div>
+
+        <form th:action="@{/login}"
+              method="post">
+
+            <div>
+                <label for="carnet">
+                    Carné
+                </label>
+
+                <input
+                    type="text"
+                    id="carnet"
+                    name="carnet"
+                    required
+                    autocomplete="username"
+                    maxlength="20">
+            </div>
+
+            <div>
+                <label for="contrasena">
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="contrasena"
+                    name="contrasena"
+                    required
+                    autocomplete="current-password">
+            </div>
+
+            <button type="submit">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>

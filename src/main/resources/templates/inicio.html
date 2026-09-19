@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio | EcoUVG</title>
+</head>
+
+<body>
+
+    <h1>Bienvenido a EcoUVG</h1>
+
+    <p>Has iniciado sesión correctamente.</p>
+
+    <a th:href="@{/residuos}">
+        Ver residuos
+    </a>
+
+    <form th:action="@{/logout}"
+          method="post">
+
+        <button type="submit">
+            Cerrar sesión
+        </button>
+
+    </form>
+
+</body>
+
+</html>
