@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
+
     <meta charset="UTF-8">
     <title>Residuos</title>
 </head>
 <body>
+    <main class="contenedor">
     <h1>Guía de residuos</h1>
 
     <form class="buscador" th:action="@{/residuos/buscar}" method="get">
+        <div class="campo-busqueda">
         <label for="nombre">
             Busqueda de residuo
         </label>
 
         <input id="nombre" name="nombre" type="text" placeholder="Ej: Botella de plástico" required>
+        </div>
+
         <button type="submit">
             Buscar
         </button>
     
     </form>
 
-    <p th:if="${#list.isEmpty(residuos)}">
+    <p class="lista-vacia" th:if="${#lists.isEmpty(residuos)}">
         No existen residuos en el registro. 
     </p>
 
-    <div th:each="residuo : ${residuos}">
+    <div class="lista-residuos">
+        <article class="area-residuo" th:each="residuo : ${residuos}">
         <h2 th:text="${residuo.nombre}">Nombre del residuo</h2>
         <p>
             Tipo:
@@ -41,12 +48,12 @@
             <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
         </p>
 
-        <a th:href=" @{/residuos/buscar(nombre=${residuo.nombre})}">
+        <a class="boton" th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
              Ver detalle
         </a>
-    
-        <hr>
+        </article>
 
     </div>
+</main>
 </body>
 </html>
