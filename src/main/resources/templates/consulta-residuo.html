@@ -5,32 +5,20 @@
     <title>Residuos</title>
 </head>
 <body>
-    <h1>Guía de residuos</h1>
-
-    <form class="buscador" th:action="@{/residuos/buscar}" method="get">
-        <label for="nombre">
-            Busqueda de residuo
-        </label>
-
-        <input id="nombre" name="nombre" type="text" placeholder="Ej: Botella de plástico" required>
-        <button type="submit">
-            Buscar
-        </button>
-    
-    </form>
+    <h1>Consulta de residuos</h1>
 
     <p th:if="${#list.isEmpty(residuos)}">
         No existen residuos en el registro. 
     </p>
-
-    <div th:each="residuo : ${residuos}">
+    
+    <div th:each="residuo : ${residuo}">
         <h2 th:text="${residuo.nombre}">Nombre del residuo</h2>
         <p>
             Tipo:
             <span th:text="${residuo.tipo}">Tipo</span>
         </p>
         <p th:text="${residuo.descripcion}">
-            Descripción
+            Descripción:
         </p>
         <p>
             Instrucciones:
@@ -40,13 +28,10 @@
             ¿Es reciclable?:
             <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
         </p>
-
-        <a th:href=" @{/residuos/buscar(nombre=${residuo.nombre})}">
-             Ver detalle
+        <a href="@{/residuos}">
+            Volver a la lista de residuos
         </a>
-    
         <hr>
-
     </div>
 </body>
 </html>
