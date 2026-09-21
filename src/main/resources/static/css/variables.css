@@ -1,0 +1,20 @@
+:root {
+    --verde-oscuro: #123c2f;
+    --verde: #1f6b4f;
+    --verde-medio: #2e8b68;
+    --verde-claro: #93d5b8;
+
+    --fondo: #f8faf9;
+    --blanco: #ffffff;
+
+    --texto: #18211e;
+    --texto-gris: #66736e;
+
+    --borde: #d9e1de;
+
+    --fondo-error: #fff0f0;
+    --texto-error: #a52a2a;
+
+    --fondo-exito: #eaf8f0;
+    --texto-exito: #26734d;
+}
