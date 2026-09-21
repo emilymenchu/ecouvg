@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
+
+    <meta charset="UTF-8">
+    <title>Residuos</title>
+</head>
+<body>
+    <main class="mensaje-error">
+    <h1>No se ha encontrado el residuo consultado</h1>
+
+    <p>
+        Por favor vuelva a la lista.
+    </p>
+
+    <a class= "boton" th:href="@{/residuos}">
+        Volver a la lista de residuos
+    </a>
+    </main>
+
+</body>
+</html>
