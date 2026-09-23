@@ -1,31 +1,91 @@
+</html>
 <!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <link rel="stylesheet" href="/css/inicio.css" th:href="@{/css/inicio.css}">
+
     <meta charset="UTF-8">
     <title>Inicio | EcoUVG</title>
+
 </head>
-
 <body>
+    <header class="encabezado">
+        <div class="barra">
+            <a class="marca" th:href="@{/inicio}" aria-current="page">
+                Eco<span>UVG</span>
+            </a>
 
-    <h1>Bienvenido a EcoUVG</h1>
+            <!-- Conserva el cierre de sesión de tu página original. -->
+            <form class="sesion" th:action="@{/logout}" method="post">
+                <button class="boton-salir" type="submit">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </header>
 
-    <p>Has iniciado sesión correctamente.</p>
+    <main>
+        <section class="bienvenida" aria-labelledby="titulo-inicio">
+            <div>
+                <p class="etiqueta">PEQUEÑAS ACCIONES, GRANDES CAMBIOS</p>
+                <h1 id="titulo-inicio">¡Bienvenido a EcoUVG!</h1>
+                <p class="descripcion">
+                    Ayuda al planeta hoy. Aprende a clasificar tus
+                    residuos y encuentra dónde llevarlos.
+                </p>
+            </div>
 
-    <a th:href="@{/residuos}">
-        Ver residuos
-    </a>
+            <span class="mascota" aria-hidden="true">🐢</span>
+        </section>
 
-    <form th:action="@{/logout}"
-          method="post">
+        <h2 class="titulo-seccion" id="titulo-opciones">
+            ¿Por dónde quieres empezar?
+        </h2>
+        <p class="introduccion">
+            Cada paso cuenta para cuidar nuestra comunidad.
+        </p>
 
-        <button type="submit">
-            Cerrar sesión
-        </button>
+        <section class="tarjetas" aria-labelledby="titulo-opciones">
+            <article class="tarjeta">
+                <span class="icono" aria-hidden="true">♻️</span>
+                <h3>Guía de residuos</h3>
+                <p>
+                    Consulta los residuos y descubre cómo
+                    clasificarlos y manejarlos correctamente.
+                </p>
 
-    </form>
+                <a class="boton" th:href="@{/residuos}">
+                    Ver residuos →
+                </a>
+            </article>
 
+            <article class="tarjeta">
+                <span class="icono" aria-hidden="true">📍</span>
+                <h3>Centros de reciclaje</h3>
+                <p>
+                    Próximamente podrás consultar ubicaciones,
+                    horarios y materiales aceptados.
+                </p>
+
+                <!-- Sustituir por un enlace cuando exista la ruta de centros. -->
+                <button class="boton" type="button" disabled>
+                    Próximamente
+                </button>
+            </article>
+        </section>
+
+        <aside class="mensaje" aria-label="Recordatorio">
+            <p>
+                <strong>Tu aporte importa.</strong>
+                Consulta cómo manejar cada residuo antes de desecharlo.
+            </p>
+        </aside>
+    </main>
+
+    <footer>
+        EcoUVG · Construyamos una comunidad más verde.
+    </footer>
 </body>
-
 </html>
