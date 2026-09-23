@@ -23,7 +23,10 @@ public class ProgresoReto {
         this.usuario = usuario; 
         this.reto = reto; 
     }
-
+    public Long getId() {
+        return id; 
+    }
+    
     public Usuario getUsuario(){
         return usuario; 
     }
