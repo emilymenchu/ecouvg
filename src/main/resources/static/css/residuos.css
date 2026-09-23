@@ -1,11 +1,16 @@
 * {
     box-sizing: border-box;
+
+}
+html,
+body {
+    width: 100%;
+    margin: 0;
 }
 
 body {
     font-family: 'Arial' serif;
     background-color: #9ac8b0;
-    margin: 0;
     padding: 20px;
 }
 
@@ -21,9 +26,9 @@ h2{
 }
 
 .contenedor{
-    width: 100%;
-    max-width: 1050px;
-    margin: 0; 
+    width: min (100%, 1020px);
+    max-width: none;
+    margin: 0 auto; 
 }
 
 .buscador {
@@ -31,7 +36,7 @@ h2{
     align-items: end;
     gap: 20px; 
     background-color: whitesmoke;
-    max-width: 700px; 
+    max-width: 900px; 
     margin: 0 auto 25px; 
     padding: 12px;
     border-radius: 10px;
@@ -59,13 +64,14 @@ h2{
 
 .campo-busqueda input:focus {
     border-color: rgba(98, 202, 98, 0.623);
-    outline: 2px solid palegreen;
+    outline: 4px solid palegreen;
 }
 
 
 .lista-residuos {
     display: grid ;
-    grid-template-columns: minmax(100px, 1fr);
+    grid-template-columns: minmax(0, 900px);
+    justify-content: center;
     gap: 20px
 }
 
@@ -73,6 +79,8 @@ h2{
     background-color: whitesmoke;
     padding: 20px; 
     border-radius: 10px;
+    width: 900px;
+
     box-shadow:0 3px 10px #4cab7821 ;
 }
 
@@ -88,8 +96,8 @@ h2{
 
 .detalle-residuo, .mensaje-error {
     background-color: whitesmoke;
-    max-width: 700px;
-    margin: 50px ;
+    max-width: 900px;
+    margin: 50px auto ;
     padding: 30px; 
     border-radius: 12px;
     box-shadow: 0 3px 12px #4cab7821 ;
@@ -99,7 +107,7 @@ h2{
     text-align: center;
 }
 
-.botones, button {
+.boton, button {
     display: inline-block;
     background-color: #2366427e;
     color: whitesmoke; 
@@ -111,7 +119,7 @@ h2{
     cursor: pointer; 
 }
 
-.botones:hover, button:hover {
+.boton:hover, button:hover {
     background-color: #1a502f
 
 }

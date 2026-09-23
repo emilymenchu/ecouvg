@@ -16,7 +16,7 @@
             Busqueda de residuo
         </label>
 
-        <input id="nombre" name="nombre" type="text" placeholder="Ej: Botella de plástico" required>
+        <input id="nombre" name="nombre" type="text" placeholder="Ej: Botella plástica" required>
         </div>
 
         <button type="submit">
@@ -36,8 +36,10 @@
             Tipo:
             <span th:text="${residuo.tipo}">Tipo</span>
         </p>
-        <p th:text="${residuo.descripcion}">
-            Descripción
+        <p>
+            Descripción:
+            <span th:text="${residuo.descripcion}">Descripción</span>
+            
         </p>
         <p>
             Instrucciones:
