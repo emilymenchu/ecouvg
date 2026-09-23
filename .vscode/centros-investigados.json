@@ -1,0 +1,100 @@
+[
+  {
+    "nombre": "CEMACO Express Zona 15",
+    "ubicacion": "2a calle 22-65, zona 15, C.C. Metro 15, nivel III, Guatemala.",
+    "latitud": 14.5861349,
+    "longitud": -90.4879555,
+    "descripcion": "Recepción de electrónicos en la entrada de la tienda.",
+    "materiales": [
+      "Electrónicos"
+    ],
+    "mapa": "https://goo.gl/maps/8PEKzLpigs8Zsu2p7",
+    "horario": "Por confirmar con la tienda antes de la visita.",
+    "fuente": "https://www.cemaco.com/reciclaje",
+    "fuente_direccion": "https://www.cemaco.com/tiendas",
+    "fecha_consulta": "2026-09-23",
+    "precision_coordenadas": "Referencia de la tienda o centro comercial; no del contenedor interior."
+  },
+  {
+    "nombre": "CEMACO Cayalá",
+    "ubicacion": "Boulevard Austriaco 16-25, zona 16, Cardales de Cayalá, Guatemala.",
+    "latitud": 14.6098228,
+    "longitud": -90.4833199,
+    "descripcion": "Acopio en el área de servicio al cliente.",
+    "materiales": [
+      "Electrónicos",
+      "Plásticos",
+      "Metal",
+      "Papel",
+      "Cartón",
+      "Tetra Pak",
+      "Vidrio"
+    ],
+    "mapa": "https://maps.app.goo.gl/RQ5VX13rjeJSKb5NA",
+    "horario": "Por confirmar con la tienda antes de la visita.",
+    "fuente": "https://www.cemaco.com/reciclaje",
+    "fuente_direccion": "https://www.cemaco.com/tiendas",
+    "fecha_consulta": "2026-09-23",
+    "precision_coordenadas": "Referencia de la tienda o centro comercial; no del contenedor interior."
+  },
+  {
+    "nombre": "Plaza CEMACO",
+    "ubicacion": "Boulevard Los Próceres 4-96, zona 10, C.C. Plaza Cemaco, Guatemala.",
+    "latitud": 14.5924647,
+    "longitud": -90.5132928,
+    "descripcion": "Punto de recepción en los sótanos, junto a las escaleras.",
+    "materiales": [
+      "Electrónicos",
+      "Plásticos",
+      "Metal",
+      "Papel",
+      "Cartón",
+      "Tetra Pak",
+      "Vidrio"
+    ],
+    "mapa": "https://goo.gl/maps/mTEvnVwunkSJk5Ni6",
+    "horario": "Por confirmar con la tienda antes de la visita.",
+    "fuente": "https://www.cemaco.com/reciclaje",
+    "fuente_direccion": "https://www.cemaco.com/tiendas",
+    "fecha_consulta": "2026-09-23",
+    "precision_coordenadas": "Referencia de la tienda o centro comercial; no del contenedor interior."
+  },
+  {
+    "nombre": "CEMACO La Noria",
+    "ubicacion": "Plaza La Noria, 10 avenida y 12 calle, zona 14, Guatemala.",
+    "latitud": 14.5812398,
+    "longitud": -90.5155665,
+    "descripcion": "Recepción de electrónicos en la entrada de la tienda.",
+    "materiales": [
+      "Electrónicos"
+    ],
+    "mapa": "https://www.google.com/maps/place/La%20Noria/@14.5812398,-90.5177552,17z/data=!3m1!4b1!4m5!3m4!1s0x8589a3ef5cebb39d:0x485550b712575a27!8m2!3d14.5812398!4d-90.5155665",
+    "horario": "Por confirmar con la tienda antes de la visita.",
+    "fuente": "https://www.cemaco.com/reciclaje",
+    "fuente_direccion": "https://www.cemaco.com/tiendas",
+    "fecha_consulta": "2026-09-23",
+    "precision_coordenadas": "Referencia de la tienda o centro comercial; no del contenedor interior."
+  },
+  {
+    "nombre": "CEMACO Portales",
+    "ubicacion": "C.C. Portales, CA-9 Norte 03-20, zona 17, Guatemala.",
+    "latitud": 14.646746,
+    "longitud": -90.481811,
+    "descripcion": "Estación de recepción en la entrada de la tienda.",
+    "materiales": [
+      "Electrónicos",
+      "Plásticos",
+      "Metal",
+      "Papel",
+      "Cartón",
+      "Tetra Pak",
+      "Vidrio"
+    ],
+    "mapa": "https://goo.gl/maps/wQ5NMiHUbL4odjru7",
+    "horario": "Por confirmar con la tienda antes de la visita.",
+    "fuente": "https://www.cemaco.com/reciclaje",
+    "fuente_direccion": "https://www.cemaco.com/tiendas",
+    "fecha_consulta": "2026-09-23",
+    "precision_coordenadas": "Referencia de la tienda o centro comercial; no del contenedor interior."
+  }
+]
