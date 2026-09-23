@@ -2,7 +2,11 @@ package gt.edu.uvg.ecouvg.modelo;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "reto")
@@ -32,6 +36,10 @@ public class Reto {
         this.fechaInicio = fechaInicio; 
         this.fechaFin = fechaFin; 
 
+    }
+
+    public Long getId(){
+        return id; 
     }
 
     public String getTitulo(){
