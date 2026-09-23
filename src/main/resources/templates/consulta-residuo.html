@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
+
+    <meta charset="UTF-8">
+    <title>Residuos</title>
+</head>
+<body>
+    <main class="detalle-residuo">
+    <h1>Consulta de residuos</h1>
+
+    
+    <div th:each="residuo : ${residuo}">
+        <h2 th:text="${residuo.nombre}">Nombre del residuo</h2>
+        <p>
+            Tipo:
+            <span th:text="${residuo.tipo}">Tipo</span>
+        </p>
+        <p th:text="${residuo.descripcion}">
+            Descripción:
+        </p>
+        <p>
+            Instrucciones:
+            <span th:text="${residuo.instrucciones}">Instrucciones</span>
+        </p>
+        <p>
+            ¿Es reciclable?:
+            <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
+        </p>
+        <a class="boton" th:href="@{/residuos}">
+            Volver a la lista de residuos
+        </a>
+        <hr>
+    </div>
+    </main>
+</body>
+</html>
