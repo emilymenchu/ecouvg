@@ -35,6 +35,9 @@
                     Ayuda al planeta hoy. Aprende a clasificar tus
                     residuos y encuentra dónde llevarlos.
                 </p>
+                <p class="racha">
+                 🔥 <strong>Tu racha:</strong> Sin datos disponibles
+                 </p>
             </div>
 
             <span class="mascota" aria-hidden="true">🐢</span>
@@ -62,17 +65,16 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">📍</span>
+                <span class="icono" aria-hidden="true">♻️</span>
                 <h3>Centros de reciclaje</h3>
+                </h3>
                 <p>
-                    Próximamente podrás consultar ubicaciones,
-                    horarios y materiales aceptados.
+                    Consulta los horarios, materiales resividos y ubicaciones de los centros de reciclaje.
                 </p>
 
-                <!-- Sustituir por un enlace cuando exista la ruta de centros. -->
-                <button class="boton" type="button" disabled>
-                    Próximamente
-                </button>
+                <a class="boton" th:href="@{/centros}">
+                    Ver centros →
+                </a>
             </article>
         </section>
 
