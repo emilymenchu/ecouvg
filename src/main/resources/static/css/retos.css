@@ -1,0 +1,37 @@
+body {
+    margin: 0; 
+    font-family: 'Arial' serif;
+    background-color: #9ac8b0 ;
+    
+}
+
+h1 {
+    color: #084123;
+    text-align: center;
+    margin-bottom: 30px;
+
+}
+
+h2{
+    color: #084123; 
+}
+
+
+.contenedor{
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto; 
+}
+
+.lista-retos{
+    display: grid ;
+    grid-template-columns: minmax(100px, 1fr);
+    gap: 20px
+}
+
+.area-retos{
+    background-color: whitesmoke;
+    padding: 20px; 
+    border-radius: 10px;
+    box-shadow:0 3px 10px #4cab7821 ;
+}
