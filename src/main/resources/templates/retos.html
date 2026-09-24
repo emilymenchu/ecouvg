@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Retos</title>
     <link rel="stylesheet" th:href="@{/css/retos.css}">
+    <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
 </head>
 
 <body>
@@ -40,6 +41,29 @@
         
     </div>
     </main>
+    <nav class="navegacion" aria-label="Navegación principal">
+
+        <a th:href="@{/inicio}" aria-current="page">
+            <span aria-hidden="true">⌂</span>
+            Inicio
+        </a>
+
+        <a th:href="@{/residuos}">
+            <span aria-hidden="true">♻</span>
+            Residuos
+        </a>
+
+        <a class="activo" th:href="@{/retos}">
+            <span aria-hidden="true">✓</span>
+            Retos
+        </a>
+
+        <a th:href="@{/centros}">
+            <span aria-hidden="true">⌖</span>
+            Centros
+        </a>
+
+    </nav>
 
 
 </body>
