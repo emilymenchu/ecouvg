@@ -1,0 +1,46 @@
+<!DOCTYPE html> 
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Retos</title>
+    <link rel="stylesheet" th:href="@{/css/retos.css}">
+</head>
+
+<body>
+    <main class="contenedor">
+    <h1>Retos de la semana </h1>
+    <p th:if="${#lists.isEmpty(retos)}">
+        No hay retos disponibles en este momento.
+    </p>
+    <div class="lista-retos">
+        <article class="area-retos"th:each="reto: ${retos}">
+        <h2 th:text="${reto.titulo}">
+            Título reto
+        </h2>
+
+        <p th:text="${reto.descripcion}">
+            Descripcion reto
+        </p>
+
+        <p>
+            Dificultad: 
+            <span th:text="${reto.dificultad}">
+                Dificultad del reto
+            </span>
+        </p>
+
+        <p>
+            Puntos de recompensa: 
+            <span th:text="${reto.puntosRecompensa}">
+                0
+            </span>
+            puntos 
+        </p>
+        </article>
+        
+    </div>
+    </main>
+
+
+</body>
+</html>

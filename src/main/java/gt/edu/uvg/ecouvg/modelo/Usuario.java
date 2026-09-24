@@ -1,6 +1,12 @@
 package gt.edu.uvg.ecouvg.modelo;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity 
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
@@ -67,5 +73,10 @@ public class Usuario {
 
     public int getHorasBeca() {
         return horasBeca;
+    }
+
+    public void sumarPuntos (int cantidad){
+        this.puntos += cantidad;
+        this.puntosTotales += cantidad; 
     }
 }
