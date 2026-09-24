@@ -1,0 +1,221 @@
+.racha {
+    display: inline-block;
+    margin: 18px 0 0;
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    color: var(--verde);
+}
+        /* Colores y configuración general */
+            :root {
+                --verde: #245c40;
+                --verde-oscuro: #193e2d;
+                --verde-claro: #eaf3e5;
+                --fondo: #f6f8f2;
+                --texto: #24392c;
+                --gris: #5f6e63;
+                --borde: #dce5d8;
+            }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--fondo);
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .encabezado {
+            background: white;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .barra {
+            max-width: 1050px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .marca {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--verde);
+            text-decoration: none;
+        }
+
+        .marca span {
+            color: #68823e;
+        }
+
+        .sesion {
+            margin: 0;
+        }
+
+        .boton-salir {
+            padding: 9px 16px;
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            background: white;
+            color: var(--verde);
+            cursor: pointer;
+        }
+
+        .boton-salir:hover {
+            background: var(--verde-claro);
+        }
+
+        /* Contenido principal */
+        main {
+            max-width: 1050px;
+            margin: auto;
+            padding: 32px 24px 48px;
+        }
+
+        .bienvenida {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 36px;
+            background: var(--verde-claro);
+            border: 1px solid var(--borde);
+            border-radius: 24px;
+        }
+
+        .etiqueta {
+            margin: 0 0 10px;
+            color: var(--verde);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: clamp(28px, 5vw, 42px);
+            line-height: 1.2;
+        }
+
+        .descripcion {
+            max-width: 480px;
+            margin: 0;
+            color: var(--gris);
+        }
+
+        .mascota {
+            flex-shrink: 0;
+            font-size: 90px;
+        }
+
+        .titulo-seccion {
+            margin: 32px 0 4px;
+            font-size: 24px;
+        }
+
+        .introduccion {
+            margin: 0 0 20px;
+            color: var(--gris);
+        }
+
+        /* Tarjetas de navegación */
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .tarjeta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 28px;
+            border: 1px solid var(--borde);
+            border-radius: 20px;
+            background: white;
+        }
+
+        .icono {
+            display: grid;
+            place-items: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--verde-claro);
+            font-size: 28px;
+        }
+
+        .tarjeta h3 {
+            margin: 18px 0 8px;
+            font-size: 21px;
+        }
+
+        .tarjeta p {
+            margin: 0 0 24px;
+            color: var(--gris);
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: auto;
+            padding: 11px 18px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            background: var(--verde);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .boton:hover {
+            background: var(--verde-oscuro);
+        }
+
+        .boton:disabled {
+            background: #edf0ea;
+            color: #596458;
+            border-color: var(--borde);
+            cursor: not-allowed;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #ad7117;
+            outline-offset: 4px;
+        }
+
+        .mensaje {
+            margin-top: 24px;
+            padding: 20px 24px;
+            border-left: 4px solid #8aa951;
+            border-radius: 0 12px 12px 0;
+            background: #eef2e5;
+        }
+
+        .mensaje p {
+            margin: 0;
+        }
+
+        footer {
+            padding: 0 24px 24px;
+            text-align: center;
+            color: var(--gris);
+            font-size: 14px;
+        }
