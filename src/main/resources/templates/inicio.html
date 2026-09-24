@@ -1,10 +1,10 @@
-</html>
 <!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <link rel="stylesheet" href="/css/inicio.css" th:href="@{/css/inicio.css}">
+    <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
 
     <meta charset="UTF-8">
     <title>Inicio | EcoUVG</title>
@@ -17,7 +17,6 @@
                 Eco<span>UVG</span>
             </a>
 
-            <!-- Conserva el cierre de sesión de tu página original. -->
             <form class="sesion" th:action="@{/logout}" method="post">
                 <button class="boton-salir" type="submit">
                     Cerrar sesión
@@ -30,14 +29,22 @@
         <section class="bienvenida" aria-labelledby="titulo-inicio">
             <div>
                 <p class="etiqueta">PEQUEÑAS ACCIONES, GRANDES CAMBIOS</p>
-                <h1 id="titulo-inicio">¡Bienvenido a EcoUVG!</h1>
+                <h1 id="titulo-inicio">
+                    ¡Bienvenido, <span th:text="${usuario.nombre}">Usuario</span>!
+                </h1>
                 <p class="descripcion">
                     Ayuda al planeta hoy. Aprende a clasificar tus
                     residuos y encuentra dónde llevarlos.
                 </p>
                 <p class="racha">
-                 🔥 <strong>Tu racha:</strong> Sin datos disponibles
-                 </p>
+                    🔥 <strong>Tu racha:</strong>
+                    <span th:text="${usuario.diasRacha}">0</span> días
+                </p>
+
+                <p class="racha">
+                    ⭐ <strong>Tus puntos:</strong>
+                    <span th:text="${usuario.puntos}">0</span>
+                </p>
             </div>
 
             <span class="mascota" aria-hidden="true">🐢</span>
@@ -85,7 +92,24 @@
             </p>
         </aside>
     </main>
+    <nav class="navegacion" aria-label="Navegación principal">
 
+        <a class="activo" th:href="@{/inicio}" aria-current="page">
+            <span aria-hidden="true">⌂</span>
+            Inicio
+        </a>
+
+        <a th:href="@{/residuos}">
+            <span aria-hidden="true">♻</span>
+            Residuos
+        </a>
+
+        <a th:href="@{/centros}">
+            <span aria-hidden="true">⌖</span>
+            Centros
+        </a>
+
+    </nav>
     <footer>
         EcoUVG · Construyamos una comunidad más verde.
     </footer>

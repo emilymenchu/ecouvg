@@ -1,0 +1,41 @@
+.navegacion {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    background: #fffffff5;
+    border-top: 1px solid #dbe3d8;
+    padding: 9px 16px calc(9px + env(safe-area-inset-bottom));
+}
+
+.navegacion a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    text-decoration: none;
+    min-width: 65px;
+    color: #58665e;
+    border-radius: 9px;
+}
+
+.navegacion a span {
+    font-size: 23px;
+    line-height: 1.4;
+}
+
+.navegacion .activo {
+    background: #e8f1df;
+    color: #185b3b;
+    font-weight: 750;
+}
+
+@media (max-width: 520px) {
+    .navegacion {
+        gap: 35px;
+    }
+}

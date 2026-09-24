@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
-
+    <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
     <meta charset="UTF-8">
     <title>Residuos</title>
 </head>
@@ -55,5 +55,23 @@
 
     </div>
 </main>
+<nav class="navegacion" aria-label="Navegación principal">
+
+    <a th:href="@{/inicio}" aria-current="page">
+        <span aria-hidden="true">⌂</span>
+        Inicio
+    </a>
+
+    <a class="activo" th:href="@{/residuos}">
+        <span aria-hidden="true">♻</span>
+        Residuos
+    </a>
+
+    <a th:href="@{/centros}">
+        <span aria-hidden="true">⌖</span>
+        Centros
+    </a>
+
+</nav>
 </body>
 </html>
