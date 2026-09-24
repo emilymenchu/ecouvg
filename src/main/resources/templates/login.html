@@ -1,159 +1,55 @@
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Iniciar sesión | EcoUVG</title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/variables.css}">
-
-    <link rel="stylesheet"
-          th:href="@{/css/login.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 
 <body>
 
-    <main class="pagina-login">
+    <div class="login">
 
-        <section class="panel-verde">
+        <h1>EcoUVG ♻</h1>
+        <h2>Iniciar sesión</h2>
 
-            <div class="logo">
-                <div class="icono-logo">
-                    ♻
-                </div>
+        <p>Ingresa tus credenciales</p>
 
-                <span>EcoUVG</span>
-            </div>
+        <div class="error" th:if="${param.error}">
+            Carné o contraseña incorrectos.
+        </div>
 
-            <div class="bienvenida">
+        <div class="exito" th:if="${param.logout}">
+            Sesión cerrada correctamente.
+        </div>
 
-                <p class="subtitulo">
-                    COMUNIDAD SOSTENIBLE
-                </p>
+        <form th:action="@{/login}" method="post">
 
-                <h1>
-                    Pequeñas acciones,
-                    <span>grandes cambios.</span>
-                </h1>
+            <label for="carnet">Carné</label>
+            <input
+                type="text"
+                id="carnet"
+                name="carnet"
+                placeholder="Ingresa tu carné"
+                required>
 
-                <p class="descripcion">
-                    Aprende a reciclar, completa retos y
-                    contribuye a construir una universidad
-                    más sostenible.
-                </p>
+            <label for="contrasena">Contraseña</label>
+            <input
+                type="password"
+                id="contrasena"
+                name="contrasena"
+                placeholder="Ingresa tu contraseña"
+                required>
 
-            </div>
+            <button type="submit">
+                Iniciar sesión
+            </button>
 
-            <p class="pie-panel">
-                Universidad del Valle de Guatemala
-            </p>
+        </form>
 
-        </section>
-
-        <section class="zona-login">
-
-            <div class="caja-login">
-
-                <div class="logo-movil">
-                    <div class="icono-logo">
-                        ♻
-                    </div>
-
-                    <span>EcoUVG</span>
-                </div>
-
-                <div class="encabezado">
-                    <h2>Bienvenido</h2>
-
-                    <p>
-                        Ingresa tus datos para continuar
-                    </p>
-                </div>
-
-                <div class="mensaje error"
-                     th:if="${param.error}">
-                    Carné o contraseña incorrectos.
-                </div>
-
-                <div class="mensaje exito"
-                     th:if="${param.logout}">
-                    Sesión cerrada correctamente.
-                </div>
-
-                <form th:action="@{/login}"
-                      method="post"
-                      class="formulario-login">
-
-                    <div class="campo">
-
-                        <label for="carnet">
-                            Carné
-                        </label>
-
-                        <div class="entrada">
-
-                            <input
-                                type="text"
-                                id="carnet"
-                                name="carnet"
-                                placeholder="Ingresa tu carné"
-                                autocomplete="username"
-                                maxlength="20"
-                                required
-                                autofocus>
-
-                        </div>
-
-                    </div>
-
-                    <div class="campo">
-
-                        <label for="contrasena">
-                            Contraseña
-                        </label>
-
-                        <div class="entrada">
-
-                            <input
-                                type="password"
-                                id="contrasena"
-                                name="contrasena"
-                                placeholder="Ingresa tu contraseña"
-                                autocomplete="current-password"
-                                required>
-
-                            <button
-                                type="button"
-                                class="ver-contrasena"
-                                id="verContrasena">
-                                Mostrar
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        class="boton-login">
-                        Iniciar sesión
-                        <span>→</span>
-                    </button>
-
-                </form>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <script th:src="@{/js/login.js}"></script>
+    </div>
 
 </body>
 </html>
