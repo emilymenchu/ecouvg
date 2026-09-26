@@ -1,19 +1,19 @@
 body {
     margin: 0; 
-    font-family: 'Arial' serif;
-    background-color: #9ac8b0 ;
+    font-family: 'Arial' , sans-serif;
+    background-color: #f8f9f4 ;
     
 }
 
 h1 {
-    color: #084123;
+    color: #17372b;
     text-align: center;
     margin-bottom: 30px;
 
 }
 
 h2{
-    color: #084123; 
+    color: #17372b; 
 }
 
 
@@ -30,8 +30,8 @@ h2{
 }
 
 .area-retos{
-    background-color: whitesmoke;
+    background-color: white;
     padding: 20px; 
     border-radius: 10px;
-    box-shadow:0 3px 10px #4cab7821 ;
+    box-shadow:0 3px 10px #17372b12 ;
 }
