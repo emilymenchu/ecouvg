@@ -9,20 +9,22 @@ body {
 }
 
 body {
-    font-family: 'Arial' serif;
-    background-color: #9ac8b0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9f4;
+    margin: 0;
     padding: 20px;
+    color: #17372b; 
 }
 
 h1 {
-    color: #084123;
+    color: #17372b;
     text-align: center;
     margin-bottom: 30px;
 
 }
 
 h2{
-    color: #084123; 
+    color: #17372b; 
 }
 
 .contenedor{
@@ -35,12 +37,13 @@ h2{
     display: flex; 
     align-items: end;
     gap: 20px; 
-    background-color: whitesmoke;
+    background-color: white;
+    border-color: #dbe3d8;
     max-width: 900px; 
     margin: 0 auto 25px; 
     padding: 12px;
     border-radius: 10px;
-    box-shadow: 0 3px 10px #0f954e7e;
+    box-shadow: 0 3px 10px #17372b12;
 }
 
 .campo-busqueda {
@@ -63,8 +66,8 @@ h2{
 }
 
 .campo-busqueda input:focus {
-    border-color: rgba(98, 202, 98, 0.623);
-    outline: 4px solid palegreen;
+    border-color: #185b3b;
+    outline: 2px solid #1ab212;
 }
 
 
@@ -76,12 +79,10 @@ h2{
 }
 
 .area-residuo {
-    background-color: whitesmoke;
+    background-color:white ;
     padding: 20px; 
     border-radius: 10px;
-    width: 900px;
-
-    box-shadow:0 3px 10px #4cab7821 ;
+    box-shadow:0 3px 10px #17372b12 ;
 }
 
 .area-residuo h2 {
@@ -90,17 +91,17 @@ h2{
 
 .tipo-residuo {
     font-weight: bold;
-    color: #1a502f;
+    color: #185b3b;
 }
 
 
 .detalle-residuo, .mensaje-error {
-    background-color: whitesmoke;
-    max-width: 900px;
+    background-color: white;
+    max-width: 700px;
     margin: 50px auto ;
     padding: 30px; 
     border-radius: 12px;
-    box-shadow: 0 3px 12px #4cab7821 ;
+    box-shadow: 0 3px 12px #17372b ;
 }
 
 .mensaje error {
@@ -109,22 +110,22 @@ h2{
 
 .boton, button {
     display: inline-block;
-    background-color: #2366427e;
-    color: whitesmoke; 
+    background-color: #185b3b;
+    color: white; 
     padding: 10px 18px;
     border: none; 
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: 5px;
+    font-size: 15px;
     text-decoration: none;
     cursor: pointer; 
 }
 
-.boton:hover, button:hover {
-    background-color: #1a502f
+.botones:hover, button:hover {
+    background-color:#10462c;
 
 }
 
-@media (max-width: 500px) {
+@media (max-width: 450px) {
     body{
         padding: 16px;
     }
