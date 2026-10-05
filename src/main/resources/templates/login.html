@@ -25,6 +25,10 @@
             Sesión cerrada correctamente.
         </div>
 
+        <div class="exito" th:if="${param.registro}">
+            Cuenta creada correctamente. Ya puedes iniciar sesión.
+        </div>
+
         <form th:action="@{/login}" method="post">
 
             <label for="carnet">Carné</label>
@@ -48,6 +52,10 @@
             </button>
 
         </form>
+        <p>
+            ¿No tienes una cuenta?
+            <a th:href="@{/registro}">Crear cuenta</a>
+        </p>
 
     </div>
 

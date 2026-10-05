@@ -24,6 +24,9 @@ public class Usuario {
     @Column(nullable = false, length = 100)
     private String contrasena;
 
+    @Column(nullable = true, unique = true)
+    private String correo;
+
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
@@ -33,9 +36,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String carnet, String contrasena) {
+    public Usuario(String nombre, String carnet, String correo, String contrasena) {
         this.nombre = nombre;
         this.carnet = carnet;
+        this.correo = correo;
         this.contrasena = contrasena;
     }
 
@@ -73,6 +77,14 @@ public class Usuario {
 
     public int getHorasBeca() {
         return horasBeca;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public void sumarPuntos (int cantidad){

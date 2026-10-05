@@ -17,25 +17,39 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/login", "/css/**", "/js/**", "/img/**").permitAll()
-                                               .anyRequest().authenticated()
-                                  )
-            .formLogin(form -> form.loginPage("/login")
-                                   .loginProcessingUrl("/login")
-                                   .usernameParameter("carnet")
-                                   .passwordParameter("contrasena")
-                                   .defaultSuccessUrl("/inicio", true)
-                                   .failureUrl("/login?error=true")
-                                   .permitAll()
-                      )
-            .logout(logout -> logout.logoutUrl("/logout")
-                                    .logoutSuccessUrl("/login?logout=true")
-                                    .invalidateHttpSession(true)
-                                    .deleteCookies("JSESSIONID")
-                                    .permitAll()
 
-                   )
-            .sessionManagement(session -> session.sessionFixation(fixation -> fixation.migrateSession()));
+        http.authorizeHttpRequests(auth ->
+                auth.requestMatchers(
+                        "/login",
+                        "/registro",
+                        "/css/**",
+                        "/js/**",
+                        "/img/**"
+                ).permitAll()
+                .anyRequest().authenticated()
+        )
+        .formLogin(form ->
+                form.loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .usernameParameter("carnet")
+                    .passwordParameter("contrasena")
+                    .defaultSuccessUrl("/inicio", true)
+                    .failureUrl("/login?error=true")
+                    .permitAll()
+        )
+        .logout(logout ->
+                logout.logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout=true")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+                    .permitAll()
+        )
+        .sessionManagement(session ->
+                session.sessionFixation(fixation ->
+                        fixation.migrateSession()
+                )
+        );
+
         return http.build();
     }
 }
