@@ -87,6 +87,10 @@ public class Usuario {
         this.correo = correo;
     }
 
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
     public void sumarPuntos (int cantidad){
         this.puntos += cantidad;
         this.puntosTotales += cantidad; 

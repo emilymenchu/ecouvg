@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verificar código | EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="login">
+
+    <h1>EcoUVG ♻</h1>
+    <h2>Verificar código</h2>
+
+    <p>
+        Revisa tu correo e ingresa el código recibido.
+    </p>
+
+    <div class="error" th:if="${error}">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/verificar-codigo}" method="post">
+
+        <input
+            type="hidden"
+            name="correo"
+            th:value="${correo}">
+
+        <label for="codigo">Código</label>
+
+        <input
+            type="text"
+            id="codigo"
+            name="codigo"
+            maxlength="6"
+            required>
+
+        <button type="submit">
+            Verificar
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -22,6 +22,9 @@ public class SecurityConfig {
                 auth.requestMatchers(
                         "/login",
                         "/registro",
+                        "/recuperar",
+                        "/verificar-codigo",
+                        "/nueva-contrasena",
                         "/css/**",
                         "/js/**",
                         "/img/**"

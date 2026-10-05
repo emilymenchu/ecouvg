@@ -21,6 +21,10 @@ public class ServicioUsuario {
         return repositorioUsuario.findByCarnet(carnet).orElse(null);
     }
 
+    public Usuario buscarPorId(Long id) {
+        return repositorioUsuario.findById(id).orElse(null);
+    }
+
     public boolean carnetExiste(String carnet) {
         return repositorioUsuario.existsByCarnet(carnet);
     }
@@ -45,5 +49,18 @@ public class ServicioUsuario {
 
     public boolean correoExiste(String correo) {
         return repositorioUsuario.existsByCorreo(correo);
+    }
+
+    public Usuario buscarPorCorreo(String correo) {
+        return repositorioUsuario.findByCorreo(correo).orElse(null);
+    }
+
+    public void cambiarContrasena(Usuario usuario, String nuevaContrasena) {
+
+        String contrasenaEncriptada = passwordEncoder.encode(nuevaContrasena);
+
+        usuario.setContrasena(contrasenaEncriptada);
+
+        repositorioUsuario.save(usuario);
     }
 }
