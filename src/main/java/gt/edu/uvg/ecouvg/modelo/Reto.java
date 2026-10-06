@@ -73,4 +73,13 @@ public class Reto {
          }
          return true; 
     }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio; 
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin; 
+    }
+
 }
