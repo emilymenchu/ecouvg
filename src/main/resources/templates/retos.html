@@ -25,7 +25,8 @@
 
         <p>
             Dificultad: 
-            <span th:text="${reto.dificultad}">
+            <span class ="difultad" th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
+                  th:text="${reto.dificultad}"> 
                 Dificultad del reto
             </span>
 
