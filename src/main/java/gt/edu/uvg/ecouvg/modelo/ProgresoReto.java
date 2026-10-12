@@ -1,11 +1,6 @@
 package gt.edu.uvg.ecouvg.modelo;
 
-import jakarta.persistence.Entity; 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 @Entity 
 @Table(name = "progreso_reto")
 
@@ -19,6 +14,8 @@ public class ProgresoReto {
     private boolean completado; 
     @ManyToOne 
     private Usuario usuario; 
+    @Enumerated(EnumType.STRING)
+    private EstadoProgreso estado; 
 
     public ProgresoReto(){
 
@@ -27,7 +24,9 @@ public class ProgresoReto {
     public ProgresoReto( Usuario usuario, Reto reto){
         this.usuario = usuario; 
         this.reto = reto; 
-    }
+        this.estado = EstadoProgreso.EN_PROGRESO; 
+    }   
+
     public Long getId() {
         return id; 
     }
@@ -43,6 +42,10 @@ public class ProgresoReto {
     public int getProgreso(){
         return progreso; 
     }
+
+    public EstadoProgreso getEstado(){
+        return estado; 
+    }
     
     public void actualizarProgreso(int progreso){
         if (progreso <0 || progreso > 100){
@@ -51,12 +54,21 @@ public class ProgresoReto {
         this.progreso = progreso; 
         
     }
+    
+    public void pendienteValidacion() {
+        if (completado){
+            throw new IllegalStateException ("Misión completada");    
+        }
+        this.estado = EstadoProgreso.PENDIENTE_VALIDACION;
+    }
 
 
     public void completar(){
         this.completado = true;
+        this.estado = EstadoProgreso.COMPLETADO; 
 
     }
+
 
     public boolean estaCompletado(){
         return completado; 
