@@ -3,6 +3,11 @@ package gt.edu.uvg.ecouvg.servicio;
 import gt.edu.uvg.ecouvg.modelo.Reto;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
 import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.modelo.CalculadorProgreso; 
+import gt.edu.uvg.ecouvg.modelo.CalculadorCantidad; 
+import gt.edu.uvg.ecouvg.modelo.CalculadorAccionUnica; 
+import gt.edu.uvg.ecouvg.modelo.CalculadorDuracion; 
+import gt.edu.uvg.ecouvg.modelo.TipoProgreso;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioReto;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
@@ -24,6 +29,35 @@ public class ServicioReto {
         this.repositorioUsuario = repositorioUsuario;
     }
 
+
+    private CalculadorProgreso seleccionarCalculador (Reto reto) {
+        TipoProgreso tipo = reto.getTipoProgreso(); 
+        if (tipo==null){
+            throw new IllegalArgumentException("El reto no cuenta con un tipo definido de progreso"); 
+        }
+        switch(tipo){
+            case CANTIDAD:
+                return new CalculadorCantidad();
+
+            case ACCION_UNICA:
+                return new CalculadorAccionUnica();
+
+            case DURACION: 
+                return new CalculadorDuracion();
+                    
+            default: 
+            throw new IllegalArgumentException(tipo + "no es válido");     
+
+        } 
+    }
+
+    public int calcularProgreso (Reto reto, int actual) {
+        CalculadorProgreso calculador = seleccionarCalculador(reto); 
+        int objetivo = reto.getObjetivo();
+        int porcentaje = calculador.calcularProgreso(actual, objetivo);
+        return porcentaje; 
+    }
+
     public List<Reto> obtenerRetosSemanales( LocalDate fecha){
         return repositorioReto.findByFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(fecha, fecha);
     }
@@ -32,8 +66,8 @@ public class ServicioReto {
         return repositorioProgresoReto.findByUsuarioIdAndRetoId(idUsuario, idReto).orElse(null);
     }
 
-    public ProgresoReto actualizarProgreso(Long idUsuario, Long idReto, int progreso){
-        if (progreso <0 || progreso >100){
+    public ProgresoReto actualizarProgreso(Long idUsuario, Long idReto, int actual){
+        if (actual <0) {
             throw new IllegalArgumentException("El progreso debe ser entre 0 y 100");  
 
         }
@@ -43,6 +77,7 @@ public class ServicioReto {
         
         Optional<Reto> retoBuscar = repositorioReto.findById(idReto);
         Reto reto = retoBuscar.orElseThrow(() -> new IllegalArgumentException("Reto no encontrado"));
+        int porcentaje = calcularProgreso(reto, actual); 
         
         Optional<ProgresoReto> progresoBuscar = repositorioProgresoReto.findByUsuarioIdAndRetoId(idUsuario, idReto); 
         ProgresoReto progresoReto; 
@@ -52,12 +87,16 @@ public class ServicioReto {
         } else {
             progresoReto = new ProgresoReto(usuario, reto); 
         }
-        boolean yaCompletado = progresoReto.estaCompletado();
-        progresoReto.actualizarProgreso(progreso); 
         
-        if (progreso >= 100 && !yaCompletado){
-            completarReto(progresoReto);
-            return progresoReto; 
+        int progresoAnterior = progresoReto.getProgreso(); 
+
+        if(porcentaje < progresoAnterior){
+            porcentaje = progresoAnterior; 
+        }
+
+        progresoReto.actualizarProgreso(porcentaje); 
+        if (porcentaje == 100 && !progresoReto.estaCompletado()) {
+            progresoReto.pendienteValidacion();
         }
         return repositorioProgresoReto.save(progresoReto);
     }
