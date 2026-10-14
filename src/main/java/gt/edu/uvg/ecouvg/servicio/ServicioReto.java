@@ -11,6 +11,10 @@ import gt.edu.uvg.ecouvg.modelo.TipoProgreso;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioReto;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
+import gt.edu.uvg.ecouvg.modelo.ValidacionReto;
+import gt.edu.uvg.ecouvg.modelo.ValidacionEvidencia;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +26,13 @@ public class ServicioReto {
     private RepositorioReto repositorioReto; 
     private final RepositorioProgresoReto repositorioProgresoReto; 
     private final RepositorioUsuario repositorioUsuario; 
+    private final RepositorioEvidencia repositorioEvidencia; 
     
-    public ServicioReto(RepositorioReto repositorioReto, RepositorioProgresoReto repositorioProgresoReto, RepositorioUsuario repositorioUsuario){
+    public ServicioReto(RepositorioReto repositorioReto, RepositorioProgresoReto repositorioProgresoReto, RepositorioUsuario repositorioUsuario, RepositorioEvidencia repositorioEvidencia){
         this.repositorioReto = repositorioReto; 
         this.repositorioProgresoReto = repositorioProgresoReto; 
         this.repositorioUsuario = repositorioUsuario;
+        this.repositorioEvidencia = repositorioEvidencia; 
     }
 
 
@@ -42,7 +48,7 @@ public class ServicioReto {
             case ACCION_UNICA:
                 return new CalculadorAccionUnica();
 
-            case DURACION: 
+            case DURACION:  
                 return new CalculadorDuracion();
                     
             default: 
@@ -68,7 +74,7 @@ public class ServicioReto {
 
     public ProgresoReto actualizarProgreso(Long idUsuario, Long idReto, int actual){
         if (actual <0) {
-            throw new IllegalArgumentException("El progreso debe ser entre 0 y 100");  
+            throw new IllegalArgumentException("El progreso debe ser positivo");  
 
         }
 
@@ -77,6 +83,9 @@ public class ServicioReto {
         
         Optional<Reto> retoBuscar = repositorioReto.findById(idReto);
         Reto reto = retoBuscar.orElseThrow(() -> new IllegalArgumentException("Reto no encontrado"));
+        if (!reto.estaDisponible(LocalDate.now())){
+            throw new IllegalStateException("No se puede registrar progreso si el reto no está disponible"); 
+        }
         int porcentaje = calcularProgreso(reto, actual); 
         
         Optional<ProgresoReto> progresoBuscar = repositorioProgresoReto.findByUsuarioIdAndRetoId(idUsuario, idReto); 
@@ -88,6 +97,9 @@ public class ServicioReto {
             progresoReto = new ProgresoReto(usuario, reto); 
         }
         
+        if (progresoReto.estaCompletado()) {
+            throw new IllegalStateException("No se puede modificar una misión completada");
+        }
         int progresoAnterior = progresoReto.getProgreso(); 
 
         if(porcentaje < progresoAnterior){
@@ -102,17 +114,99 @@ public class ServicioReto {
     }
 
 
-    public void completarReto(ProgresoReto progresoReto){
+    private void completarReto(ProgresoReto progresoReto){
         if (progresoReto.estaCompletado()){
             return; 
         }
+        
+        Reto reto = progresoReto.getReto(); 
+        
+
         progresoReto.completar();
         Usuario usuario = progresoReto.getUsuario(); 
-        Reto reto = progresoReto.getReto(); 
-        progresoReto.completar(); 
-
         usuario.sumarPuntos(reto.getPuntosRecompensa());
         repositorioUsuario.save(usuario);
         repositorioProgresoReto.save(progresoReto); 
     }
+    
+    private boolean tieneEvidenciaAprobada(ProgresoReto progresoReto) {
+
+        ValidacionReto validador =
+            new ValidacionEvidencia(repositorioEvidencia);
+
+        return validador.validar(progresoReto);
+    }
+
+
+        
+    @Transactional
+    public void completarRetoConEvidencia(ProgresoReto progresoReto) {
+
+        if (progresoReto == null) {
+            throw new IllegalArgumentException("El progreso no puede ser nulo");
+        }
+
+        Long idProgreso = progresoReto.getId();
+
+        if (idProgreso == null) {
+            throw new IllegalArgumentException("El progreso debe estar registrado");
+        }
+
+        ProgresoReto progresoBloqueado = repositorioProgresoReto.buscarParaCompletar(idProgreso).orElseThrow(() -> new IllegalArgumentException("Progreso no encontrado" ));
+
+        if (progresoBloqueado.estaCompletado()) {
+            return;
+        }
+
+        if (progresoBloqueado.getProgreso() != 100) {
+            throw new IllegalStateException("La misión todavía no alcanza el 100%");
+        }
+
+        if (!tieneEvidenciaAprobada(progresoBloqueado)) {
+            throw new IllegalStateException("La evidencia todavía no está aprobada" );
+        }
+
+        completarReto(progresoBloqueado);
+    }
+        
+    private void actualizarProgresoValidado(ProgresoReto progresoReto) {
+
+        Reto reto = progresoReto.getReto();
+        int cantidad = progresoReto.getCantidadValidada();
+        int porcentaje = calcularProgreso(reto, cantidad);
+        progresoReto.actualizarProgreso(porcentaje);
+    }
+        
+    @Transactional
+    public void registrarEvidenciaAprobada(ProgresoReto progresoReto) {
+
+        if (progresoReto == null || progresoReto.getId() == null) {
+            throw new IllegalArgumentException("El progreso debe estar registrado");
+        }
+
+        ProgresoReto progresoBloqueado =repositorioProgresoReto.buscarParaCompletar(progresoReto.getId() ).orElseThrow(() -> new IllegalArgumentException("Progreso no encontrado"));
+
+        if (progresoBloqueado.estaCompletado()) {
+            throw new IllegalStateException("La misión ya está completada" );
+        }
+
+        Reto reto = progresoBloqueado.getReto();
+
+        if (reto.getTipoProgreso() != TipoProgreso.CANTIDAD) {
+            throw new IllegalStateException( "Este registro requiere una misión de cantidad" );
+        }
+
+        progresoBloqueado.registrarUnidadValidada();
+
+        actualizarProgresoValidado(progresoBloqueado);
+
+        if (progresoBloqueado.getProgreso() == 100) {
+            completarReto(progresoBloqueado);
+        }
+
+        repositorioProgresoReto.save(progresoBloqueado);
+    }
+
+
+
 }

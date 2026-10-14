@@ -76,6 +76,9 @@ public class Usuario {
     }
 
     public void sumarPuntos (int cantidad){
+        if (cantidad<= 0) {
+            throw new IllegalArgumentException("La cantidad tiene que ser positiva"); 
+        }
         this.puntos += cantidad;
         this.puntosTotales += cantidad; 
     }

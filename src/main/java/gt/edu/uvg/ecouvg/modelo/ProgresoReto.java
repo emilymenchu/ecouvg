@@ -11,6 +11,7 @@ public class ProgresoReto {
     @ManyToOne  
     private Reto reto; 
     private int progreso; 
+    private int cantidadValidada; 
     private boolean completado; 
     @ManyToOne 
     private Usuario usuario; 
@@ -41,6 +42,23 @@ public class ProgresoReto {
 
     public int getProgreso(){
         return progreso; 
+    }
+
+    public int getCantidadValidada(){
+        return cantidadValidada; 
+    }
+
+    public void registrarUnidadValidada() {
+
+        if (estaCompletado()) {
+            throw new IllegalStateException( "La misión ya está completada");
+        }
+
+        if (cantidadValidada >= reto.getObjetivo()) {
+            throw new IllegalStateException("Ya se alcanzó el objetivo de la misión"  );
+        }
+
+        this.cantidadValidada++;
     }
 
     public EstadoProgreso getEstado(){
