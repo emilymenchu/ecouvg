@@ -3,6 +3,8 @@ package gt.edu.uvg.ecouvg.modelo;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,20 +24,23 @@ public class Reto {
     private String dificultad; 
     private LocalDate fechaInicio; 
     private LocalDate fechaFin; 
-    
+    @Enumerated(EnumType.STRING)
+    private TipoProgreso tipoProgreso; 
+    private int objetivo; 
     //Métodos
     public Reto(){
 
     }
 
-    public Reto(String titulo, String descripcion, int puntosRecompensa, String dificultad, LocalDate fechaInicio, LocalDate fechaFin){
+    public Reto(String titulo, String descripcion, int puntosRecompensa, String dificultad, LocalDate fechaInicio, LocalDate fechaFin, TipoProgreso tipoProgreso, int objetivo){
         this.titulo = titulo;
         this.descripcion = descripcion; 
         this.puntosRecompensa = puntosRecompensa; 
         this.dificultad = dificultad; 
         this.fechaInicio = fechaInicio; 
         this.fechaFin = fechaFin; 
-
+        this.tipoProgreso = tipoProgreso; 
+        this.objetivo = objetivo; 
     }
 
     public Long getId(){
@@ -58,6 +63,14 @@ public class Reto {
         return dificultad; 
     }
 
+    public TipoProgreso getTipoProgreso(){
+        return tipoProgreso; 
+    }
+
+    public int getObjetivo(){
+        return objetivo; 
+    }
+
 
     public boolean estaDisponible(LocalDate fecha) {
          if (fecha == null || fechaInicio == null || fechaFin == null){
@@ -73,4 +86,13 @@ public class Reto {
          }
          return true; 
     }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio; 
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin; 
+    }
+
 }

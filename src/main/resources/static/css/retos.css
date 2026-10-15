@@ -35,3 +35,28 @@ h2{
     border-radius: 10px;
     box-shadow:0 3px 10px #17372b12 ;
 }
+
+
+.dificultad {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+.facil {
+    background-color: white;
+    color: #185b3b;
+}
+
+.media {
+    background-color: white; 
+    color: #7a5b00;
+}
+
+.dificil {
+    background-color: white;
+    color: #842029;
+}

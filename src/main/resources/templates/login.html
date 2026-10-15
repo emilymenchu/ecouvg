@@ -25,6 +25,13 @@
             Sesión cerrada correctamente.
         </div>
 
+        <div class="exito" th:if="${param.registro}">
+            Cuenta creada correctamente. Ya puedes iniciar sesión.
+        </div>
+        <div class="exito" th:if="${param.recuperada}">
+            Contraseña actualizada correctamente.
+        </div>
+
         <form th:action="@{/login}" method="post">
 
             <label for="carnet">Carné</label>
@@ -48,6 +55,13 @@
             </button>
 
         </form>
+        <p>
+            ¿No tienes una cuenta?
+            <a th:href="@{/registro}">Crear cuenta</a>
+        </p>
+                <a th:href="@{/recuperar}">
+            ¿Olvidaste tu contraseña?
+        </a>
 
     </div>
 

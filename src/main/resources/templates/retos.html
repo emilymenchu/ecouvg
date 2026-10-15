@@ -25,8 +25,22 @@
 
         <p>
             Dificultad: 
-            <span th:text="${reto.dificultad}">
+            <span class ="difultad" th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
+                  th:text="${reto.dificultad}"> 
                 Dificultad del reto
+            </span>
+
+        </p>
+        <p>
+            Disponible desde:
+            <span th:text="${reto.fechaInicio}">
+                Fecha inicial
+            </span>
+        </p>
+        <p>
+            Disponible hasta:
+            <span th:text="${reto.fechaFin}">
+                Fecha Fin
             </span>
         </p>
 
