@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Centros de reciclaje | EcoUVG</title><link rel="stylesheet" th:href="@{/css/centros.css}" href="/css/centros.css"></head>
+<title>Centros de reciclaje | EcoUVG</title><link rel="stylesheet" th:href="@{/css/centros.css}" href="/css/centros.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/mapa-centros.css}" href="/css/mapa-centros.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script defer th:src="@{/js/mapa-centros.js}" src="/js/mapa-centros.js"></script>
+</head>
 <body>
 <a class="salto" href="#resultados">Ir a los resultados</a>
 <header class="cabecera"><a class="marca" th:href="@{/inicio}"><span aria-hidden="true">♻</span> EcoUVG</a><span class="campus">Campus central · Zona 15</span></header>
@@ -12,18 +19,41 @@
 <div class="campo"><label for="material">Material que recibe</label><select id="material" name="material"><option value="">Todos los materiales</option><option th:each="opcion : ${materiales}" th:value="${opcion}" th:text="${opcion}" th:selected="${opcion == material}"></option></select></div>
 <button type="submit">Buscar centros <span aria-hidden="true">→</span></button>
 </form>
-<section class="mapa-reservado" aria-labelledby="titulo-mapa"><div class="mapa-mensaje"><span class="mapa-icono" aria-hidden="true">⌖</span><h2 id="titulo-mapa">Aquí estará tu mapa</h2><p>Próximamente podrás explorar los centros en el mapa.</p><span class="etiqueta">Mientras tanto, encuentra tu centro en la lista</span></div></section>
+<section class="mapa-panel" aria-labelledby="titulo-mapa">
+  <div class="mapa-cabecera">
+    <div><p class="ceja">EXPLORA TU CIUDAD</p><h2 id="titulo-mapa">Ubica los centros</h2></div>
+    <button id="mapa-encuadrar" type="button" disabled>Ver todos los puntos</button>
+  </div>
+  <p id="mapa-estado" class="mapa-estado" role="status" aria-live="polite">Cargando mapa y centros…</p>
+  <p id="mapa-aviso" class="mapa-aviso" role="status" hidden></p>
+  <div id="mapa-centros" class="mapa-lienzo" role="region" aria-label="Mapa interactivo de centros de reciclaje"
+       aria-describedby="mapa-ayuda" aria-busy="true" tabindex="0"
+       data-api-url="/api/centros/mapa"
+       data-detalle-base="/centros/"
+       th:attr="data-api-url=@{/api/centros/mapa(q=${q},material=${material})},data-detalle-base=@{/centros/}"
+       data-tiles-url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"></div>
+  <div class="mapa-pie">
+    <p id="mapa-ayuda">Usa + y − para acercar o alejar el mapa. Pulsa un punto para consultar el centro o usa Ver en mapa desde su tarjeta.</p>
+    <button id="mapa-reintentar" type="button" hidden>Reintentar carga</button>
+    <a id="mapa-login" th:href="@{/login}" href="/login" hidden>Volver a iniciar sesión</a>
+  </div>
+  <noscript><p class="mapa-aviso">Activa JavaScript para ver el mapa. Puedes consultar los centros en la lista inferior.</p></noscript>
+</section>
 <section id="resultados" aria-labelledby="titulo-resultados">
 <div class="resultados-titulo"><div><p class="ceja">PUNTOS DE ACOPIO</p><h2 id="titulo-resultados">Centros de reciclaje <span class="contador" th:text="${#lists.size(centros)}">0</span></h2></div><a class="limpiar" th:href="@{/centros}">Limpiar filtros</a></div>
 <p class="nota">Directorio en zonas cercanas y alrededores de la UVG. Orden alfabético; no indica distancia ni tiempo de viaje.</p>
 <div class="vacio" th:if="${#lists.isEmpty(centros)}"><h3>No encontramos centros</h3><p>Prueba con otro nombre, zona o material, o limpia los filtros.</p><a class="boton" th:href="@{/centros}">Ver todos los centros</a></div>
-<div class="tarjetas"><article class="tarjeta" th:each="centro : ${centros}"><div class="tarjeta-top"><span class="icono-centro" aria-hidden="true">♻</span><span class="tipo">Punto de acopio</span></div><h3 th:text="${centro.nombre}">Centro</h3><p class="direccion" th:text="${centro.ubicacion}">Dirección</p><p class="horario"><strong>Horario:</strong> <span th:text="${centro.horario ?: 'Por confirmar con el centro'}"></span></p><div class="materiales" aria-label="Materiales aceptados"><span th:each="residuo : ${centro.residuosAceptados}" th:text="${residuo.nombre}"></span><span th:if="${#lists.isEmpty(centro.residuosAceptados)}">Materiales por confirmar</span></div><a class="detalle" th:href="@{/centros/{id}(id=${centro.id})}" th:attr="aria-label=${'Ver información de ' + centro.nombre}">Ver información <span aria-hidden="true">↗</span></a></article></div>
+<div class="tarjetas"><article class="tarjeta" th:each="centro : ${centros}" tabindex="-1"
+    th:attr="data-centro-tarjeta=${centro.id}"><div class="tarjeta-top"><span class="icono-centro" aria-hidden="true">♻</span><span class="tipo">Punto de acopio</span></div><h3 th:text="${centro.nombre}">Centro</h3><p class="direccion" th:text="${centro.ubicacion}">Dirección</p><p class="horario"><strong>Horario:</strong> <span th:text="${centro.horario ?: 'Por confirmar con el centro'}"></span></p><div class="materiales" aria-label="Materiales aceptados"><span th:each="residuo : ${centro.residuosAceptados}" th:text="${residuo.nombre}"></span><span th:if="${#lists.isEmpty(centro.residuosAceptados)}">Materiales por confirmar</span></div><button class="ver-en-mapa" type="button" disabled aria-pressed="false"
+    th:attr="data-ver-centro=${centro.id},aria-label=${'Ver en mapa: ' + centro.nombre}"
+    title="Esperando la carga del mapa">Ver en mapa</button>
+<a class="detalle" th:href="@{/centros/{id}(id=${centro.id})}" th:attr="aria-label=${'Ver información de ' + centro.nombre}">Ver información <span aria-hidden="true">↗</span></a></article></div>
 </section>
 <aside class="consejo"><span aria-hidden="true">♧</span><div><strong>Prepara tus reciclables</strong><p>Llévalos separados, limpios y secos. Confirma con el centro los horarios y las condiciones de recepción antes de ir.</p></div></aside>
 </main>
 <nav class="navegacion" aria-label="Navegación principal">
 
-    <a th:href="@{/inicio}" aria-current="page">
+    <a th:href="@{/inicio}">
         <span aria-hidden="true">⌂</span>
         Inicio
     </a>
@@ -38,7 +68,7 @@
         Retos
     </a>
 
-    <a class="activo" th:href="@{/centros}">
+    <a class="activo" th:href="@{/centros}" aria-current="page">
         <span aria-hidden="true">⌖</span>
         Centros
     </a>
