@@ -184,3 +184,58 @@ test('respeta la preferencia de movimiento reducido', async () => {
     const h=preparar();h.entorno.matchMedia=()=>({matches:true});await iniciarMapa(h.entorno);h.botones[0].onclick();
     assert.equal(h.elementos['mapa-centros'].scroll.behavior,'auto');
 });
+
+function prepararDetalle(responder = async () => respuesta(centro())) {
+    const h = preparar(responder);
+    Object.assign(h.elementos['mapa-centros'].dataset, {
+        modo: 'detalle', centroId: '1', apiUrl: '/eco/api/centros/mapa/1'
+    });
+    h.entorno.document.querySelectorAll = () => [];
+    return h;
+}
+test('detalle consulta un único centro y muestra su ubicación sin enlace a sí mismo', async () => {
+    const h = prepararDetalle(); await iniciarMapa(h.entorno);
+    assert.equal(h.llamadas.consultas[0][0], '/eco/api/centros/mapa/1');
+    assert.equal(h.grupo.markers.length, 1);
+    assert.equal(h.elementos['mapa-centros'].hidden, false);
+    assert.deepEqual(h.llamadas.vistas.at(-1), [[14.6, -90.4], 15]);
+    assert.equal(h.grupo.markers[0].ficha.children.some(n => n.tag === 'a' || n.tag === 'button'), false);
+});
+test('detalle sin coordenadas oculta el mapa y conserva una explicación', async () => {
+    const h = prepararDetalle(async () => respuesta(centro({ubicable: false, latitud: null})));
+    await iniciarMapa(h.entorno);
+    assert.equal(h.elementos['mapa-centros'].hidden, true);
+    assert.equal(h.grupo.markers.length, 0);
+    assert.match(h.elementos['mapa-estado'].textContent, /dirección indicada arriba/);
+    assert.equal(h.elementos['mapa-encuadrar'].disabled, true);
+});
+test('detalle rechaza otro centro y contratos JSON incorrectos', async () => {
+    for (const datos of [centro({id: 2}), [centro()], null, {}]) {
+        const h = prepararDetalle(async () => respuesta(datos)); await iniciarMapa(h.entorno);
+        assert.equal(h.grupo.markers.length, 0);
+        assert.equal(h.elementos['mapa-centros'].hidden, true);
+        assert.equal(h.elementos['mapa-reintentar'].hidden, false);
+    }
+});
+test('detalle inexistente informa que se debe volver al directorio', async () => {
+    const h = prepararDetalle(async () => respuesta(null, {ok: false, status: 404}));
+    await iniciarMapa(h.entorno);
+    assert.match(h.elementos['mapa-estado'].textContent, /ya no está disponible/);
+    assert.equal(h.elementos['mapa-centros'].hidden, true);
+});
+test('detalle se recupera de un error de red sin crear otro mapa', async () => {
+    let vez = 0;
+    const h = prepararDetalle(async () => { if (++vez === 1) throw new TypeError('network'); return respuesta(centro()); });
+    const app = await iniciarMapa(h.entorno);
+    assert.equal(h.elementos['mapa-centros'].hidden, true);
+    await app.cargarCentros();
+    assert.equal(h.elementos['mapa-centros'].hidden, false);
+    assert.equal(h.llamadas.mapas, 1);
+    assert.equal(h.grupo.markers.length, 1);
+});
+test('detalle con sesión caducada mantiene visible el enlace de acceso', async () => {
+    const h = prepararDetalle(async () => respuesta(null, {redirected: true}));
+    await iniciarMapa(h.entorno);
+    assert.equal(h.elementos['mapa-login'].hidden, false);
+    assert.equal(h.elementos['mapa-centros'].hidden, true);
+});

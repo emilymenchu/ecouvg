@@ -45,6 +45,13 @@ public class ControladorCentro {
         return servicio.obtenerCentrosMapa(q, material);
     }
 
+    @GetMapping(value = "/api/centros/mapa/{id}", produces = "application/json")
+    @ResponseBody
+    public CentroMapaDTO consultarCentroMapa(@PathVariable("id") Long id) {
+        return servicio.obtenerCentroMapa(id).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.NOT_FOUND, "Centro no encontrado"));
+    }
+
     private void validarBusqueda(String q, String material) {
         if (q.length() > 120 || material.length() > 120) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

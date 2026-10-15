@@ -12,7 +12,7 @@
         return Number.isSafeInteger(id) && id > 0 ? String(id) : null;
     }
 
-    function crearFicha(doc, centro, detalleBase, verTarjeta) {
+    function crearFicha(doc, centro, detalleBase, verTarjeta, mostrarEnlace = true) {
         const ficha = doc.createElement('section');
         ficha.className = 'mapa-ficha';
         function texto(tag, valor) {
@@ -28,7 +28,7 @@
             ? centro.materiales.filter(m => typeof m === 'string' && m.trim()) : [];
         texto('p', 'Recibe: ' + (materiales.length ? materiales.join(', ') : 'Materiales por confirmar'));
         const id = identificadorCentro(centro.id);
-        if (id !== null) {
+        if (id !== null && mostrarEnlace) {
             const enlace = texto('a', 'Ver información completa');
             enlace.href = detalleBase + id;
         }
@@ -45,6 +45,8 @@
         const doc = entorno.document;
         const lienzo = doc.getElementById('mapa-centros');
         if (!lienzo || lienzo.dataset.iniciado === 'true') return null;
+        const detalle = lienzo.dataset.modo === 'detalle';
+        if (detalle) lienzo.hidden = true;
         const estado = doc.getElementById('mapa-estado');
         const aviso = doc.getElementById('mapa-aviso');
         const encuadrar = doc.getElementById('mapa-encuadrar');
@@ -74,7 +76,9 @@
             mapa = L.map(lienzo, { scrollWheelZoom: false }).setView([14.60, -90.50], 12);
         } catch (error) {
             desactivarBotones('El mapa no está disponible');
-            estado.textContent = 'No se pudo iniciar el mapa. Puedes consultar la lista de centros.';
+            estado.textContent = 'No se pudo iniciar el mapa. Puedes consultar la dirección del centro.';
+            reintentar.hidden = false;
+            reintentar.onclick = () => entorno.location.reload();
             lienzo.setAttribute('aria-busy', 'false');
             return null;
         }
@@ -134,7 +138,8 @@
             login.hidden = true;
             encuadrar.disabled = true;
             lienzo.setAttribute('aria-busy', 'true');
-            estado.textContent = 'Cargando centros…';
+            if (detalle) lienzo.hidden = true;
+            estado.textContent = detalle ? 'Cargando ubicación…' : 'Cargando centros…';
             grupo.clearLayers();
             puntos = [];
             marcadores.clear();
@@ -152,11 +157,17 @@
                     login.hidden = false;
                     throw new Error('Tu sesión puede haber terminado. Vuelve a iniciar sesión para cargar los centros.');
                 }
+                if (detalle && respuesta.status === 404) throw new Error('Este centro ya no está disponible. Vuelve al directorio de centros.');
                 if (!respuesta.ok) throw new Error('No se pudieron consultar los centros. Intenta nuevamente.');
                 if (!(respuesta.headers.get('content-type') || '').includes('application/json')) {
                     throw new Error('La respuesta del servidor no contiene datos del mapa. Revisa que estés ejecutando la versión actual del proyecto.');
                 }
-                const centros = await respuesta.json();
+                const datos = await respuesta.json();
+                if (detalle && (!datos || Array.isArray(datos) || typeof datos !== 'object'
+                    || identificadorCentro(datos.id) !== lienzo.dataset.centroId)) {
+                    throw new Error('El servidor devolvió datos inesperados para este centro.');
+                }
+                const centros = detalle ? [datos] : datos;
                 if (!Array.isArray(centros)) throw new Error('El servidor devolvió datos inesperados para el mapa.');
                 puntos = centros.filter(esUbicable);
                 puntos.forEach(centro => {
@@ -171,7 +182,7 @@
                             mapa.closePopup();
                             resaltarTarjeta(id);
                             desplazar(tarjeta);
-                        } : null);
+                        } : null, !detalle);
                     const marcador = L.marker([centro.latitud, centro.longitud], {
                         title: nombre,
                         alt: nombre,
@@ -192,11 +203,14 @@
                 if (centros.length === 0) {
                     estado.textContent = 'No hay centros para mostrar con esta búsqueda. Prueba otros filtros.';
                 } else if (puntos.length === 0) {
-                    estado.textContent = 'Los centros encontrados aún no tienen coordenadas válidas. Consulta sus direcciones en la lista.';
+                    estado.textContent = detalle
+                        ? 'Este centro aún no tiene coordenadas válidas. Consulta la dirección indicada arriba.'
+                        : 'Los centros encontrados aún no tienen coordenadas válidas. Consulta sus direcciones en la lista.';
                 } else {
                     estado.textContent = puntos.length === 1 ? '1 centro ubicado en el mapa.' : `${puntos.length} centros ubicados en el mapa.`;
                     if (sinUbicacion > 0) estado.textContent += ` Sin ubicación válida: ${sinUbicacion}. Puedes consultarlos en la lista.`;
                     encuadrar.disabled = false;
+                    lienzo.hidden = false;
                     ajustarVista();
                 }
             } catch (error) {

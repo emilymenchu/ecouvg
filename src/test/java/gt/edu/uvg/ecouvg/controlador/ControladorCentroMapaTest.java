@@ -54,4 +54,27 @@ class ControladorCentroMapaTest {
             .andExpect(status().isBadRequest());
         verifyNoInteractions(servicio);
     }
+    @Test void detalleDevuelveSoloElCentroSolicitado() throws Exception {
+        when(servicio.obtenerCentroMapa(7L)).thenReturn(java.util.Optional.of(
+            new CentroMapaDTO(7L, "Cayalá", "Zona 16", 14.6, -90.4, null, List.of("Cartón"))));
+        mvc.perform(get("/api/centros/mapa/7"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(7))
+            .andExpect(jsonPath("$.ubicable").value(true));
+        verify(servicio).obtenerCentroMapa(7L);
+        verifyNoMoreInteractions(servicio);
+    }
+    @Test void detalleInexistenteDevuelve404() throws Exception {
+        when(servicio.obtenerCentroMapa(99L)).thenReturn(java.util.Optional.empty());
+        mvc.perform(get("/api/centros/mapa/99")).andExpect(status().isNotFound());
+    }
+    @Test void detalleSinCoordenadasExistePeroNoEsUbicable() throws Exception {
+        when(servicio.obtenerCentroMapa(9L)).thenReturn(java.util.Optional.of(
+            new CentroMapaDTO(9L, "Pendiente", "Zona 15", null, -90.4, null, List.of())));
+        mvc.perform(get("/api/centros/mapa/9"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.ubicable").value(false))
+            .andExpect(jsonPath("$.latitud").isEmpty())
+            .andExpect(jsonPath("$.longitud").isEmpty());
+    }
 }

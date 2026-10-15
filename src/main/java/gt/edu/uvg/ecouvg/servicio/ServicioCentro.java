@@ -38,11 +38,18 @@ public class ServicioCentro {
     /** Comparte los filtros de la lista y conserva los centros sin coordenadas válidas. */
     public List<CentroMapaDTO> obtenerCentrosMapa(String consulta, String material) {
         return buscarCentros(consulta, material).stream()
-            .map(c -> new CentroMapaDTO(c.getId(), c.getNombre(), c.getUbicacion(),
-                c.getLatitud(), c.getLongitud(), c.getHorario(),
-                c.getResiduosAceptados().stream().map(Residuo::getNombre)
-                    .filter(java.util.Objects::nonNull).distinct().sorted().toList()))
-            .toList();
+            .map(this::convertirMapa).toList();
+    }
+
+    public Optional<CentroMapaDTO> obtenerCentroMapa(Long id) {
+        return repositorio.findById(id).map(this::convertirMapa);
+    }
+
+    private CentroMapaDTO convertirMapa(CentroReciclaje c) {
+        return new CentroMapaDTO(c.getId(), c.getNombre(), c.getUbicacion(),
+            c.getLatitud(), c.getLongitud(), c.getHorario(),
+            c.getResiduosAceptados().stream().map(Residuo::getNombre)
+                .filter(java.util.Objects::nonNull).distinct().sorted().toList());
     }
 
     public List<String> obtenerMateriales() {

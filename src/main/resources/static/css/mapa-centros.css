@@ -1,4 +1,4 @@
-/* Aislado de los estilos de las tarjetas y del mapa reservado de la ficha individual. */
+/* Mapa compartido por el directorio y la ficha individual. */
 .mapa-panel { margin: 24px 0 36px; padding: 20px; border: 1px solid var(--linea, #dbe3d8); border-radius: 18px; background: #fff; }
 .mapa-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .mapa-cabecera h2 { margin: 0; }

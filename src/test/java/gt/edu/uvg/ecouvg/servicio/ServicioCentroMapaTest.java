@@ -49,4 +49,17 @@ class ServicioCentroMapaTest {
         assertEquals(List.of("Cartón", "Vidrio"), servicio.obtenerCentrosMapa("cayala", "")
             .getFirst().getMateriales());
     }
+    @Test void consultaIndividualNoCargaTodoElDirectorio() {
+        when(repositorio.findById(9L)).thenReturn(java.util.Optional.of(pendiente));
+        CentroMapaDTO resultado = servicio.obtenerCentroMapa(9L).orElseThrow();
+        assertEquals("Pendiente", resultado.getNombre());
+        assertFalse(resultado.isUbicable());
+        assertEquals(List.of("Vidrio"), resultado.getMateriales());
+        verify(repositorio).findById(9L);
+        verify(repositorio, never()).findAllByOrderByNombreAsc();
+    }
+    @Test void consultaIndividualConservaAusencia() {
+        when(repositorio.findById(99L)).thenReturn(java.util.Optional.empty());
+        assertTrue(servicio.obtenerCentroMapa(99L).isEmpty());
+    }
 }
