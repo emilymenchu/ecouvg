@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de reciclaje | EcoUVG</title>
+<link rel="stylesheet" th:href="@{/css/guia.css}" href="/css/guia.css">
+<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css"></head>
+<body><header class="guia-cabecera"><a th:href="@{/inicio}" class="marca">♻ EcoUVG</a><span>Aprende a separar</span></header>
+<main class="guia guia-ficha"><a class="volver" th:href="@{/guia(q=${q})}">← Volver a la guía</a>
+<section class="guia-presentacion" th:classappend="${categoria.color}"><span class="contenedor-dibujo" aria-hidden="true"><span class="tapa"></span><span class="cuerpo"><span th:text="${categoria.simbolo}">♻</span></span></span><div><p class="ceja">GUÍA DE SEPARACIÓN</p><h1 th:text="${categoria.nombre}"></h1><p th:text="${categoria.descripcion}"></p></div></section>
+<section class="guia-contenido"><h2>Ejemplos de residuos</h2><p>Confirma su aceptación antes de depositarlos.</p><ul><li th:each="ejemplo : ${categoria.ejemplos}" th:text="${ejemplo}"></li></ul><h2>Antes de llevarlos</h2><p th:text="${categoria.preparacion}"></p><a class="guia-boton" th:href="@{/centros}">Consultar centros de reciclaje</a></section>
+<p class="guia-nota">Los colores son ilustrativos. Sigue la rotulación del contenedor y confirma qué recibe cada centro.</p><p class="guia-fuente">Referencia educativa: <a th:href="${categoria.fuenteUrl}" target="_blank" rel="noopener noreferrer">EPA · Consultar orientación ↗</a>. Consulta: 15/10/2026. No es una norma de colores de Guatemala ni confirma la aceptación en un centro local.</p></main><nav th:replace="~{fragmentos/navegacion :: menu('guia')}"></nav></body></html>
