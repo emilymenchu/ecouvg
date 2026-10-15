@@ -8,6 +8,7 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <script defer th:src="@{/js/mapa-centros.js}" src="/js/mapa-centros.js"></script>
+<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
 </head>
 <body>
 <a class="salto" href="#resultados">Ir a los resultados</a>
@@ -51,27 +52,5 @@
 </section>
 <aside class="consejo"><span aria-hidden="true">♧</span><div><strong>Prepara tus reciclables</strong><p>Llévalos separados, limpios y secos. Confirma con el centro los horarios y las condiciones de recepción antes de ir.</p></div></aside>
 </main>
-<nav class="navegacion" aria-label="Navegación principal">
-
-    <a th:href="@{/inicio}">
-        <span aria-hidden="true">⌂</span>
-        Inicio
-    </a>
-
-    <a th:href="@{/residuos}">
-        <span aria-hidden="true">♻</span>
-        Residuos
-    </a>
-
-    <a th:href="@{/retos}">
-        <span aria-hidden="true">✓</span>
-        Retos
-    </a>
-
-    <a class="activo" th:href="@{/centros}" aria-current="page">
-        <span aria-hidden="true">⌖</span>
-        Centros
-    </a>
-
-</nav>
+<nav th:replace="~{fragmentos/navegacion :: menu('centros')}"></nav>
 </body></html>

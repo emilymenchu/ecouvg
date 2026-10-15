@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<nav class="navegacion" aria-label="Navegación principal" th:fragment="menu(seccion)">
+<a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'" th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}"><span aria-hidden="true">⌂</span>Inicio</a>
+<a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'" th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}"><span aria-hidden="true">♻</span>Residuos</a>
+<a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}"><span aria-hidden="true">▤</span>Guía</a>
+<a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
+<a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
+</nav>
+</body></html>
