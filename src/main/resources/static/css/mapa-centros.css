@@ -22,3 +22,15 @@
     .mapa-cabecera h2 { font-size: 22px; }
     .mapa-lienzo .leaflet-control-attribution { max-width: 240px; }
 }
+
+/* Interacción entre tarjetas y marcadores (bloque 3). */
+.tarjeta[data-centro-tarjeta] { scroll-margin-block: 95px; }
+.tarjeta.tarjeta-seleccionada { border-color: #185b3b; box-shadow: 0 0 0 2px #185b3b; }
+.tarjeta[data-centro-tarjeta]:focus-visible { outline: 3px solid #b27812; outline-offset: 4px; }
+.ver-en-mapa { align-self: flex-start; margin: auto 0 14px; font-size: 13px; padding: 8px 14px; }
+.ver-en-mapa:disabled { opacity: .55; cursor: not-allowed; }
+.mapa-ficha { font: 13px/1.5 system-ui, sans-serif; color: #17372b; overflow-wrap: anywhere; }
+.mapa-ficha h3 { font-size: 17px; margin: 0 0 10px; }
+.mapa-ficha p { margin: 0 0 9px; }
+.mapa-ficha a { display: block; color: #185b3b; font-weight: 700; margin-top: 12px; }
+.mapa-ficha button { display: block; margin-top: 12px; padding: 7px 10px; font-size: 12px; }

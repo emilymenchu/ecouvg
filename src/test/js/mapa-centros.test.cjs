@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { esUbicable, iniciarMapa } = require('../../main/resources/static/js/mapa-centros.js');
+const { esUbicable, iniciarMapa, crearFicha, identificadorCentro } = require('../../main/resources/static/js/mapa-centros.js');
 
 const centro = (extra = {}) => ({ id: 1, nombre: 'Cayalá', latitud: 14.6, longitud: -90.4, ubicable: true, ...extra });
 function respuesta(datos, extra = {}) {
@@ -8,20 +8,31 @@ function respuesta(datos, extra = {}) {
         headers: { get: () => 'application/json;charset=UTF-8' },
         json: async () => datos, ...extra };
 }
+function nodo(tag = 'div') {
+    const clases = new Set();
+    return { tag, children: [], dataset: {}, atributos: {}, textContent: '',
+        appendChild(n) { this.children.push(n); return n; },
+        setAttribute(k,v) { this.atributos[k]=v; },
+        classList: { toggle(k,activo) { if(activo)clases.add(k);else clases.delete(k); }, contains(k) { return clases.has(k); } },
+        scrollIntoView(opciones) { this.scroll=opciones; }, focus() { this.enfocado=true; } };
+}
 function preparar(responder = async () => respuesta([centro()])) {
     const elementos = {};
     for (const id of ['mapa-centros', 'mapa-estado', 'mapa-aviso', 'mapa-encuadrar', 'mapa-reintentar', 'mapa-login']) {
-        elementos[id] = { dataset: {}, hidden: true, disabled: false, textContent: '', atributos: {},
+        elementos[id] = { ...nodo(), dataset: {}, hidden: true, disabled: false, textContent: '', atributos: {},
             setAttribute(nombre, valor) { this.atributos[nombre] = valor; } };
     }
     elementos['mapa-centros'].dataset = { apiUrl: '/eco/api/centros/mapa?q=cayala&material=Cart%C3%B3n', tilesUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' };
+    const tarjetas = [1,2].map(id => Object.assign(nodo(), {dataset:{centroTarjeta:String(id)}}));
+    const botones = [1,2].map(id => Object.assign(nodo('button'), {dataset:{verCentro:String(id)}}));
     const llamadas = { vistas: [], limites: [], consultas: [], recargas: 0, mapas: 0 };
     const mapa = { setView(pos, zoom) { llamadas.vistas.push([pos, zoom]); return this; },
+        closePopup() { for(const m of grupo.markers) m.closePopup(); },
         fitBounds(bounds, options) { llamadas.limites.push(options); }, invalidateSize() {} };
     const grupo = { markers: [], addTo() { return this; }, clearLayers() { this.markers = []; }, getBounds() { return 'bounds'; } };
     const capa = { eventos: {}, on(evento, fn) { this.eventos[evento] = fn; return this; }, addTo() { return this; } };
     const entorno = {
-        document: { getElementById: id => elementos[id], createElement: tag => ({ tag, textContent: '' }) },
+        document: { getElementById: id => elementos[id], createElement: nodo, querySelectorAll: selector => selector === '[data-ver-centro]' ? botones : tarjetas },
         location: { reload() { llamadas.recargas++; } },
         AbortController, setTimeout, clearTimeout,
         fetch: async (...args) => { llamadas.consultas.push(args); return responder(...args); },
@@ -29,10 +40,18 @@ function preparar(responder = async () => respuesta([centro()])) {
             map() { llamadas.mapas++; return mapa; },
             tileLayer(url, options) { llamadas.tilesUrl = url; llamadas.tileOptions = options; return capa; },
             featureGroup() { return grupo; },
-            marker(pos, options) { return { pos, options, bindTooltip(el) { this.etiqueta = el; return this; }, addTo(g) { g.markers.push(this); return this; } }; }
+            marker(pos, options) { return { pos, options, eventos: {}, abierto:false,
+                bindTooltip(el) { this.etiqueta=el;return this; },
+                bindPopup(el,opciones) { this.ficha=el;this.popupOptions=opciones;return this; },
+                on(evento,fn) { this.eventos[evento]=fn;return this; },
+                getLatLng() {return this.pos;},
+                openPopup() {this.abierto=true;this.eventos.popupopen?.();return this;},
+                closePopup() {if(this.abierto){this.abierto=false;this.eventos.popupclose?.();}return this;},
+                addTo(g) {g.markers.push(this);return this;}
+            }; }
         }
     };
-    return { elementos, llamadas, mapa, grupo, capa, entorno };
+    return { elementos, llamadas, mapa, grupo, capa, entorno, tarjetas, botones };
 }
 
 test('acepta coordenadas finitas y límites; rechaza nulos, strings, NaN e infinito', () => {
@@ -114,4 +133,54 @@ test('Leaflet ausente muestra un aviso y permite recargar', async () => {
 test('no inicializa dos veces el mismo contenedor', async () => {
     const h=preparar();await iniciarMapa(h.entorno);await iniciarMapa(h.entorno);
     assert.equal(h.llamadas.mapas,1);assert.equal(h.llamadas.consultas.length,1);
+});
+
+test('la ventana contiene datos completos y enlace relativo al contexto de la aplicación', () => {
+    const ficha=crearFicha({createElement:nodo},centro({ubicacion:'Zona 16',horario:'Lunes',materiales:['Cartón','Vidrio']}),'/eco/centros/',null);
+    assert.match(ficha.children.map(n=>n.textContent).join(' '),/Zona 16.*Horario: Lunes.*Cartón, Vidrio/);
+    assert.equal(ficha.children.find(n=>n.tag==='a').href,'/eco/centros/1');
+});
+test('no crea enlaces a partir de IDs inválidos y muestra valores pendientes', () => {
+    for(const id of [null,-1,0,'javascript:alert(1)',1.2,Number.MAX_SAFE_INTEGER+1]) assert.equal(identificadorCentro(id),null);
+    const ficha=crearFicha({createElement:nodo},{id:null},'/centros/',null);
+    assert.equal(ficha.children.some(n=>n.tag==='a'),false);
+    assert.match(ficha.children.map(n=>n.textContent).join(' '),/Dirección por confirmar.*Por confirmar.*Materiales por confirmar/);
+});
+test('los campos de la ventana se insertan como texto sin HTML', () => {
+    const ataque='<img src=x onerror=alert(1)>';
+    const ficha=crearFicha({createElement:nodo},centro({nombre:ataque,ubicacion:ataque,horario:ataque,materiales:[ataque]}),'/centros/',null);
+    for(const hijo of ficha.children){assert.equal(hijo.innerHTML,undefined);assert.equal(hijo.children.length,0);}
+    assert.equal(ficha.children[0].textContent,ataque);
+});
+test('Ver en mapa centra el marcador y abre su información', async () => {
+    const h=preparar();await iniciarMapa(h.entorno);
+    assert.equal(h.botones[0].disabled,false);h.botones[0].onclick();
+    assert.equal(h.grupo.markers[0].abierto,true);assert.equal(h.llamadas.vistas.at(-1)[1],16);
+    assert.equal(h.tarjetas[0].classList.contains('tarjeta-seleccionada'),true);
+    assert.equal(h.botones[0].atributos['aria-pressed'],'true');assert.equal(h.elementos['mapa-centros'].enfocado,true);
+});
+test('no habilita Ver en mapa cuando el centro carece de coordenadas', async () => {
+    const h=preparar(async()=>respuesta([centro({ubicable:false})]));const app=await iniciarMapa(h.entorno);
+    assert.equal(h.botones[0].disabled,true);assert.equal(app.seleccionarCentro(1),false);
+});
+test('al abrir y cerrar un marcador se actualiza el resaltado de su tarjeta', async () => {
+    const h=preparar();await iniciarMapa(h.entorno);h.grupo.markers[0].openPopup();
+    assert.equal(h.tarjetas[0].classList.contains('tarjeta-seleccionada'),true);
+    h.grupo.markers[0].closePopup();assert.equal(h.tarjetas[0].classList.contains('tarjeta-seleccionada'),false);
+});
+test('Ver tarjeta cierra la ventana y lleva el foco a la tarjeta correcta', async () => {
+    const h=preparar();await iniciarMapa(h.entorno);const m=h.grupo.markers[0];m.openPopup();
+    m.ficha.children.find(n=>n.tag==='button').onclick();
+    assert.equal(m.abierto,false);assert.equal(h.tarjetas[0].enfocado,true);
+    assert.equal(h.tarjetas[0].classList.contains('tarjeta-seleccionada'),true);
+});
+test('reintentar vacía selección y referencias a los marcadores anteriores', async () => {
+    let vez=0;const h=preparar(async()=>respuesta(++vez===1?[centro()]:[]));
+    const app=await iniciarMapa(h.entorno);h.botones[0].onclick();await app.cargarCentros();
+    assert.equal(app.seleccionarCentro(1),false);assert.equal(h.botones[0].disabled,true);
+    assert.equal(h.tarjetas[0].classList.contains('tarjeta-seleccionada'),false);
+});
+test('respeta la preferencia de movimiento reducido', async () => {
+    const h=preparar();h.entorno.matchMedia=()=>({matches:true});await iniciarMapa(h.entorno);h.botones[0].onclick();
+    assert.equal(h.elementos['mapa-centros'].scroll.behavior,'auto');
 });

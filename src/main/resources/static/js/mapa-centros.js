@@ -8,6 +8,38 @@
             && Math.abs(centro.latitud) <= 90 && Math.abs(centro.longitud) <= 180;
     }
 
+    function identificadorCentro(id) {
+        return Number.isSafeInteger(id) && id > 0 ? String(id) : null;
+    }
+
+    function crearFicha(doc, centro, detalleBase, verTarjeta) {
+        const ficha = doc.createElement('section');
+        ficha.className = 'mapa-ficha';
+        function texto(tag, valor) {
+            const elemento = doc.createElement(tag);
+            elemento.textContent = valor;
+            ficha.appendChild(elemento);
+            return elemento;
+        }
+        texto('h3', centro.nombre || 'Centro de reciclaje');
+        texto('p', centro.ubicacion || 'Dirección por confirmar');
+        texto('p', 'Horario: ' + (centro.horario || 'Por confirmar con el centro'));
+        const materiales = Array.isArray(centro.materiales)
+            ? centro.materiales.filter(m => typeof m === 'string' && m.trim()) : [];
+        texto('p', 'Recibe: ' + (materiales.length ? materiales.join(', ') : 'Materiales por confirmar'));
+        const id = identificadorCentro(centro.id);
+        if (id !== null) {
+            const enlace = texto('a', 'Ver información completa');
+            enlace.href = detalleBase + id;
+        }
+        if (verTarjeta) {
+            const boton = texto('button', 'Ver tarjeta en la lista');
+            boton.type = 'button';
+            boton.onclick = verTarjeta;
+        }
+        return ficha;
+    }
+
     // Las dependencias opcionales permiten probar el comportamiento sin servicios externos.
     async function iniciarMapa(entorno = global) {
         const doc = entorno.document;
@@ -19,8 +51,16 @@
         const reintentar = doc.getElementById('mapa-reintentar');
         const login = doc.getElementById('mapa-login');
         const L = entorno.L;
+        const botones = Array.from(doc.querySelectorAll('[data-ver-centro]'));
+        const tarjetas = new Map(Array.from(doc.querySelectorAll('[data-centro-tarjeta]'))
+            .map(t => [t.dataset.centroTarjeta, t]));
+        function desactivarBotones(mensaje) {
+            botones.forEach(b => { b.disabled = true; b.title = mensaje; b.setAttribute('aria-pressed', 'false'); });
+        }
+        desactivarBotones('Esperando la carga del mapa');
 
         if (!L) {
+            desactivarBotones('El mapa no está disponible');
             estado.textContent = 'No se pudo cargar el mapa. Revisa tu conexión; la lista de centros sigue disponible.';
             lienzo.setAttribute('aria-busy', 'false');
             reintentar.hidden = false;
@@ -33,6 +73,7 @@
             // Vista general de Ciudad de Guatemala; no representa una ubicación exacta de la UVG.
             mapa = L.map(lienzo, { scrollWheelZoom: false }).setView([14.60, -90.50], 12);
         } catch (error) {
+            desactivarBotones('El mapa no está disponible');
             estado.textContent = 'No se pudo iniciar el mapa. Puedes consultar la lista de centros.';
             lienzo.setAttribute('aria-busy', 'false');
             return null;
@@ -54,6 +95,27 @@
         capa.addTo(mapa);
         const grupo = L.featureGroup().addTo(mapa);
         let puntos = [];
+        const marcadores = new Map();
+        function resaltarTarjeta(id) {
+            tarjetas.forEach((tarjeta, clave) => tarjeta.classList.toggle('tarjeta-seleccionada', clave === id));
+            botones.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.verCentro === id)));
+        }
+        function desplazar(elemento) {
+            const reducido = entorno.matchMedia && entorno.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            elemento.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'center' });
+            elemento.focus({ preventScroll: true });
+        }
+        function seleccionarCentro(id) {
+            const marcador = marcadores.get(String(id));
+            if (!marcador) return false;
+            mapa.invalidateSize();
+            mapa.setView(marcador.getLatLng(), 16);
+            marcador.openPopup();
+            resaltarTarjeta(String(id));
+            desplazar(lienzo);
+            return true;
+        }
+        botones.forEach(b => { b.onclick = () => seleccionarCentro(b.dataset.verCentro); });
 
         function ajustarVista() {
             if (puntos.length === 0) return;
@@ -75,6 +137,9 @@
             estado.textContent = 'Cargando centros…';
             grupo.clearLayers();
             puntos = [];
+            marcadores.clear();
+            resaltarTarjeta(null);
+            desactivarBotones('Esperando la carga del mapa');
             const cancelacion = new entorno.AbortController();
             const timeout = entorno.setTimeout(() => cancelacion.abort(), 12000);
             try {
@@ -99,11 +164,29 @@
                     // Leaflet interpreta strings como HTML: se usa textContent para datos de la base.
                     const etiqueta = doc.createElement('span');
                     etiqueta.textContent = nombre;
-                    L.marker([centro.latitud, centro.longitud], {
+                    const id = identificadorCentro(centro.id);
+                    const tarjeta = id === null ? null : tarjetas.get(id);
+                    const ficha = crearFicha(doc, centro, lienzo.dataset.detalleBase || '/centros/',
+                        tarjeta ? () => {
+                            mapa.closePopup();
+                            resaltarTarjeta(id);
+                            desplazar(tarjeta);
+                        } : null);
+                    const marcador = L.marker([centro.latitud, centro.longitud], {
                         title: nombre,
                         alt: nombre,
                         keyboard: true
-                    }).bindTooltip(etiqueta).addTo(grupo);
+                    }).bindTooltip(etiqueta)
+                        .bindPopup(ficha, { maxWidth: 290, maxHeight: 230 })
+                        .on('popupopen', () => resaltarTarjeta(id))
+                        .on('popupclose', () => resaltarTarjeta(null))
+                        .addTo(grupo);
+                    if (id !== null) marcadores.set(id, marcador);
+                });
+                botones.forEach(b => {
+                    b.disabled = !marcadores.has(b.dataset.verCentro);
+                    b.title = b.disabled ? 'Este centro no tiene una ubicación disponible en el mapa'
+                        : 'Centrar el mapa y abrir la información del centro';
                 });
                 const sinUbicacion = centros.length - puntos.length;
                 if (centros.length === 0) {
@@ -119,6 +202,9 @@
             } catch (error) {
                 grupo.clearLayers();
                 puntos = [];
+                marcadores.clear();
+                resaltarTarjeta(null);
+                desactivarBotones('No se pudieron cargar los puntos del mapa');
                 encuadrar.disabled = true;
                 estado.textContent = error.name === 'AbortError'
                     ? 'La consulta tardó demasiado. Revisa tu conexión e intenta nuevamente.'
@@ -134,13 +220,13 @@
         }
         reintentar.onclick = cargarCentros;
         await cargarCentros();
-        return { mapa, cargarCentros, ajustarVista };
+        return { mapa, cargarCentros, ajustarVista, seleccionarCentro };
     }
 
     if (typeof module !== 'undefined' && module.exports) {
-        module.exports = { esUbicable, iniciarMapa };
+        module.exports = { esUbicable, iniciarMapa, crearFicha, identificadorCentro };
     } else {
-        global.EcoUVGMapa = { esUbicable, iniciarMapa };
+        global.EcoUVGMapa = { esUbicable, iniciarMapa, crearFicha, identificadorCentro };
         if (global.document.readyState === 'loading') {
             global.document.addEventListener('DOMContentLoaded', () => iniciarMapa());
         } else {

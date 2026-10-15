@@ -29,10 +29,11 @@
   <div id="mapa-centros" class="mapa-lienzo" role="region" aria-label="Mapa interactivo de centros de reciclaje"
        aria-describedby="mapa-ayuda" aria-busy="true" tabindex="0"
        data-api-url="/api/centros/mapa"
-       th:attr="data-api-url=@{/api/centros/mapa(q=${q},material=${material})}"
+       data-detalle-base="/centros/"
+       th:attr="data-api-url=@{/api/centros/mapa(q=${q},material=${material})},data-detalle-base=@{/centros/}"
        data-tiles-url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"></div>
   <div class="mapa-pie">
-    <p id="mapa-ayuda">Usa + y − para acercar o alejar el mapa. Los puntos muestran la ubicación de cada centro.</p>
+    <p id="mapa-ayuda">Usa + y − para acercar o alejar el mapa. Pulsa un punto para consultar el centro o usa Ver en mapa desde su tarjeta.</p>
     <button id="mapa-reintentar" type="button" hidden>Reintentar carga</button>
     <a id="mapa-login" th:href="@{/login}" href="/login" hidden>Volver a iniciar sesión</a>
   </div>
@@ -42,7 +43,11 @@
 <div class="resultados-titulo"><div><p class="ceja">PUNTOS DE ACOPIO</p><h2 id="titulo-resultados">Centros de reciclaje <span class="contador" th:text="${#lists.size(centros)}">0</span></h2></div><a class="limpiar" th:href="@{/centros}">Limpiar filtros</a></div>
 <p class="nota">Directorio en zonas cercanas y alrededores de la UVG. Orden alfabético; no indica distancia ni tiempo de viaje.</p>
 <div class="vacio" th:if="${#lists.isEmpty(centros)}"><h3>No encontramos centros</h3><p>Prueba con otro nombre, zona o material, o limpia los filtros.</p><a class="boton" th:href="@{/centros}">Ver todos los centros</a></div>
-<div class="tarjetas"><article class="tarjeta" th:each="centro : ${centros}"><div class="tarjeta-top"><span class="icono-centro" aria-hidden="true">♻</span><span class="tipo">Punto de acopio</span></div><h3 th:text="${centro.nombre}">Centro</h3><p class="direccion" th:text="${centro.ubicacion}">Dirección</p><p class="horario"><strong>Horario:</strong> <span th:text="${centro.horario ?: 'Por confirmar con el centro'}"></span></p><div class="materiales" aria-label="Materiales aceptados"><span th:each="residuo : ${centro.residuosAceptados}" th:text="${residuo.nombre}"></span><span th:if="${#lists.isEmpty(centro.residuosAceptados)}">Materiales por confirmar</span></div><a class="detalle" th:href="@{/centros/{id}(id=${centro.id})}" th:attr="aria-label=${'Ver información de ' + centro.nombre}">Ver información <span aria-hidden="true">↗</span></a></article></div>
+<div class="tarjetas"><article class="tarjeta" th:each="centro : ${centros}" tabindex="-1"
+    th:attr="data-centro-tarjeta=${centro.id}"><div class="tarjeta-top"><span class="icono-centro" aria-hidden="true">♻</span><span class="tipo">Punto de acopio</span></div><h3 th:text="${centro.nombre}">Centro</h3><p class="direccion" th:text="${centro.ubicacion}">Dirección</p><p class="horario"><strong>Horario:</strong> <span th:text="${centro.horario ?: 'Por confirmar con el centro'}"></span></p><div class="materiales" aria-label="Materiales aceptados"><span th:each="residuo : ${centro.residuosAceptados}" th:text="${residuo.nombre}"></span><span th:if="${#lists.isEmpty(centro.residuosAceptados)}">Materiales por confirmar</span></div><button class="ver-en-mapa" type="button" disabled aria-pressed="false"
+    th:attr="data-ver-centro=${centro.id},aria-label=${'Ver en mapa: ' + centro.nombre}"
+    title="Esperando la carga del mapa">Ver en mapa</button>
+<a class="detalle" th:href="@{/centros/{id}(id=${centro.id})}" th:attr="aria-label=${'Ver información de ' + centro.nombre}">Ver información <span aria-hidden="true">↗</span></a></article></div>
 </section>
 <aside class="consejo"><span aria-hidden="true">♧</span><div><strong>Prepara tus reciclables</strong><p>Llévalos separados, limpios y secos. Confirma con el centro los horarios y las condiciones de recepción antes de ir.</p></div></aside>
 </main>
