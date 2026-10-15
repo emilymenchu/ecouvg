@@ -24,7 +24,7 @@ public class Usuario {
     @Column(nullable = false, length = 100)
     private String contrasena;
 
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private String correo;
 
     private int puntos;
