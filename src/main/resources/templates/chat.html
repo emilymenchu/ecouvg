@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoBot | EcoUVG</title>
+
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <script th:src="@{/js/chat.js}" defer></script>
+
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<body>
+
+    <main class="chat">
+
+        <header class="chat-header">
+            <h1>♻️ EcoBot</h1>
+            <p>Tu asistente de reciclaje</p>
+        </header>
+
+        <section class="mensajes" id="mensajes">
+            <div class="mensaje bot">
+                ¡Hola! Soy EcoBot. ¿Qué quieres saber sobre reciclaje?
+            </div>
+        </section>
+
+        <form id="form-chat" class="form-chat">
+            <input
+                type="text"
+                id="pregunta"
+                placeholder="Escribe tu pregunta..."
+                maxlength="1000"
+                required
+            >
+
+            <button type="submit" id="btn-enviar">
+                Enviar
+            </button>
+        </form>
+
+    </main>
+
+</body>
+</html>
