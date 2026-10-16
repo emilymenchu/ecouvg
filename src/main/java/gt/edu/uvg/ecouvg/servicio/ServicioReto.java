@@ -72,6 +72,24 @@ public class ServicioReto {
         return repositorioProgresoReto.findByUsuarioIdAndRetoId(idUsuario, idReto).orElse(null);
     }
 
+
+    @Transactional 
+    public ProgresoReto inicioReto(Long idUsuario, Long idReto){
+        Usuario usuario = repositorioUsuario.findById(idUsuario).orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado")); 
+        Reto reto = repositorioReto.findById(idReto).orElseThrow(()->new IllegalArgumentException("Reto no encontrado")); 
+        if (!reto.estaDisponible(LocalDate.now())){
+            throw new IllegalStateException("Reto no disponible"); 
+    
+        }
+        Optional<ProgresoReto> progresoExistente= repositorioProgresoReto.findByUsuarioIdAndRetoId(idUsuario, idReto); 
+        if (progresoExistente.isPresent()){
+            return progresoExistente.get(); 
+        }
+        ProgresoReto nuevoProgreso = new ProgresoReto(usuario, reto); 
+        return repositorioProgresoReto.save(nuevoProgreso); 
+    }   
+
+
     public ProgresoReto actualizarProgreso(Long idUsuario, Long idReto, int actual){
         if (actual <0) {
             throw new IllegalArgumentException("El progreso debe ser positivo");  
