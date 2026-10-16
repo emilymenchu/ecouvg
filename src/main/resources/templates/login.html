@@ -1,73 +1,70 @@
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Iniciar sesión | EcoUVG</title>
+    <title>Login | EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script th:src="@{/js/login.js}" defer></script>
 </head>
 
 <body>
 
-    <main>
+    <div class="login">
 
-        <h1>EcoUVG</h1>
-
+        <h1>EcoUVG ♻</h1>
         <h2>Iniciar sesión</h2>
 
-        <div th:if="${param.error}">
-            <p>
-                Carné o contraseña incorrectos.
-            </p>
+        <p>Ingresa tus credenciales</p>
+
+        <div class="error" th:if="${param.error}">
+            Carné o contraseña incorrectos.
         </div>
 
-        <div th:if="${param.logout}">
-            <p>
-                Sesión cerrada correctamente.
-            </p>
+        <div class="exito" th:if="${param.logout}">
+            Sesión cerrada correctamente.
         </div>
 
-        <form th:action="@{/login}"
-              method="post">
+        <div class="exito" th:if="${param.registro}">
+            Cuenta creada correctamente. Ya puedes iniciar sesión.
+        </div>
+        <div class="exito" th:if="${param.recuperada}">
+            Contraseña actualizada correctamente.
+        </div>
 
-            <div>
-                <label for="carnet">
-                    Carné
-                </label>
+        <form th:action="@{/login}" method="post">
 
-                <input
-                    type="text"
-                    id="carnet"
-                    name="carnet"
-                    required
-                    autocomplete="username"
-                    maxlength="20">
-            </div>
+            <label for="carnet">Carné</label>
+            <input
+                type="text"
+                id="carnet"
+                name="carnet"
+                placeholder="Ingresa tu carné"
+                required>
 
-            <div>
-                <label for="contrasena">
-                    Contraseña
-                </label>
-
-                <input
-                    type="password"
-                    id="contrasena"
-                    name="contrasena"
-                    required
-                    autocomplete="current-password">
-            </div>
+            <label for="contrasena">Contraseña</label>
+            <input
+                type="password"
+                id="contrasena"
+                name="contrasena"
+                placeholder="Ingresa tu contraseña"
+                required>
 
             <button type="submit">
                 Iniciar sesión
             </button>
 
         </form>
+        <p>
+            ¿No tienes una cuenta?
+            <a th:href="@{/registro}">Crear cuenta</a>
+        </p>
+                <a th:href="@{/recuperar}">
+            ¿Olvidaste tu contraseña?
+        </a>
 
-    </main>
+    </div>
 
 </body>
-
 </html>

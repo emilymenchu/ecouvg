@@ -2,9 +2,10 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
-
     <meta charset="UTF-8">
     <title>Residuos</title>
+<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <main class="contenedor">
@@ -48,12 +49,13 @@
             <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
         </p>
 
-        <a class="boton" th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
+        <a class="botones" th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
              Ver detalle
         </a>
         </article>
 
     </div>
 </main>
+<nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
 </body>
 </html>

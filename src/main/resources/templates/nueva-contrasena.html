@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva contraseña | EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="login">
+
+    <h1>EcoUVG ♻</h1>
+    <h2>Nueva contraseña</h2>
+
+    <div class="error" th:if="${error}">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/nueva-contrasena}" method="post">
+
+        <label>Nueva contraseña</label>
+
+        <input
+            type="password"
+            name="contrasena"
+            required>
+
+        <label>Confirmar contraseña</label>
+
+        <input
+            type="password"
+            name="confirmarContrasena"
+            required>
+
+        <button type="submit">
+            Cambiar contraseña
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

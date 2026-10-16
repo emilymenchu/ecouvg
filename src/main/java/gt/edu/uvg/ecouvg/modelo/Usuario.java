@@ -1,6 +1,12 @@
 package gt.edu.uvg.ecouvg.modelo;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity 
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
@@ -18,6 +24,9 @@ public class Usuario {
     @Column(nullable = false, length = 100)
     private String contrasena;
 
+    @Column(nullable = false, unique = true)
+    private String correo;
+
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
@@ -27,9 +36,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String carnet, String contrasena) {
+    public Usuario(String nombre, String carnet, String correo, String contrasena) {
         this.nombre = nombre;
         this.carnet = carnet;
+        this.correo = correo;
         this.contrasena = contrasena;
     }
 
@@ -67,5 +77,25 @@ public class Usuario {
 
     public int getHorasBeca() {
         return horasBeca;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public void sumarPuntos (int cantidad){
+        if (cantidad<= 0) {
+            throw new IllegalArgumentException("La cantidad tiene que ser positiva"); 
+        }
+        this.puntos += cantidad;
+        this.puntosTotales += cantidad; 
     }
 }

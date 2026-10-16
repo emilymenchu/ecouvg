@@ -1,0 +1,62 @@
+body {
+    margin: 0; 
+    font-family: 'Arial' , sans-serif;
+    background-color: #f8f9f4 ;
+    
+}
+
+h1 {
+    color: #17372b;
+    text-align: center;
+    margin-bottom: 30px;
+
+}
+
+h2{
+    color: #17372b; 
+}
+
+
+.contenedor{
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto; 
+}
+
+.lista-retos{
+    display: grid ;
+    grid-template-columns: minmax(100px, 1fr);
+    gap: 20px
+}
+
+.area-retos{
+    background-color: white;
+    padding: 20px; 
+    border-radius: 10px;
+    box-shadow:0 3px 10px #17372b12 ;
+}
+
+
+.dificultad {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+.facil {
+    background-color: white;
+    color: #185b3b;
+}
+
+.media {
+    background-color: white; 
+    color: #7a5b00;
+}
+
+.dificil {
+    background-color: white;
+    color: #842029;
+}

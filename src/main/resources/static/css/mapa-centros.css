@@ -1,0 +1,36 @@
+/* Mapa compartido por el directorio y la ficha individual. */
+.mapa-panel { margin: 24px 0 36px; padding: 20px; border: 1px solid var(--linea, #dbe3d8); border-radius: 18px; background: #fff; }
+.mapa-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.mapa-cabecera h2 { margin: 0; }
+.mapa-panel button { font-size: 13px; }
+.mapa-panel button:disabled { opacity: .5; cursor: default; }
+.mapa-estado { margin: 14px 0; color: #40594b; font-size: 14px; }
+.mapa-aviso { background: #fff3d4; color: #654c0d; border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+.mapa-lienzo { height: 420px; width: 100%; border: 1px solid #cad7cb; border-radius: 12px; background: #edf1e7; isolation: isolate; z-index: 0; }
+.mapa-lienzo:focus-visible { outline: 3px solid #b27812; outline-offset: 3px; }
+.mapa-lienzo .leaflet-control-attribution { font-size: 11px; background: #fffffff2; }
+.mapa-lienzo .leaflet-control-attribution a { color: #145333; }
+.mapa-lienzo .leaflet-tooltip { max-width: 230px; white-space: normal; font-family: inherit; }
+.mapa-pie { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.mapa-pie p { flex: 1; min-width: 180px; margin: 0; color: #58665e; font-size: 12px; }
+.mapa-pie a { font-size: 13px; }
+.mapa-panel [hidden] { display: none !important; }
+@media (max-width: 600px) {
+    .mapa-panel { padding: 14px; }
+    .mapa-lienzo { height: 320px; }
+    .mapa-cabecera { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .mapa-cabecera h2 { font-size: 22px; }
+    .mapa-lienzo .leaflet-control-attribution { max-width: 240px; }
+}
+
+/* Interacción entre tarjetas y marcadores (bloque 3). */
+.tarjeta[data-centro-tarjeta] { scroll-margin-block: 95px; }
+.tarjeta.tarjeta-seleccionada { border-color: #185b3b; box-shadow: 0 0 0 2px #185b3b; }
+.tarjeta[data-centro-tarjeta]:focus-visible { outline: 3px solid #b27812; outline-offset: 4px; }
+.ver-en-mapa { align-self: flex-start; margin: auto 0 14px; font-size: 13px; padding: 8px 14px; }
+.ver-en-mapa:disabled { opacity: .55; cursor: not-allowed; }
+.mapa-ficha { font: 13px/1.5 system-ui, sans-serif; color: #17372b; overflow-wrap: anywhere; }
+.mapa-ficha h3 { font-size: 17px; margin: 0 0 10px; }
+.mapa-ficha p { margin: 0 0 9px; }
+.mapa-ficha a { display: block; color: #185b3b; font-weight: 700; margin-top: 12px; }
+.mapa-ficha button { display: block; margin-top: 12px; padding: 7px 10px; font-size: 12px; }

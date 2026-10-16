@@ -1,4 +1,12 @@
-
+.racha {
+    display: inline-block;
+    margin: 18px 0 0;
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    color: var(--verde);
+}
         /* Colores y configuración general */
             :root {
                 --verde: #245c40;

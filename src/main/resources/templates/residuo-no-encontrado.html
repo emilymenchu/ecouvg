@@ -5,6 +5,8 @@
 
     <meta charset="UTF-8">
     <title>Residuos</title>
+<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <main class="mensaje-error">
@@ -14,10 +16,11 @@
         Por favor vuelva a la lista.
     </p>
 
-    <a class= "boton" th:href="@{/residuos}">
+    <a class= "botones" th:href="@{/residuos}">
         Volver a la lista de residuos
     </a>
     </main>
 
+<nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
 </body>
 </html>

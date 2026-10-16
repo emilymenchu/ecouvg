@@ -1,4 +1,3 @@
-</html>
 <!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org">
@@ -9,6 +8,8 @@
     <meta charset="UTF-8">
     <title>Inicio | EcoUVG</title>
 
+<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <header class="encabezado">
@@ -17,7 +18,6 @@
                 Eco<span>UVG</span>
             </a>
 
-            <!-- Conserva el cierre de sesión de tu página original. -->
             <form class="sesion" th:action="@{/logout}" method="post">
                 <button class="boton-salir" type="submit">
                     Cerrar sesión
@@ -30,10 +30,21 @@
         <section class="bienvenida" aria-labelledby="titulo-inicio">
             <div>
                 <p class="etiqueta">PEQUEÑAS ACCIONES, GRANDES CAMBIOS</p>
-                <h1 id="titulo-inicio">¡Bienvenido a EcoUVG!</h1>
+                <h1 id="titulo-inicio">
+                    ¡Bienvenido, <span th:text="${usuario.nombre}">Usuario</span>!
+                </h1>
                 <p class="descripcion">
                     Ayuda al planeta hoy. Aprende a clasificar tus
                     residuos y encuentra dónde llevarlos.
+                </p>
+                <p class="racha">
+                    🔥 <strong>Tu racha:</strong>
+                    <span th:text="${usuario.diasRacha}">0</span> días
+                </p>
+
+                <p class="racha">
+                    ⭐ <strong>Tus puntos:</strong>
+                    <span th:text="${usuario.puntos}">0</span>
                 </p>
             </div>
 
@@ -62,17 +73,16 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">📍</span>
+                <span class="icono" aria-hidden="true">♻️</span>
                 <h3>Centros de reciclaje</h3>
+                </h3>
                 <p>
-                    Próximamente podrás consultar ubicaciones,
-                    horarios y materiales aceptados.
+                    Consulta los horarios, materiales resividos y ubicaciones de los centros de reciclaje.
                 </p>
 
-                <!-- Sustituir por un enlace cuando exista la ruta de centros. -->
-                <button class="boton" type="button" disabled>
-                    Próximamente
-                </button>
+                <a class="boton" th:href="@{/centros}">
+                    Ver centros →
+                </a>
             </article>
         </section>
 
@@ -83,7 +93,7 @@
             </p>
         </aside>
     </main>
-
+    <nav th:replace="~{fragmentos/navegacion :: menu('inicio')}"></nav>
     <footer>
         EcoUVG · Construyamos una comunidad más verde.
     </footer>
