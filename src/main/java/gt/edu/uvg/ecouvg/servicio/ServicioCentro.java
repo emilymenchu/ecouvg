@@ -1,6 +1,7 @@
 package gt.edu.uvg.ecouvg.servicio;
 
 import gt.edu.uvg.ecouvg.modelo.CentroReciclaje;
+import gt.edu.uvg.ecouvg.dto.CentroMapaDTO;
 import gt.edu.uvg.ecouvg.modelo.Residuo;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioCentro;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,23 @@ public class ServicioCentro {
                 + " " + residuos, consulta);
         }).toList();
     }
+    /** Comparte los filtros de la lista y conserva los centros sin coordenadas válidas. */
+    public List<CentroMapaDTO> obtenerCentrosMapa(String consulta, String material) {
+        return buscarCentros(consulta, material).stream()
+            .map(this::convertirMapa).toList();
+    }
+
+    public Optional<CentroMapaDTO> obtenerCentroMapa(Long id) {
+        return repositorio.findById(id).map(this::convertirMapa);
+    }
+
+    private CentroMapaDTO convertirMapa(CentroReciclaje c) {
+        return new CentroMapaDTO(c.getId(), c.getNombre(), c.getUbicacion(),
+            c.getLatitud(), c.getLongitud(), c.getHorario(),
+            c.getResiduosAceptados().stream().map(Residuo::getNombre)
+                .filter(java.util.Objects::nonNull).distinct().sorted().toList());
+    }
+
     public List<String> obtenerMateriales() {
         return obtenerCentros().stream().flatMap(c -> c.getResiduosAceptados().stream())
             .map(Residuo::getNombre).distinct().sorted().toList();
