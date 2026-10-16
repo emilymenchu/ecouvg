@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es " xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset ="UTF-8">
+    <meta name= "viewport" content= "width=device-width, initial-scale=1.0">
+    <title> Envío de EVIDENCIA - EcoUVG</title>
+    <link rel ="stylesheet" th:href="@{/css/envio-evidencia.css}">
+</head>
+
+<body>
+    <main class ="contenedor">
+        <h1>Enviar evidencia</h1>
+        <p> Toma una fotografia sobre la actividad que realizaste para que otros puedan validarla</p>
+        <p class="mensaje" th:if="${mensaje}" th:text="${mensaje}"></p>
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <form th:action="@{/evidencias/enviar}" method="post" enctype ="multipart/form-data">
+            <input type="hidden" name="idProgreso" th:value="${idProgreso}">
+            <label for="fotografia">
+                Fotografia a subir de la mision: 
+            </label>
+
+            <input type="file" id="fotografia" name="fotografia" accept="image/jpeg, image/png, image/webp" capture="environment" required>
+            <p>
+                Formatos de imagen permitidos: JPG, PNG, webp
+                Tamaño max: 5MB
+            </p>
+
+
+            <button type="submit">
+                Enviar evidencia
+            </button>
+
+
+
+        </form>
+
+        
+        <a th:href="@{/retos}" class="boton-volver">
+            Volver a retos
+        </a>
+
+    </main>
+</body>
+</html>

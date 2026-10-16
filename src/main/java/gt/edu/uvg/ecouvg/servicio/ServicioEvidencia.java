@@ -1,33 +1,38 @@
 package gt.edu.uvg.ecouvg.servicio;
-import gt.edu.uvg.ecouvg.modelo.Evidencia;
-import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
-import gt.edu.uvg.ecouvg.modelo.Usuario;
-import gt.edu.uvg.ecouvg.modelo.EstadoEvidencia;
-
-import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import gt.edu.uvg.ecouvg.modelo.EstadoEvidencia;
+import gt.edu.uvg.ecouvg.modelo.Evidencia;
+import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
+import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
 
 @Service 
 public class ServicioEvidencia {
     private final RepositorioEvidencia repositorioEvidencia; 
     private final RepositorioProgresoReto repositorioProgresoReto; 
     private final RepositorioUsuario repositorioUsuario;
-    
-    public ServicioEvidencia(RepositorioEvidencia repositorioEvidencia, RepositorioProgresoReto repositorioProgresoReto, RepositorioUsuario repositorioUsuario){
+    private final ServicioStorage servicioStorage;
+
+
+    public ServicioEvidencia(RepositorioEvidencia repositorioEvidencia, RepositorioProgresoReto repositorioProgresoReto, RepositorioUsuario repositorioUsuario, ServicioStorage servicioStorage){
         this.repositorioEvidencia = repositorioEvidencia; 
         this.repositorioProgresoReto = repositorioProgresoReto; 
         this.repositorioUsuario = repositorioUsuario; 
+        this.servicioStorage = servicioStorage; 
     }
 
         
     @Transactional
-    public Evidencia registrarEvidencia(Long idUsuario,Long idProgreso,String rutaFotografia) {
+    public Evidencia registrarEvidencia(Long idUsuario,Long idProgreso,MultipartFile fotografia) throws IOException {
         
         Usuario usuario = repositorioUsuario.findById(idUsuario).orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
@@ -42,7 +47,11 @@ public class ServicioEvidencia {
             throw new IllegalStateException("La misión ya está completada" );
         }
 
-        if (rutaFotografia == null ||rutaFotografia.isBlank()) {
+        if(!progresoReto.retoEstaDisponible(LocalDate.now())){
+            throw new IllegalStateException("La misión no está disponible" );
+        }
+
+        if (fotografia == null ||fotografia.isEmpty()) {
             throw new IllegalArgumentException("Debes adjuntar una fotografía" );
         }
 
@@ -53,12 +62,20 @@ public class ServicioEvidencia {
                 throw new IllegalStateException("Ya tienes una evidencia pendiente de revisión" );
             }
         }
+        String rutaFotografia =  servicioStorage.subirImagen(fotografia, "evidencias", "usuario_" + usuario.getId()); 
+        try{
 
-        Evidencia evidencia = new Evidencia(
-            usuario, progresoReto, rutaFotografia
-        );
-
+        Evidencia evidencia = new Evidencia(usuario, progresoReto, rutaFotografia);
         return repositorioEvidencia.save(evidencia);
+        }catch(RuntimeException e){
+            try{
+                servicioStorage.eliminarImagen("evidencias", rutaFotografia);
+
+            }catch (RuntimeException errorEliminacion){
+                e.addSuppressed(errorEliminacion); 
+            }
+            throw e; 
+        }
     }
 
     
