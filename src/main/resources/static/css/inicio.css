@@ -121,8 +121,10 @@
         }
 
         .mascota {
+            width: 150px;
+            height: auto;
             flex-shrink: 0;
-            font-size: 90px;
+            object-fit: contain;
         }
 
         .titulo-seccion {
