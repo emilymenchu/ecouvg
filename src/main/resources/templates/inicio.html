@@ -1,22 +1,28 @@
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/inicio.css" th:href="@{/css/inicio.css}">
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inicio | EcoUVG</title>
 
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="../static/css/inicio.css"
+          th:href="@{/css/inicio.css}">
 </head>
+
 <body>
     <header class="encabezado">
         <div class="barra">
-            <a class="marca" th:href="@{/inicio}" aria-current="page">
-                Eco<span>UVG</span>
-            </a>
+            <button class="abrir-menu"
+                    id="abrir-menu"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-controls="menu-lateral"
+                    aria-expanded="false">
+                <span aria-hidden="true">🐚</span> Menú
+            </button>
+
+            <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
 
             <form class="sesion" th:action="@{/logout}" method="post">
                 <button class="boton-salir" type="submit">
@@ -26,17 +32,66 @@
         </div>
     </header>
 
+    <dialog class="menu-lateral"
+            id="menu-lateral"
+            aria-labelledby="titulo-menu">
+
+        <div class="cabecera-menu">
+            <h2 id="titulo-menu">Explora EcoUVG</h2>
+
+            <button class="cerrar-menu"
+                    id="cerrar-menu"
+                    type="button"
+                    aria-label="Cerrar menú"
+                    autofocus>
+                ✕
+            </button>
+        </div>
+
+        <p class="descripcion-menu">
+            Un pequeño paso para cuidar el planeta.
+        </p>
+
+        <nav class="enlaces-menu" aria-label="Navegación principal">
+            <a class="activo" th:href="@{/inicio}" aria-current="page">
+                <span aria-hidden="true">🏡</span> Inicio
+            </a>
+
+            <a th:href="@{/residuos}">
+                <span aria-hidden="true">♻️</span> Residuos
+            </a>
+
+            <a th:href="@{/centros}">
+                <span aria-hidden="true">📍</span> Centros de reciclaje
+            </a>
+
+            <a th:href="@{/guia}">
+                <span aria-hidden="true">📖</span> Guía de reciclaje
+            </a>
+
+            <a th:href="@{/retos}">
+                <span aria-hidden="true">⭐</span> Retos
+            </a>
+        </nav>
+    </dialog>
+
     <main>
         <section class="bienvenida" aria-labelledby="titulo-inicio">
             <div>
-                <p class="etiqueta">PEQUEÑAS ACCIONES, GRANDES CAMBIOS</p>
+                <p class="etiqueta">
+                    PEQUEÑAS ACCIONES, GRANDES CAMBIOS
+                </p>
+
                 <h1 id="titulo-inicio">
-                    ¡Bienvenido, <span th:text="${usuario.nombre}">Usuario</span>!
+                    ¡Bienvenido,
+                    <span th:text="${usuario.nombre}">Usuario</span>!
                 </h1>
+
                 <p class="descripcion">
                     Ayuda al planeta hoy. Aprende a clasificar tus
                     residuos y encuentra dónde llevarlos.
                 </p>
+
                 <p class="racha">
                     🔥 <strong>Tu racha:</strong>
                     <span th:text="${usuario.diasRacha}">0</span> días
@@ -49,14 +104,15 @@
             </div>
 
             <img class="mascota"
-                src="../static/img/Eco sentada feliz.png"
-                th:src="@{/img/Eco sentada feliz.png}"
-                alt="Eco, la tortuga mascota, sentada y feliz">
+                 src="../static/img/Eco sentada feliz.png"
+                 th:src="@{/img/Eco sentada feliz.png}"
+                 alt="Eco, la tortuga mascota, sentada y feliz">
         </section>
 
         <h2 class="titulo-seccion" id="titulo-opciones">
             ¿Por dónde quieres empezar?
         </h2>
+
         <p class="introduccion">
             Cada paso cuenta para cuidar nuestra comunidad.
         </p>
@@ -65,6 +121,7 @@
             <article class="tarjeta">
                 <span class="icono" aria-hidden="true">♻️</span>
                 <h3>Guía de residuos</h3>
+
                 <p>
                     Consulta los residuos y descubre cómo
                     clasificarlos y manejarlos correctamente.
@@ -76,11 +133,12 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">♻️</span>
+                <span class="icono" aria-hidden="true">📍</span>
                 <h3>Centros de reciclaje</h3>
-                </h3>
+
                 <p>
-                    Consulta los horarios, materiales resividos y ubicaciones de los centros de reciclaje.
+                    Consulta los horarios, materiales recibidos y
+                    ubicaciones de los centros de reciclaje.
                 </p>
 
                 <a class="boton" th:href="@{/centros}">
@@ -89,11 +147,12 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">♻️</span>
+                <span class="icono" aria-hidden="true">📖</span>
                 <h3>Guía de reciclaje</h3>
-                </h3>
+
                 <p>
-                    Consulta los basurero y contenedores que se deben usar para cada tipo de residuo.
+                    Consulta los basureros y contenedores que se
+                    deben usar para cada tipo de residuo.
                 </p>
 
                 <a class="boton" th:href="@{/guia}">
@@ -102,11 +161,12 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">♻️</span>
-                <h3>Centros de reciclaje</h3>
-                </h3>
+                <span class="icono" aria-hidden="true">⭐</span>
+                <h3>Retos de la semana</h3>
+
                 <p>
-                    Consulta los reto y desafíos que puedes completar para ganar puntos y mejorar tu racha.
+                    Consulta los retos y desafíos que puedes completar
+                    para ganar puntos y mejorar tu racha.
                 </p>
 
                 <a class="boton" th:href="@{/retos}">
@@ -122,9 +182,47 @@
             </p>
         </aside>
     </main>
-    <nav th:replace="~{fragmentos/navegacion :: menu('inicio')}"></nav>
+
     <footer>
         EcoUVG · Construyamos una comunidad más verde.
     </footer>
+
+    <script>
+        const menuLateral = document.getElementById("menu-lateral");
+        const abrirMenu = document.getElementById("abrir-menu");
+        const cerrarMenu = document.getElementById("cerrar-menu");
+
+        abrirMenu.addEventListener("click", () => {
+            menuLateral.showModal();
+            abrirMenu.setAttribute("aria-expanded", "true");
+            document.body.classList.add("menu-abierto");
+        });
+
+        cerrarMenu.addEventListener("click", () => {
+            menuLateral.close();
+        });
+
+        // Cerrar al hacer clic fuera del panel.
+        menuLateral.addEventListener("click", (evento) => {
+            const limites = menuLateral.getBoundingClientRect();
+
+            const fueraDelPanel =
+                evento.clientX < limites.left ||
+                evento.clientX > limites.right ||
+                evento.clientY < limites.top ||
+                evento.clientY > limites.bottom;
+
+            if (evento.target === menuLateral && fueraDelPanel) {
+                menuLateral.close();
+            }
+        });
+
+        // Escape también cierra el diálogo.
+        menuLateral.addEventListener("close", () => {
+            abrirMenu.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("menu-abierto");
+            abrirMenu.focus();
+        });
+    </script>
 </body>
 </html>
