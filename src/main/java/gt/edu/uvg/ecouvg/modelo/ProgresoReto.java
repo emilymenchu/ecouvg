@@ -1,4 +1,5 @@
 package gt.edu.uvg.ecouvg.modelo;
+import java.time.LocalDate; 
 
 import jakarta.persistence.*;
 @Entity 
@@ -91,5 +92,8 @@ public class ProgresoReto {
     public boolean estaCompletado(){
         return completado; 
 
+    }
+    public boolean retoEstaDisponible(LocalDate fecha){
+        return reto.estaDisponible(fecha); 
     }
 }

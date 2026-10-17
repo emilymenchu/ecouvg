@@ -108,3 +108,21 @@ h2 {
     color: var(--gris);
     text-align: center;
 }
+
+.acciones-reto {
+    margin-top: 16px;
+}
+
+.boton-evidencia {
+    display: inline-block;
+    background-color: #267347;
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.boton-evidencia:hover {
+    background-color: #195c36;
+}

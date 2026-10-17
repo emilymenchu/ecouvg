@@ -16,6 +16,7 @@
 
     <main class="contenedor">
     <h1>Retos de la semana </h1>
+    <p class="error" th:if="${error}" th:text="${error}"> </p>
     <p th:if="${#lists.isEmpty(retos)}">
         No hay retos disponibles en este momento.
     </p>
@@ -58,6 +59,34 @@
             </span>
             puntos 
         </p>
+
+
+        <div class ="acciones-reto" th:with="progreso=${progresos[reto.id]}">
+            <p th:if="${progreso != null}">
+                Progreso: 
+                <span th:text="${progreso.progreso}">0</span>%
+            </p> 
+        
+            <p th:if="${progreso == null}">
+                No se ha iniciado esta mision
+
+            </p>
+            <form th:if="${progreso == null}"
+                th:action="@{/retos/iniciar/{id}(id=${reto.id})}" method="post">
+                <button type="submit" class="boton-evidencia">
+                    Iniciar misión
+                </button>
+            </form>
+
+            <a th:if="${progreso != null and !progreso.estaCompletado()}" th:href="@{/evidencias/enviar/{id}(id=${progreso.id})}" class="boton-evidencia">
+                    Enviar evidencia
+            </a>
+
+            <p th:if="${progreso != null and progreso.estaCompletado()}">
+                    Misión completada
+            </p>
+
+        </div>
         </article>
         
         <p class="lista-vacia" th:if="${#lists.isEmpty(retos)}">
