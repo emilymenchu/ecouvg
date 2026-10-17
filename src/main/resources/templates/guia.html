@@ -1,14 +1,47 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guía de reciclaje | EcoUVG</title>
 <link rel="stylesheet" th:href="@{/css/guia.css}" href="/css/guia.css">
 <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css"></head>
-<body><header class="guia-cabecera"><a th:href="@{/inicio}" class="marca">♻ EcoUVG</a><span>Aprende a separar</span></header>
-<main class="guia"><p class="ceja">CADA RESIDUO EN SU LUGAR</p><h1>Guía de reciclaje</h1><p class="introduccion">Elige un contenedor para conocer qué residuos separar.</p>
-<form class="guia-buscador" th:action="@{/guia}" method="get" role="search"><label for="q">Busca un material o residuo</label><div><input type="search" id="q" name="q" maxlength="120" th:value="${q}" placeholder="Ej. botella, cartón o pilas"><button type="submit">Buscar</button></div></form>
-<div class="guia-resultados"><p><strong th:text="${#lists.size(categorias)}">8</strong> categorías</p><a th:href="@{/guia}" th:if="${!#strings.isEmpty(q)}">Limpiar búsqueda</a></div>
-<section class="guia-vacio" th:if="${#lists.isEmpty(categorias)}"><h2>No encontramos coincidencias</h2><p>Prueba con otro material o consulta todas las categorías.</p><a th:href="@{/guia}">Ver todos los contenedores</a></section>
-<div class="guia-cuadricula"><a class="guia-tarjeta" th:each="categoria : ${categorias}" th:classappend="${categoria.color}" th:href="@{/guia/{slug}(slug=${categoria.slug},q=${q})}">
-<span class="contenedor-dibujo" aria-hidden="true"><span class="tapa"></span><span class="cuerpo"><span th:text="${categoria.simbolo}">♻</span></span></span><h2 th:text="${categoria.nombre}">Material</h2><span class="tarjeta-accion">Qué va aquí <span aria-hidden="true">↗</span></span></a></div>
-<p class="guia-nota">Los colores son ilustrativos. Sigue la rotulación del contenedor y confirma qué recibe cada centro.</p></main><nav th:replace="~{fragmentos/navegacion :: menu('guia')}"></nav></body></html>
+<body>
+    <header class="guia-cabecera">
+        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
+        <span>Aprende a separar</span>
+    </header>
+<main class="guia">
+    <p class="ceja">CADA RESIDUO EN SU LUGAR</p>
+    <h1>Guía de reciclaje</h1>
+    <p class="introduccion">Elige un contenedor para conocer qué residuos separar.</p>
+<form class="guia-buscador" th:action="@{/guia}" method="get" role="search">
+    <label for="q">Busca un material o residuo</label>
+    <div>
+        <input type="search" id="q" name="q" maxlength="120" th:value="${q}" placeholder="Ej. botella, cartón o pilas">
+        <button type="submit">Buscar</button>
+    </div>
+</form>
+<div class="guia-resultados">
+    <p>
+        <strong th:text="${#lists.size(categorias)}">8</strong> categorías</p>
+        <a th:href="@{/guia}" th:if="${!#strings.isEmpty(q)}">Limpiar búsqueda</a>
+</div>
+<section class="guia-vacio" th:if="${#lists.isEmpty(categorias)}">
+    <h2>No encontramos coincidencias</h2>
+    <p>Prueba con otro material o consulta todas las categorías.</p>
+    <a th:href="@{/guia}">Ver todos los contenedores</a>
+</section>
+<div class="guia-cuadricula">
+    <a class="guia-tarjeta" th:each="categoria : ${categorias}" th:classappend="${categoria.color}" th:href="@{/guia/{slug}(slug=${categoria.slug},q=${q})}">
+<span class="contenedor-dibujo" aria-hidden="true">
+    <span class="tapa"></span>
+    <span class="cuerpo">
+    <span th:text="${categoria.simbolo}">♻</span></span></span>
+    <h2 th:text="${categoria.nombre}">Material</h2>
+    <span class="tarjeta-accion">Qué va aquí <span aria-hidden="true">↗</span></span>
+    </a>
+</div>
+<p class="guia-nota">Los colores son ilustrativos. Sigue la rotulación del contenedor y confirma qué recibe cada centro.</p>
+</main>
+<nav th:replace="~{fragmentos/navegacion :: menu('guia')}"></nav></body></html>
