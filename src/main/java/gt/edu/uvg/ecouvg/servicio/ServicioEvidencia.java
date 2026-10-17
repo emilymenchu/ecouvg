@@ -24,7 +24,6 @@ public class ServicioEvidencia {
         this.repositorioProgresoReto = repositorioProgresoReto; 
         this.repositorioUsuario = repositorioUsuario; 
     }
-
         
     @Transactional
     public Evidencia registrarEvidencia(Long idUsuario,Long idProgreso,String rutaFotografia) {
@@ -59,7 +58,5 @@ public class ServicioEvidencia {
         );
 
         return repositorioEvidencia.save(evidencia);
-    }
-
-    
+    }   
 }

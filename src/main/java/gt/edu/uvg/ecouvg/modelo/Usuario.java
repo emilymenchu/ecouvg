@@ -32,6 +32,15 @@ public class Usuario {
     private int diasRacha;
     private int nivel;
     private int horasBeca;
+    private String fotoPerfil;
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
 
     public Usuario() {
     }
