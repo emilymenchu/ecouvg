@@ -9,6 +9,11 @@
 </head>
 
 <body>
+     <header class="guia-cabecera">
+        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
+        <span>Cumple retos</span>
+    </header>
+
     <main class="contenedor">
     <h1>Retos de la semana </h1>
     <p th:if="${#lists.isEmpty(retos)}">
