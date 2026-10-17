@@ -15,7 +15,7 @@
         No hay retos disponibles en este momento.
     </p>
     <div class="lista-retos">
-        <article class="area-retos"th:each="reto: ${retos}">
+        <article class="area-retos" th:each="reto: ${retos}">
         <h2 th:text="${reto.titulo}">
             Título reto
         </h2>
@@ -26,8 +26,9 @@
 
         <p>
             Dificultad: 
-            <span class ="difultad" th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
-                  th:text="${reto.dificultad}"> 
+           <span class="dificultad"
+                 th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
+                 th:text="${reto.dificultad}">
                 Dificultad del reto
             </span>
 
@@ -53,6 +54,10 @@
             puntos 
         </p>
         </article>
+        
+        <p class="lista-vacia" th:if="${#lists.isEmpty(retos)}">
+            No hay retos disponibles en este momento.
+        </p>
         
     </div>
     </main>
