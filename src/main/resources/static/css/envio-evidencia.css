@@ -1,0 +1,60 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f7f3;
+    margin: 0;
+    padding: 24px;
+}
+
+.contenedor {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+}
+
+h1 {
+    color: #267347;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 20px 0;
+    width: 100%;
+}
+
+button {
+    background: #267347;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.error {
+    color: #b42318;
+}
+
+.mensaje {
+    color: #267347;
+}
+
+
+
+.boton-volver {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: #e5e7eb;
+    color: #267347;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.boton-volver:hover {
+    background-color: #d1d5db;
+}
+
