@@ -1,66 +1,132 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
     <meta charset="UTF-8">
-    <title>Residuos</title>
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guía de residuos | EcoUVG</title>
+
+    <link rel="stylesheet"
+          href="../static/css/residuos.css"
+          th:href="@{/css/residuos.css}">
+
+    <link rel="stylesheet"
+          href="../static/css/navegacion.css"
+          th:href="@{/css/navegacion.css}">
 </head>
+
 <body>
-     <header class="guia-cabecera">
-        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-        <span>Aprende a reciclar</span>
-    </header>
-
     <main class="contenedor">
-    <h1>Guía de residuos</h1>
+        <section class="playa" aria-labelledby="titulo-residuos">
+            <div class="playa-texto">
+                <p class="etiqueta-playa">UN MAR DE PEQUEÑAS ACCIONES</p>
 
-    <form class="buscador" th:action="@{/residuos/buscar}" method="get">
-        <div class="campo-busqueda">
-        <label for="nombre">
-            Busqueda de residuo
-        </label>
+                <h1 id="titulo-residuos">
+                    ¡Ayudemos a limpiar la playa!
+                </h1>
 
-        <input id="nombre" name="nombre" type="text" placeholder="Ej: Botella de plástico" required>
+                <p class="descripcion-playa">
+                    Busca un residuo y descubre cómo clasificarlo
+                    correctamente. El cambio empieza contigo.
+                </p>
+            </div>
+
+            <!-- Elementos decorativos sobre la arena -->
+            <div class="residuos-playa" aria-hidden="true">
+                <img class="objeto-playa botella"
+                     src="../static/img/playa/botella.png"
+                     th:src="@{/img/playa/botella.png}"
+                     alt="">
+
+                <img class="objeto-playa bolsa"
+                     src="../static/img/playa/bolsa.png"
+                     th:src="@{/img/playa/bolsa.png}"
+                     alt="">
+
+                <img class="objeto-playa aros"
+                     src="../static/img/playa/aros.png"
+                     th:src="@{/img/playa/aros.png}"
+                     alt="">
+
+                <img class="objeto-playa pajilla"
+                     src="../static/img/playa/pajilla.png"
+                     th:src="@{/img/playa/pajilla.png}"
+                     alt="">
+
+                <img class="objeto-playa playera"
+                     src="../static/img/playa/playera-verde.png"
+                     th:src="@{/img/playa/playera-verde.png}"
+                     alt="">
+            </div>
+        </section>
+
+        <form class="buscador"
+              th:action="@{/residuos/buscar}"
+              method="get">
+
+            <div class="campo-busqueda">
+                <label for="nombre">¿Qué residuo quieres consultar?</label>
+
+                <input id="nombre"
+                       name="nombre"
+                       type="text"
+                       placeholder="Ej: Botella de plástico"
+                       required>
+            </div>
+
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h2 class="titulo-lista">Guía de residuos</h2>
+        <p class="introduccion-lista">
+            Aprende cómo manejar cada material antes de desecharlo.
+        </p>
+
+        <p class="lista-vacia" th:if="${#lists.isEmpty(residuos)}">
+            No existen residuos en el registro.
+        </p>
+
+        <div class="lista-residuos">
+            <article class="area-residuo"
+                     th:each="residuo : ${residuos}">
+
+                <h2 th:text="${residuo.nombre}">
+                    Nombre del residuo
+                </h2>
+
+                <p>
+                    <strong>Tipo:</strong>
+                    <span class="tipo-residuo"
+                          th:text="${residuo.tipo}">
+                        Tipo
+                    </span>
+                </p>
+
+                <p th:text="${residuo.descripcion}">
+                    Descripción del residuo.
+                </p>
+
+                <p>
+                    <strong>Instrucciones:</strong>
+                    <span th:text="${residuo.instrucciones}">
+                        Instrucciones
+                    </span>
+                </p>
+
+                <p>
+                    <strong>¿Es reciclable?</strong>
+                    <span th:text="${residuo.reciclable ? 'Sí' : 'No'}">
+                        Sí
+                    </span>
+                </p>
+
+                <a class="botones"
+                   th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
+                    Ver detalle →
+                </a>
+            </article>
         </div>
+    </main>
 
-        <button type="submit">
-            Buscar
-        </button>
-    
-    </form>
-
-    <p class="lista-vacia" th:if="${#lists.isEmpty(residuos)}">
-        No existen residuos en el registro. 
-    </p>
-
-    <div class="lista-residuos">
-        <article class="area-residuo" th:each="residuo : ${residuos}">
-        <h2 th:text="${residuo.nombre}">Nombre del residuo</h2>
-        <p>
-            Tipo:
-            <span th:text="${residuo.tipo}">Tipo</span>
-        </p>
-        <p th:text="${residuo.descripcion}">
-            Descripción
-        </p>
-        <p>
-            Instrucciones:
-            <span th:text="${residuo.instrucciones}">Instrucciones</span>
-        </p>
-        <p>
-            ¿Es reciclable?:
-            <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
-        </p>
-
-        <a class="botones" th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
-             Ver detalle
-        </a>
-        </article>
-
-    </div>
-</main>
-<nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
+    <nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
 </body>
 </html>

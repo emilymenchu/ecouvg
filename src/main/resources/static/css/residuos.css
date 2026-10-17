@@ -1,22 +1,24 @@
+/* Colores */
 :root {
-    --verde: #185b3b;
-    --verde-oscuro: #10462c;
-    --verde-claro: #eaf3e5;
-    --fondo: #f8f9f4;
-    --texto: #17372b;
-    --gris: #5f6e63;
-    --borde: #dbe3d8;
+    --verde: #245c40;
+    --verde-oscuro: #193e2d;
+    --texto: #23434c;
+    --gris: #526d73;
+    --borde: #d3e5e5;
+    --arena: #faf6ed;
+    --mar-claro: #e1f5fb;
 }
 
+/* Configuración general */
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--fondo);
     margin: 0;
     padding: 32px 24px;
+    font-family: Arial, sans-serif;
+    background: var(--arena);
     color: var(--texto);
     line-height: 1.6;
 }
@@ -28,16 +30,144 @@ body {
 }
 
 h1 {
-    color: var(--texto);
-    text-align: center;
-    margin: 0 0 30px;
+    margin: 0 0 20px;
+    color: #234b59;
     font-size: 36px;
     line-height: 1.2;
+    text-align: center;
 }
 
 h2 {
-    color: var(--texto);
+    color: #234b59;
     font-size: 21px;
+}
+
+a {
+    color: var(--verde);
+}
+
+/* Escena de playa */
+.playa {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 360px;
+    margin-bottom: 24px;
+    border: 1px solid #c6e2e8;
+    border-radius: 28px;
+    background: linear-gradient(
+        180deg,
+        #edfaff 0%,
+        #ccecf7 42%,
+        #a8dce9 100%
+    );
+}
+
+/* Orilla y espuma */
+.playa::before,
+.playa::after {
+    content: "";
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    pointer-events: none;
+}
+
+.playa::before {
+    bottom: -77px;
+    height: 230px;
+    border-radius: 50% 45% 0 0;
+    background: #ffffffb8;
+    transform: rotate(-4deg);
+    z-index: 0;
+}
+
+.playa::after {
+    bottom: -91px;
+    height: 230px;
+    border-radius: 50% 45% 0 0;
+    background: #f2e4c9;
+    transform: rotate(-4deg);
+    z-index: 1;
+}
+
+.playa-texto {
+    position: relative;
+    z-index: 3;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 170px;
+    text-align: center;
+}
+
+.etiqueta-playa {
+    margin: 0 0 10px;
+    color: #326476;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.playa h1 {
+    margin-bottom: 12px;
+}
+
+.descripcion-playa {
+    max-width: 580px;
+    margin: 0 auto;
+    color: #426773;
+}
+
+/* Residuos decorativos */
+.residuos-playa {
+    position: absolute;
+    inset: auto 0 0;
+    height: 150px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.objeto-playa {
+    position: absolute;
+    display: block;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 3px #775e351a);
+}
+
+.botella {
+    width: 95px;
+    left: 7%;
+    bottom: 27px;
+    transform: rotate(-18deg);
+}
+
+.bolsa {
+    width: 75px;
+    left: 28%;
+    bottom: 15px;
+    transform: rotate(14deg);
+}
+
+.aros {
+    width: 85px;
+    left: 48%;
+    bottom: 30px;
+    transform: rotate(-12deg);
+}
+
+.pajilla {
+    width: 45px;
+    right: 26%;
+    bottom: 27px;
+    transform: rotate(28deg);
+}
+
+.playera {
+    width: 88px;
+    right: 7%;
+    bottom: 35px;
+    transform: rotate(16deg);
 }
 
 /* Buscador */
@@ -45,12 +175,12 @@ h2 {
     display: flex;
     align-items: flex-end;
     gap: 20px;
-    background-color: var(--verde-claro);
-    border: 1px solid var(--borde);
-    max-width: 900px;
-    margin: 0 auto 28px;
+    margin: 0 0 28px;
     padding: 24px;
+    border: 1px solid var(--borde);
     border-radius: 20px;
+    background: white;
+    box-shadow: 0 6px 18px #37697908;
 }
 
 .campo-busqueda {
@@ -62,16 +192,16 @@ h2 {
 }
 
 .campo-busqueda label {
-    color: var(--verde);
+    color: #245263;
     font-weight: bold;
 }
 
 .campo-busqueda input {
     width: 100%;
     padding: 11px 14px;
-    border: 1px solid var(--borde);
+    border: 1px solid #c4dfe7;
     border-radius: 10px;
-    background-color: white;
+    background: #f7fcfd;
     color: var(--texto);
     font: inherit;
 }
@@ -81,12 +211,22 @@ h2 {
 }
 
 .campo-busqueda input:focus-visible {
-    border-color: var(--verde);
-    outline: 2px solid var(--verde);
+    border-color: #326476;
+    outline: 2px solid #326476;
     outline-offset: 2px;
 }
 
-/* Lista de residuos */
+/* Lista */
+.titulo-lista {
+    margin: 0 0 4px;
+    font-size: 24px;
+}
+
+.introduccion-lista {
+    margin: 0 0 20px;
+    color: var(--gris);
+}
+
 .lista-residuos {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -94,10 +234,11 @@ h2 {
 }
 
 .area-residuo {
-    background-color: white;
     padding: 28px;
     border: 1px solid var(--borde);
-    border-radius: 20px;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 6px 18px #37697908;
 }
 
 .area-residuo h2 {
@@ -109,15 +250,15 @@ h2 {
 }
 
 .tipo-residuo {
-    font-weight: bold;
     color: var(--verde);
+    font-weight: bold;
 }
 
 .lista-vacia {
     padding: 24px;
     border: 1px dashed var(--borde);
     border-radius: 16px;
-    background-color: white;
+    background: white;
     color: var(--gris);
     text-align: center;
 }
@@ -125,18 +266,29 @@ h2 {
 /* Detalle y residuo no encontrado */
 .detalle-residuo,
 .mensaje-error {
-    background-color: white;
     max-width: 700px;
     margin: 50px auto;
     padding: 32px;
     border: 1px solid var(--borde);
-    border-radius: 20px;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 6px 18px #37697908;
 }
 
 .detalle-residuo h1,
 .mensaje-error h1 {
-    font-size: 30px;
     margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.detalle-residuo h2 {
+    margin-top: 0;
+}
+
+.detalle-residuo hr {
+    margin: 24px 0;
+    border: 0;
+    border-top: 1px solid var(--borde);
 }
 
 .mensaje-error {
@@ -144,19 +296,19 @@ h2 {
 }
 
 .mensaje-error p {
-    color: var(--gris);
     margin-bottom: 24px;
+    color: var(--gris);
 }
 
-/* Botones del contenido */
+/* Botones */
 .botones,
 .buscador button {
     display: inline-block;
-    background-color: var(--verde);
-    color: white;
     padding: 11px 18px;
     border: 1px solid transparent;
-    border-radius: 10px;
+    border-radius: 12px;
+    background: var(--verde);
+    color: white;
     font: inherit;
     font-weight: bold;
     text-align: center;
@@ -166,7 +318,7 @@ h2 {
 
 .botones:hover,
 .buscador button:hover {
-    background-color: var(--verde-oscuro);
+    background: var(--verde-oscuro);
 }
 
 .botones:focus-visible,
