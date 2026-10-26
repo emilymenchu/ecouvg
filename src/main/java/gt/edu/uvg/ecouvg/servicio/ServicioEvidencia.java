@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gt.edu.uvg.ecouvg.modelo.EstadoEvidencia;
 import gt.edu.uvg.ecouvg.modelo.Evidencia;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
+import gt.edu.uvg.ecouvg.modelo.TipoProgreso;
 import gt.edu.uvg.ecouvg.modelo.Usuario;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
@@ -51,6 +52,10 @@ public class ServicioEvidencia {
             throw new IllegalStateException("La misión no está disponible" );
         }
 
+        if(progresoReto.getReto().getTipoProgreso()== TipoProgreso.DURACION){
+            throw new IllegalStateException("evidencias de duracipin pausadas");
+
+        }
         if (fotografia == null ||fotografia.isEmpty()) {
             throw new IllegalArgumentException("Debes adjuntar una fotografía" );
         }
