@@ -1,17 +1,15 @@
 package gt.edu.uvg.ecouvg.servicio;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import gt.edu.uvg.ecouvg.modelo.Evidencia;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
 import gt.edu.uvg.ecouvg.modelo.RevisionEvidencia;
 import gt.edu.uvg.ecouvg.modelo.Usuario;
-
 import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioRevisionEvidencia;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
-
-import org.springframework.transaction.annotation.Transactional; 
-
 
 @Service 
 public class ServicioRevisionEvidencia {
@@ -19,7 +17,8 @@ public class ServicioRevisionEvidencia {
     private final RepositorioEvidencia repositorioEvidencia; 
     private final RepositorioRevisionEvidencia repositorioRevisionEvidencia; 
     private final RepositorioUsuario repositorioUsuario; 
-    private final ServicioReto servicioReto; 
+    private final ServicioReto servicioReto;
+    
 
     public ServicioRevisionEvidencia(RepositorioEvidencia repositorioEvidencia, RepositorioRevisionEvidencia repositorioRevisionEvidencia, RepositorioUsuario repositorioUsuario, ServicioReto servicioReto){
 
@@ -67,11 +66,11 @@ public class ServicioRevisionEvidencia {
             repositorioEvidencia.saveAndFlush(evidencia);
             
             servicioReto.registrarEvidenciaAprobada(progresoReto);
-
+            
         } else if (rechazos >= 2){
             evidencia.rechazar(); 
             repositorioEvidencia.save(evidencia); 
-
+            
         }
 
         
@@ -79,6 +78,11 @@ public class ServicioRevisionEvidencia {
    
     }
 
+
+    //
+    
+
+    
     
     
 }

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gt.edu.uvg.ecouvg.modelo.CalculadorAccionUnica;
 import gt.edu.uvg.ecouvg.modelo.CalculadorCantidad;
-import gt.edu.uvg.ecouvg.modelo.CalculadorDuracion;
 import gt.edu.uvg.ecouvg.modelo.CalculadorProgreso;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
 import gt.edu.uvg.ecouvg.modelo.Reto; 
@@ -44,18 +43,13 @@ public class ServicioReto {
             throw new IllegalStateException("La misión no tiene un tipo de progreso definido");
         }
 
-        if (tipo == TipoProgreso.DURACION) {
-            throw new IllegalStateException("Las misiones de duración requieren una validación específica");
-        }
+        
         switch(tipo){
             case CANTIDAD:
                 return new CalculadorCantidad();
 
             case ACCION_UNICA:
                 return new CalculadorAccionUnica();
-
-            case DURACION:  
-                return new CalculadorDuracion();
                     
             default: 
             throw new IllegalArgumentException(tipo + "no es válido");     
@@ -221,9 +215,7 @@ public void registrarEvidenciaAprobada(ProgresoReto progresoReto) {
         throw new IllegalStateException("La misión no tiene un tipo de progreso definido");
     }
 
-    if (tipo == TipoProgreso.DURACION) {
-        throw new IllegalStateException("Las misiones de duración requieren una validación específica");
-    }
+    
 
     progresoBloqueado.registrarUnidadValidada();
     actualizarProgresoValidado(progresoBloqueado);
