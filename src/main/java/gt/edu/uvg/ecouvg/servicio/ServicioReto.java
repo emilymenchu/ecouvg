@@ -1,25 +1,26 @@
 package gt.edu.uvg.ecouvg.servicio;
 
-import gt.edu.uvg.ecouvg.modelo.Reto;
-import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
-import gt.edu.uvg.ecouvg.modelo.Usuario;
-import gt.edu.uvg.ecouvg.modelo.CalculadorProgreso; 
-import gt.edu.uvg.ecouvg.modelo.CalculadorCantidad; 
-import gt.edu.uvg.ecouvg.modelo.CalculadorAccionUnica; 
-import gt.edu.uvg.ecouvg.modelo.CalculadorDuracion; 
-import gt.edu.uvg.ecouvg.modelo.TipoProgreso;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioReto;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
-import gt.edu.uvg.ecouvg.modelo.ValidacionReto;
-import gt.edu.uvg.ecouvg.modelo.ValidacionEvidencia;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
-import java.time.LocalDate; 
-import java.util.Optional; 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import gt.edu.uvg.ecouvg.modelo.CalculadorAccionUnica;
+import gt.edu.uvg.ecouvg.modelo.CalculadorCantidad;
+import gt.edu.uvg.ecouvg.modelo.CalculadorDuracion;
+import gt.edu.uvg.ecouvg.modelo.CalculadorProgreso;
+import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
+import gt.edu.uvg.ecouvg.modelo.Reto; 
+import gt.edu.uvg.ecouvg.modelo.TipoProgreso;
+import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.modelo.ValidacionEvidencia;
+import gt.edu.uvg.ecouvg.modelo.ValidacionReto;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioProgresoReto;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioReto;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario; 
 
 @Service
 public class ServicioReto { 
@@ -38,8 +39,13 @@ public class ServicioReto {
 
     private CalculadorProgreso seleccionarCalculador (Reto reto) {
         TipoProgreso tipo = reto.getTipoProgreso(); 
-        if (tipo==null){
-            throw new IllegalArgumentException("El reto no cuenta con un tipo definido de progreso"); 
+
+        if (tipo == null) {
+            throw new IllegalStateException("La misión no tiene un tipo de progreso definido");
+        }
+
+        if (tipo == TipoProgreso.DURACION) {
+            throw new IllegalStateException("Las misiones de duración requieren una validación específica");
         }
         switch(tipo){
             case CANTIDAD:
@@ -196,35 +202,36 @@ public class ServicioReto {
     }
         
     @Transactional
-    public void registrarEvidenciaAprobada(ProgresoReto progresoReto) {
+public void registrarEvidenciaAprobada(ProgresoReto progresoReto) {
 
-        if (progresoReto == null || progresoReto.getId() == null) {
-            throw new IllegalArgumentException("El progreso debe estar registrado");
-        }
-
-        ProgresoReto progresoBloqueado =repositorioProgresoReto.buscarParaCompletar(progresoReto.getId() ).orElseThrow(() -> new IllegalArgumentException("Progreso no encontrado"));
-
-        if (progresoBloqueado.estaCompletado()) {
-            throw new IllegalStateException("La misión ya está completada" );
-        }
-
-        Reto reto = progresoBloqueado.getReto();
-
-        if (reto.getTipoProgreso() != TipoProgreso.CANTIDAD) {
-            throw new IllegalStateException( "Este registro requiere una misión de cantidad" );
-        }
-
-        progresoBloqueado.registrarUnidadValidada();
-
-        actualizarProgresoValidado(progresoBloqueado);
-
-        if (progresoBloqueado.getProgreso() == 100) {
-            completarReto(progresoBloqueado);
-        }
-
-        repositorioProgresoReto.save(progresoBloqueado);
+    if (progresoReto == null || progresoReto.getId() == null) {
+        throw new IllegalArgumentException("El progreso debe estar registrado");
     }
 
+    ProgresoReto progresoBloqueado = repositorioProgresoReto.buscarParaCompletar(progresoReto.getId()).orElseThrow(() -> new IllegalArgumentException("Progreso no encontrado"));
 
+    if (progresoBloqueado.estaCompletado()) {
+        throw new IllegalStateException("La misión ya está completada");
+    }
 
+    Reto reto = progresoBloqueado.getReto();
+    TipoProgreso tipo = reto.getTipoProgreso();
+
+    if (tipo == null) {
+        throw new IllegalStateException("La misión no tiene un tipo de progreso definido");
+    }
+
+    if (tipo == TipoProgreso.DURACION) {
+        throw new IllegalStateException("Las misiones de duración requieren una validación específica");
+    }
+
+    progresoBloqueado.registrarUnidadValidada();
+    actualizarProgresoValidado(progresoBloqueado);
+
+    if (progresoBloqueado.getProgreso() == 100) {
+        completarReto(progresoBloqueado);
+    }
+
+    repositorioProgresoReto.save(progresoBloqueado);
+    }
 }

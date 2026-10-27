@@ -1,0 +1,41 @@
+<!DOCTYPE html> 
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Revisión de evidencias ECOUVG</title>
+
+</head>
+
+<body>
+    <main>
+        <h1> Centro de validacion de evidencias </h1>
+        <p> Ayúdanos a revisar las fotografías enviadas por otros estudiantes y dinos si están cumpliendo con el objetivo</p>
+        <p th:if="${mensaje}" th:text="${mensaje}"> </p>
+        <p th:if="${error}" th:text="${error}"> </p>
+
+        <p th:if="${#lists.isEmpty(evidencias)}">
+            No hay evidencias que revisar actualmente
+        </p>
+
+        <section> 
+            <article th:each="evidencia: ${evidencias}">
+                <h2>Evidencia pendiente </h2> 
+                <img th:src="${urlsImagenes[evidencia.id]}" alt="Fotografía evidencia" width="250">
+
+                <form th:action="@{/revisiones/aprobar/{id}(id=${evidencia.id})}" method="post">
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit">Aprobar</button>
+                </form>
+                
+                <form th:action="@{/revisiones/rechazar/{id}(id=${evidencia.id})}" method="post">
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit">Rechazar</button>
+                </form>
+                <hr> 
+            
+            </article>
+        </section>
+        <a href="@{/retos}"></a>
+    </main>
+</body>
