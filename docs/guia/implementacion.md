@@ -1,3 +1,5 @@
+> Actualización: el catálogo ahora se guarda en PostgreSQL. Consulta [base-datos.md](base-datos.md) para la instalación vigente. Las referencias al catálogo fijo en este documento describen la primera versión.
+
 # Guía de reciclaje
 
 ## Uso

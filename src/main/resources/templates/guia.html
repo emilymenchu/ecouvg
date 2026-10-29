@@ -28,8 +28,8 @@
         <a th:href="@{/guia}" th:if="${!#strings.isEmpty(q)}">Limpiar búsqueda</a>
 </div>
 <section class="guia-vacio" th:if="${#lists.isEmpty(categorias)}">
-    <h2>No encontramos coincidencias</h2>
-    <p>Prueba con otro material o consulta todas las categorías.</p>
+    <h2 th:text="${#strings.isEmpty(q) ? 'No hay categorías disponibles' : 'No encontramos coincidencias'}">No encontramos coincidencias</h2>
+    <p th:text="${#strings.isEmpty(q) ? 'La guía todavía no tiene categorías cargadas.' : 'Prueba con otro material o consulta todas las categorías.'}">Prueba con otro material.</p>
     <a th:href="@{/guia}">Ver todos los contenedores</a>
 </section>
 <div class="guia-cuadricula">

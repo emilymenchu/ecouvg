@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServicioGuiaTest {
-    private final ServicioGuia servicio = new ServicioGuia();
+    private final ServicioGuia servicio = new ServicioGuia(gt.edu.uvg.ecouvg.GuiaPrueba.repositorio());
     @Test void muestraOchoCategoriasSinFiltro() {
         assertEquals(8, servicio.buscar("").size());
         assertEquals(8, servicio.buscar(null).size());
@@ -31,5 +31,11 @@ class ServicioGuiaTest {
     @Test void ejemplosSonInmutables() {
         var categoria = servicio.obtener("papel").orElseThrow();
         assertThrows(UnsupportedOperationException.class, () -> categoria.ejemplos().add("otro"));
+    }
+    @Test void baseVaciaNoUsaCatalogoDeRespaldo() {
+        var repo = org.mockito.Mockito.mock(gt.edu.uvg.ecouvg.repositorio.RepositorioGuia.class);
+        org.mockito.Mockito.when(repo.findAllByOrderByOrdenAscSlugAsc()).thenReturn(java.util.List.of());
+        assertTrue(new ServicioGuia(repo).buscar("").isEmpty());
+        org.mockito.Mockito.verify(repo).findAllByOrderByOrdenAscSlugAsc();
     }
 }
