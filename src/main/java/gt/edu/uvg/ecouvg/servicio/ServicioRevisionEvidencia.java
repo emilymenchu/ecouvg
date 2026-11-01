@@ -1,16 +1,20 @@
 package gt.edu.uvg.ecouvg.servicio;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gt.edu.uvg.ecouvg.modelo.Evidencia;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
 import gt.edu.uvg.ecouvg.modelo.RevisionEvidencia;
 import gt.edu.uvg.ecouvg.modelo.Usuario;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioEvidencia;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioRevisionEvidencia;
-import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
-
+import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario; 
 @Service 
 public class ServicioRevisionEvidencia {
 
@@ -18,14 +22,16 @@ public class ServicioRevisionEvidencia {
     private final RepositorioRevisionEvidencia repositorioRevisionEvidencia; 
     private final RepositorioUsuario repositorioUsuario; 
     private final ServicioReto servicioReto;
-    
+    private final ServicioStorage servicioStorage; 
+    private static final Logger logger = LoggerFactory.getLogger(ServicioRevisionEvidencia.class); 
 
-    public ServicioRevisionEvidencia(RepositorioEvidencia repositorioEvidencia, RepositorioRevisionEvidencia repositorioRevisionEvidencia, RepositorioUsuario repositorioUsuario, ServicioReto servicioReto){
+    public ServicioRevisionEvidencia(RepositorioEvidencia repositorioEvidencia, RepositorioRevisionEvidencia repositorioRevisionEvidencia, RepositorioUsuario repositorioUsuario, ServicioReto servicioReto, ServicioStorage servicioStorage){
 
     this.repositorioEvidencia = repositorioEvidencia; 
     this.repositorioRevisionEvidencia = repositorioRevisionEvidencia; 
     this.repositorioUsuario = repositorioUsuario; 
     this.servicioReto = servicioReto; 
+    this.servicioStorage = servicioStorage; 
     }
 
     @Transactional
@@ -56,7 +62,7 @@ public class ServicioRevisionEvidencia {
 
 
         RevisionEvidencia revision = new RevisionEvidencia(evidencia, revisor, aprobada); 
-        RevisionEvidencia revisionGuardada = repositorioRevisionEvidencia.save(revision); 
+        RevisionEvidencia revisionGuardada = repositorioRevisionEvidencia.saveAndFlush(revision); 
         
         long aprobaciones = repositorioRevisionEvidencia.countByEvidenciaIdAndAprobada(idEvidencia, true); 
         long rechazos = repositorioRevisionEvidencia.countByEvidenciaIdAndAprobada(idEvidencia, false); 
@@ -64,13 +70,15 @@ public class ServicioRevisionEvidencia {
         if (aprobaciones >= 2){
             evidencia.aprobar();
             repositorioEvidencia.saveAndFlush(evidencia);
-            
             servicioReto.registrarEvidenciaAprobada(progresoReto);
-            
+            recompensarRevisor(idEvidencia);
+            eliminarFotografias(evidencia.getRutaFotografia()) ;
+
         } else if (rechazos >= 2){
             evidencia.rechazar(); 
             repositorioEvidencia.save(evidencia); 
-            
+            recompensarRevisor(idEvidencia); 
+            eliminarFotografias(evidencia.getRutaFotografia()); 
         }
 
         
@@ -79,9 +87,47 @@ public class ServicioRevisionEvidencia {
     }
 
 
-    //
+    private void recompensarRevisor(Long idEvidencia ){
+        List<RevisionEvidencia> revisiones  = repositorioRevisionEvidencia.findByEvidenciaId(idEvidencia); 
+        for (RevisionEvidencia revisionActual : revisiones ){
+            if (!revisionActual.estaRecompensada()){
+                Usuario revisor = revisionActual.getRevisor(); 
+                revisor.sumarPuntos(2); 
+                revisionActual.marcarRecompensada(); 
+                repositorioUsuario.save(revisor);
+                repositorioRevisionEvidencia.save(revisionActual); 
+            }
+        }
+
+
+    }
     
 
+
+    //Eliminacion de fotografias (para no llenar la base de datos)
+    private void eliminarFotografias(String rutaFotografia){
+        if (rutaFotografia == null || rutaFotografia.isBlank()){
+            return; 
+        }
+
+        if (!TransactionSynchronizationManager.isSynchronizationActive()){
+            throw new IllegalStateException("Para eliminar la foto, tiene que haber una transaccion :/ "); 
+
+        }
+        TransactionSynchronizationManager.registerSynchronization( new TransactionSynchronization() {
+            @Override 
+            public void afterCommit() {
+                try{
+                    servicioStorage.eliminarImagen("evidencias", rutaFotografia); 
+                    logger.info("Fotografía {} eliminada :D ", rutaFotografia); 
+
+                }catch(Exception e) {
+                    logger.error("La fotografia {} no pudo eliminarse : ( ",rutaFotografia, e); 
+                }
+            }
+        }
+        ); 
+    }
     
     
     

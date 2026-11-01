@@ -6,7 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint; 
 
 @Entity 
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
@@ -30,7 +31,7 @@ public class Usuario {
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
-    private int nivel;
+    private int nivel = 1;
     private int horasBeca;
 
     public Usuario() {
@@ -97,5 +98,12 @@ public class Usuario {
         }
         this.puntos += cantidad;
         this.puntosTotales += cantidad; 
+        CalculadorNivel calculador = new CalculadorNivel(); 
+        this.nivel = calculador.calculadorNivel(this.puntosTotales); 
+    }
+    @Transient 
+    public String getNombreNivel(){
+        CalculadorNivel calculador = new CalculadorNivel(); 
+        return calculador.nombreNivel(nivel); 
     }
 }
