@@ -83,4 +83,9 @@ public class Evidencia {
         this.estado = EstadoEvidencia.RECHAZADA;
     }
 
+
+        //para las revisiones de las evidencias
+    public String getTituloReto() {
+        return progresoReto.getTituloReto(); 
+    }
 }

@@ -96,4 +96,9 @@ public class ProgresoReto {
     public boolean retoEstaDisponible(LocalDate fecha){
         return reto.estaDisponible(fecha); 
     }
+
+    //para revisar evidencias 
+    public String getTituloReto(){
+        return reto.getTitulo(); 
+    }
 }
