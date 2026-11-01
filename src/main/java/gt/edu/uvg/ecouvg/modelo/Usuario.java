@@ -1,5 +1,7 @@
 package gt.edu.uvg.ecouvg.modelo;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,8 +33,10 @@ public class Usuario {
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
+    private LocalDate lastActividadValida; 
     private int nivel = 1;
     private int horasBeca;
+
 
     public Usuario() {
     }
@@ -105,5 +109,41 @@ public class Usuario {
     public String getNombreNivel(){
         CalculadorNivel calculador = new CalculadorNivel(); 
         return calculador.nombreNivel(nivel); 
+    }
+
+    public void registroActividadValida(LocalDate fechaActividad){
+        if (fechaActividad == null){
+            throw new IllegalArgumentException("La actividad debe contar con fecha -_-"); 
+
+        }
+        if (lastActividadValida == null){
+            diasRacha = 1; 
+        }else if(fechaActividad.equals(lastActividadValida)){ 
+            return; 
+
+        }else if(fechaActividad.equals(lastActividadValida.plusDays(1))){
+            diasRacha++;
+
+        }else if (fechaActividad.isAfter(lastActividadValida)){
+            diasRacha = 1; 
+        }else {
+            return; 
+        }
+        lastActividadValida = fechaActividad; 
+    }
+
+    public int obtenerRacha(LocalDate hoy){
+        if(hoy == null){
+            throw new IllegalArgumentException("La fecha actual es obligatoria ://// ");
+
+        }
+        if (lastActividadValida ==null){
+            return 0; 
+        }
+        if (lastActividadValida.equals(hoy)   ||  lastActividadValida.equals(hoy.minusDays(1))){
+            return diasRacha;
+        }
+        return 0; 
+        
     }
 }

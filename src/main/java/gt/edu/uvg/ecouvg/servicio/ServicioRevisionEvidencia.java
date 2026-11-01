@@ -1,13 +1,16 @@
 package gt.edu.uvg.ecouvg.servicio;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
+import org.slf4j.Logger; 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import gt.edu.uvg.ecouvg.modelo.Evidencia;
 import gt.edu.uvg.ecouvg.modelo.ProgresoReto;
 import gt.edu.uvg.ecouvg.modelo.RevisionEvidencia;
@@ -71,6 +74,9 @@ public class ServicioRevisionEvidencia {
             evidencia.aprobar();
             repositorioEvidencia.saveAndFlush(evidencia);
             servicioReto.registrarEvidenciaAprobada(progresoReto);
+            LocalDate hoy =LocalDate.now(ZoneId.of("America/Guatemala"));
+            autor.registroActividadValida(hoy);
+            
             recompensarRevisor(idEvidencia);
             eliminarFotografias(evidencia.getRutaFotografia()) ;
 
@@ -126,7 +132,7 @@ public class ServicioRevisionEvidencia {
                 }
             }
         }
-        ); 
+        );
     }
     
     
