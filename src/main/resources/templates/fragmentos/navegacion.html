@@ -6,5 +6,75 @@
 <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}"><span aria-hidden="true">▤</span>Guía</a>
 <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
 <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
+<a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}"><span aria-hidden="true">👤</span>Perfil</a>
 </nav>
+<th:block th:fragment="cabecera(seccion)">
+    <header class="encabezado">
+        <div class="barra">
+            <button class="abrir-menu"
+                    id="abrir-menu"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-controls="menu-lateral"
+                    aria-expanded="false">
+                <span aria-hidden="true">🐚</span> Menú
+            </button>
+
+            <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
+
+            <form class="sesion" th:action="@{/logout}" method="post">
+                <button class="boton-salir" type="submit">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <dialog class="menu-lateral"
+            id="menu-lateral"
+            aria-labelledby="titulo-menu">
+
+        <div class="cabecera-menu">
+            <h2 id="titulo-menu">Explora EcoUVG</h2>
+
+            <button class="cerrar-menu"
+                    id="cerrar-menu"
+                    type="button"
+                    aria-label="Cerrar menú"
+                    autofocus>
+                ✕
+            </button>
+        </div>
+
+        <p class="descripcion-menu">
+            Un pequeño paso para cuidar el planeta.
+        </p>
+
+        <nav class="enlaces-menu" aria-label="Navegación principal">
+            <a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'" th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}">
+                <span aria-hidden="true">🏡</span> Inicio
+            </a>
+
+            <a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'" th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}">
+                <span aria-hidden="true">♻️</span> Residuos
+            </a>
+
+            <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}">
+                <span aria-hidden="true">📍</span> Centros de reciclaje
+            </a>
+
+            <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}">
+                <span aria-hidden="true">📖</span> Guía de reciclaje
+            </a>
+
+            <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}">
+                <span aria-hidden="true">⭐</span> Retos
+            </a>
+            <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}">
+                <span aria-hidden="true">👤</span> Mi perfil
+            </a>
+        </nav>
+    </dialog>
+
+</th:block>
 </body></html>

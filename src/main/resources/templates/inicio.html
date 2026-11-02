@@ -11,69 +11,7 @@
 </head>
 
 <body>
-    <header class="encabezado">
-        <div class="barra">
-            <button class="abrir-menu"
-                    id="abrir-menu"
-                    type="button"
-                    aria-haspopup="dialog"
-                    aria-controls="menu-lateral"
-                    aria-expanded="false">
-                <span aria-hidden="true">🐚</span> Menú
-            </button>
-
-            <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-
-            <form class="sesion" th:action="@{/logout}" method="post">
-                <button class="boton-salir" type="submit">
-                    Cerrar sesión
-                </button>
-            </form>
-        </div>
-    </header>
-
-    <dialog class="menu-lateral"
-            id="menu-lateral"
-            aria-labelledby="titulo-menu">
-
-        <div class="cabecera-menu">
-            <h2 id="titulo-menu">Explora EcoUVG</h2>
-
-            <button class="cerrar-menu"
-                    id="cerrar-menu"
-                    type="button"
-                    aria-label="Cerrar menú"
-                    autofocus>
-                ✕
-            </button>
-        </div>
-
-        <p class="descripcion-menu">
-            Un pequeño paso para cuidar el planeta.
-        </p>
-
-        <nav class="enlaces-menu" aria-label="Navegación principal">
-            <a class="activo" th:href="@{/inicio}" aria-current="page">
-                <span aria-hidden="true">🏡</span> Inicio
-            </a>
-
-            <a th:href="@{/residuos}">
-                <span aria-hidden="true">♻️</span> Residuos
-            </a>
-
-            <a th:href="@{/centros}">
-                <span aria-hidden="true">📍</span> Centros de reciclaje
-            </a>
-
-            <a th:href="@{/guia}">
-                <span aria-hidden="true">📖</span> Guía de reciclaje
-            </a>
-
-            <a th:href="@{/retos}">
-                <span aria-hidden="true">⭐</span> Retos
-            </a>
-        </nav>
-    </dialog>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('inicio')}"></th:block>
 
     <main>
         <section class="bienvenida" aria-labelledby="titulo-inicio">
@@ -187,42 +125,6 @@
         EcoUVG · Construyamos una comunidad más verde.
     </footer>
 
-    <script>
-        const menuLateral = document.getElementById("menu-lateral");
-        const abrirMenu = document.getElementById("abrir-menu");
-        const cerrarMenu = document.getElementById("cerrar-menu");
-
-        abrirMenu.addEventListener("click", () => {
-            menuLateral.showModal();
-            abrirMenu.setAttribute("aria-expanded", "true");
-            document.body.classList.add("menu-abierto");
-        });
-
-        cerrarMenu.addEventListener("click", () => {
-            menuLateral.close();
-        });
-
-        // Cerrar al hacer clic fuera del panel.
-        menuLateral.addEventListener("click", (evento) => {
-            const limites = menuLateral.getBoundingClientRect();
-
-            const fueraDelPanel =
-                evento.clientX < limites.left ||
-                evento.clientX > limites.right ||
-                evento.clientY < limites.top ||
-                evento.clientY > limites.bottom;
-
-            if (evento.target === menuLateral && fueraDelPanel) {
-                menuLateral.close();
-            }
-        });
-
-        // Escape también cierra el diálogo.
-        menuLateral.addEventListener("close", () => {
-            abrirMenu.setAttribute("aria-expanded", "false");
-            document.body.classList.remove("menu-abierto");
-            abrirMenu.focus();
-        });
-    </script>
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </body>
 </html>

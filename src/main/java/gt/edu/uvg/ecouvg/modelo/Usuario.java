@@ -10,7 +10,12 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity 
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
-public class Usuario {
+public class Usuario implements Comparable<Usuario> {
+
+    private static final int[] UMBRALES_NIVEL = {0, 100, 250, 500, 1000, 10000};
+    private static final String[] NOMBRES_NIVEL = {
+        "Semilla", "Brote", "Raíz", "Granito verde", "Árbol", "Guardián del planeta"
+    };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +55,7 @@ public class Usuario {
         this.carnet = carnet;
         this.correo = correo;
         this.contrasena = contrasena;
+        this.nivel = 1;
     }
 
     public Long getId() {
@@ -58,6 +64,10 @@ public class Usuario {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getCarnet() {
@@ -81,7 +91,27 @@ public class Usuario {
     }
 
     public int getNivel() {
-        return nivel;
+        return Math.clamp(nivel, 1, UMBRALES_NIVEL.length);
+    }
+
+    public String getNombreNivel() {
+        return NOMBRES_NIVEL[getNivel() - 1];
+    }
+
+    public boolean isNivelMaximo() {
+        return getNivel() == UMBRALES_NIVEL.length;
+    }
+
+    public int getMetaNivel() {
+        return UMBRALES_NIVEL[isNivelMaximo() ? getNivel() - 1 : getNivel()];
+    }
+
+    public int getPorcentajeNivel() {
+        if (isNivelMaximo()) {
+            return 100;
+        }
+        int inicio = UMBRALES_NIVEL[getNivel() - 1];
+        return (int) Math.clamp((puntosTotales - (long) inicio) * 100 / (getMetaNivel() - inicio), 0, 100);
     }
 
     public int getHorasBeca() {
@@ -106,5 +136,20 @@ public class Usuario {
         }
         this.puntos += cantidad;
         this.puntosTotales += cantidad; 
+        calcularNivel();
+    }
+
+    @Override
+    public int compareTo(Usuario otro) {
+        return Integer.compare(otro.puntosTotales, this.puntosTotales);
+    }
+
+    public void calcularNivel() {
+        nivel = 1;
+        for (int i = 1; i < UMBRALES_NIVEL.length; i++) {
+            if (puntosTotales >= UMBRALES_NIVEL[i]) {
+                nivel = i + 1;
+            }
+        }
     }
 }
