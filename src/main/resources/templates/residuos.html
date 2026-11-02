@@ -16,8 +16,13 @@
 
 <body>
     <header class="residuos-cabecera">
-        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-        <span>Aprende a reciclar</span>
+    <div class="residuos-barra">
+        <a th:href="@{/inicio}" class="marca">
+            ♻ Eco<span>UVG</span>
+        </a>
+
+        <span class="frase-cabecera">Aprende a reciclar</span>
+    </div>
     </header>
     
     <main class="contenedor">
@@ -37,31 +42,41 @@
 
             <!-- Elementos decorativos sobre la arena -->
             <div class="residuos-playa" aria-hidden="true">
-                <img class="objeto-playa botella"
-                     src="../static/img/playa/botella.png"
-                     th:src="@{/img/playa/botella.png}"
-                     alt="">
+            <img class="objeto-playa botella"
+                src="../static/img/botella.png"
+                th:src="@{/img/botella.png}"
+                alt="">
 
-                <img class="objeto-playa bolsa"
-                     src="../static/img/playa/bolsa.png"
-                     th:src="@{/img/playa/bolsa.png}"
-                     alt="">
+            <img class="objeto-playa bolsa"
+                src="../static/img/bolsa.png"
+                th:src="@{/img/bolsa.png}"
+                alt="">
 
-                <img class="objeto-playa aros"
-                     src="../static/img/playa/aros.png"
-                     th:src="@{/img/playa/aros.png}"
-                     alt="">
+            <img class="objeto-playa aros"
+                src="../static/img/aros.png"
+                th:src="@{/img/aros.png}"
+                alt="">
 
-                <img class="objeto-playa pajilla"
-                     src="../static/img/playa/pajilla.png"
-                     th:src="@{/img/playa/pajilla.png}"
-                     alt="">
+            <img class="objeto-playa pajilla"
+                src="../static/img/pajilla.png"
+                th:src="@{/img/pajilla.png}"
+                alt="">
 
-                <img class="objeto-playa playera"
-                     src="../static/img/playa/playera-verde.png"
-                     th:src="@{/img/playa/playera-verde.png}"
-                     alt="">
-            </div>
+            <img class="objeto-playa camisa-verde"
+                src="../static/img/camisa verde.png"
+                th:src="@{/img/camisa verde.png}"
+                alt="">
+
+            <img class="objeto-playa camisa-azul"
+                src="../static/img/camisa azul.png"
+                th:src="@{/img/camisa azul.png}"
+                alt="">
+
+            <img class="objeto-playa camisa-morada"
+                src="../static/img/camisa morada.png"
+                th:src="@{/img/camisa morada.png}"
+                alt="">
+        </div>
         </section>
 
         <form class="buscador"
