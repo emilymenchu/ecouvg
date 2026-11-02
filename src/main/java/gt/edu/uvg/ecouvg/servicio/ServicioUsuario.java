@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import gt.edu.uvg.ecouvg.modelo.Usuario;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
+import java.util.List;
+import gt.edu.uvg.ecouvg.modelo.Ranking;
 
 @Service
 public class ServicioUsuario {
@@ -29,11 +31,7 @@ public class ServicioUsuario {
         return repositorioUsuario.existsByCarnet(carnet);
     }
 
-    public Usuario registrarUsuario(
-        String nombre,
-        String carnet,
-        String correo,
-        String contrasena) {
+    public Usuario registrarUsuario(String nombre, String carnet, String correo, String contrasena) {
 
         String contrasenaEncriptada = passwordEncoder.encode(contrasena);
 
@@ -58,9 +56,21 @@ public class ServicioUsuario {
     public void cambiarContrasena(Usuario usuario, String nuevaContrasena) {
 
         String contrasenaEncriptada = passwordEncoder.encode(nuevaContrasena);
-
         usuario.setContrasena(contrasenaEncriptada);
-
         repositorioUsuario.save(usuario);
+    }
+
+
+    public Ranking obtenerRanking(int nivel) {
+
+        List<Usuario> usuarios = repositorioUsuario.findAll();
+
+        Ranking ranking = new Ranking(nivel);
+
+        for (Usuario usuario : usuarios) {
+            ranking.agregarUsuario(usuario);
+        }
+        ranking.ordenar();
+        return ranking;
     }
 }

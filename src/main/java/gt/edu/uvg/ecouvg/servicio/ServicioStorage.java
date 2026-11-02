@@ -1,6 +1,5 @@
 package gt.edu.uvg.ecouvg.servicio;
 
-
 import tools.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.util.*;

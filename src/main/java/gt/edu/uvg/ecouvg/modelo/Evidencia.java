@@ -22,7 +22,7 @@ public class Evidencia {
     private Usuario usuario;
     @ManyToOne
     private ProgresoReto progresoReto;
-    private String rutaFotografia ;
+    private String rutaFotografia;
     @Enumerated(EnumType.STRING)
     private EstadoEvidencia estado;
     private LocalDateTime fechaEnvio; 
@@ -30,7 +30,6 @@ public class Evidencia {
     protected Evidencia(){
         
     }
-
 
     public Evidencia (Usuario usuario, ProgresoReto progresoReto, String rutaFotografia){
         this.usuario = usuario; 
