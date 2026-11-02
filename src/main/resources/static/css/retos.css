@@ -343,3 +343,66 @@ h1 {
     color: #245c40;
     font-weight: bold;
 }
+.eco-nadando {
+    display: block;
+    width: 140px;
+    height: auto;
+    margin: 0 auto 12px;
+    object-fit: contain;
+}
+
+.ayuda-eco .boton {
+    width: 100%;
+    text-align: center;
+}
+/* Eco flotante */
+.eco-flotante {
+    position: fixed;
+    right: 24px;
+    bottom: 20px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--verde);
+    text-decoration: none;
+    border-radius: 18px;
+}
+
+.eco-flotante img {
+    display: block;
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 5px 6px #23434c26);
+    transition: transform 0.2s ease;
+}
+
+.eco-globo {
+    padding: 7px 12px;
+    border: 1px solid #c4dfe7;
+    border-radius: 16px;
+    background: white;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px #23434c12;
+}
+
+.eco-flotante:hover img {
+    transform: translateY(-5px);
+}
+
+/* Espacio para que Eco no tape el contenido al final */
+.pagina {
+    padding-bottom: 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eco-flotante img {
+        transition: none;
+    }
+
+    .eco-flotante:hover img {
+        transform: none;
+    }
+}
