@@ -82,17 +82,15 @@
                             <span th:text="${usuario.nombre}">Usuario</span>!
                         </h1>
 
-                        <p class="descripcion">
-                            Ayuda al planeta hoy. Aprende a clasificar
-                            tus residuos y encuentra dónde llevarlos.
-                        </p>
+                <p class="descripcion">
+                    Ayuda al planeta hoy. Aprende a clasificar tus
+                    residuos y encuentra dónde llevarlos.
+                </p>
 
-                        <div class="estadisticas">
-                            <p class="dato">
-                                <span aria-hidden="true">🔥</span>
-                                <strong th:text="${usuario.diasRacha}">0</strong>
-                                días de racha
-                            </p>
+                <p class="racha">
+                    🔥 <strong>Tu racha:</strong>
+                    <span th:text="${rachaVigente}">0</span> días
+                </p>
 
                             <p class="dato">
                                 <span aria-hidden="true">⭐</span>
