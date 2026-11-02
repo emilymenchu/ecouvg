@@ -69,10 +69,10 @@ public class ControladorLogin {
         Usuario usuario = servicioUsuario.buscarPorCarnet(carnet);
 
         LocalDate hoy = LocalDate.now(ZoneId.of("America/Guatemala")); 
-        int rachaActual = usuario.obtenerRacha(hoy); 
+        int rachaVigente = usuario.obtenerRacha(hoy); 
 
         model.addAttribute("usuario", usuario);
-        model.addAttribute("rachaActual", rachaActual);
+        model.addAttribute("rachaVigente", rachaVigente);
         return "inicio";
     }
 }
