@@ -1,42 +1,35 @@
 <!DOCTYPE html>
-<html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/inicio.css" th:href="@{/css/inicio.css}">
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inicio | EcoUVG</title>
 
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="../static/css/inicio.css"
+          th:href="@{/css/inicio.css}">
 </head>
-<body>
-    <header class="encabezado">
-        <div class="barra">
-            <a class="marca" th:href="@{/inicio}" aria-current="page">
-                Eco<span>UVG</span>
-            </a>
 
-            <form class="sesion" th:action="@{/logout}" method="post">
-                <button class="boton-salir" type="submit">
-                    Cerrar sesión
-                </button>
-            </form>
-        </div>
-    </header>
+<body>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('inicio')}"></th:block>
 
     <main>
         <section class="bienvenida" aria-labelledby="titulo-inicio">
             <div>
-                <p class="etiqueta">PEQUEÑAS ACCIONES, GRANDES CAMBIOS</p>
+                <p class="etiqueta">
+                    PEQUEÑAS ACCIONES, GRANDES CAMBIOS
+                </p>
+
                 <h1 id="titulo-inicio">
-                    ¡Bienvenido, <span th:text="${usuario.nombre}">Usuario</span>!
+                    ¡Bienvenido,
+                    <span th:text="${usuario.nombre}">Usuario</span>!
                 </h1>
+
                 <p class="descripcion">
                     Ayuda al planeta hoy. Aprende a clasificar tus
                     residuos y encuentra dónde llevarlos.
                 </p>
+
                 <p class="racha">
                     🔥 <strong>Tu racha:</strong>
                     <span th:text="${usuario.diasRacha}">0</span> días
@@ -53,12 +46,16 @@
                 </p>     
             </div>
 
-            <span class="mascota" aria-hidden="true">🐢</span>
+            <img class="mascota"
+                 src="../static/img/Eco sentada feliz.png"
+                 th:src="@{/img/Eco sentada feliz.png}"
+                 alt="Eco, la tortuga mascota, sentada y feliz">
         </section>
 
         <h2 class="titulo-seccion" id="titulo-opciones">
             ¿Por dónde quieres empezar?
         </h2>
+
         <p class="introduccion">
             Cada paso cuenta para cuidar nuestra comunidad.
         </p>
@@ -67,6 +64,7 @@
             <article class="tarjeta">
                 <span class="icono" aria-hidden="true">♻️</span>
                 <h3>Guía de residuos</h3>
+
                 <p>
                     Consulta los residuos y descubre cómo
                     clasificarlos y manejarlos correctamente.
@@ -78,15 +76,44 @@
             </article>
 
             <article class="tarjeta">
-                <span class="icono" aria-hidden="true">♻️</span>
+                <span class="icono" aria-hidden="true">📍</span>
                 <h3>Centros de reciclaje</h3>
-                </h3>
+
                 <p>
-                    Consulta los horarios, materiales resividos y ubicaciones de los centros de reciclaje.
+                    Consulta los horarios, materiales recibidos y
+                    ubicaciones de los centros de reciclaje.
                 </p>
 
                 <a class="boton" th:href="@{/centros}">
                     Ver centros →
+                </a>
+            </article>
+
+            <article class="tarjeta">
+                <span class="icono" aria-hidden="true">📖</span>
+                <h3>Guía de reciclaje</h3>
+
+                <p>
+                    Consulta los basureros y contenedores que se
+                    deben usar para cada tipo de residuo.
+                </p>
+
+                <a class="boton" th:href="@{/guia}">
+                    Ver guía →
+                </a>
+            </article>
+
+            <article class="tarjeta">
+                <span class="icono" aria-hidden="true">⭐</span>
+                <h3>Retos de la semana</h3>
+
+                <p>
+                    Consulta los retos y desafíos que puedes completar
+                    para ganar puntos y mejorar tu racha.
+                </p>
+
+                <a class="boton" th:href="@{/retos}">
+                    Ver retos →
                 </a>
             </article>
         </section>
@@ -98,9 +125,11 @@
             </p>
         </aside>
     </main>
-    <nav th:replace="~{fragmentos/navegacion :: menu('inicio')}"></nav>
+
     <footer>
         EcoUVG · Construyamos una comunidad más verde.
     </footer>
+
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </body>
 </html>

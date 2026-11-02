@@ -10,6 +10,8 @@ import java.util.Optional;
 
 
 public interface RepositorioProgresoReto extends JpaRepository<ProgresoReto, Long>{
+
+    long countByUsuarioIdAndCompletadoTrue(Long idUsuario);
     
     Optional<ProgresoReto> findByUsuarioIdAndRetoId(Long idUsuario, Long idReto);
     

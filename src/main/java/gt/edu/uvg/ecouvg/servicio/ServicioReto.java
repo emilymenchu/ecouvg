@@ -36,6 +36,10 @@ public class ServicioReto {
     }
 
 
+    public long contarMisionesCompletadas(Long idUsuario) {
+        return repositorioProgresoReto.countByUsuarioIdAndCompletadoTrue(idUsuario);
+    }
+
     private CalculadorProgreso seleccionarCalculador (Reto reto) {
         TipoProgreso tipo = reto.getTipoProgreso(); 
 
