@@ -99,6 +99,38 @@
                     </strong>
                     de recompensa
                 </p>
+                
+                <div class="acciones-reto"
+                th:with="progreso=${progresos[reto.id]}">
+
+                <form th:if="${progreso == null}"
+                    th:action="@{/retos/iniciar/{id}(id=${reto.id})}"
+                    method="post">
+
+                    <button type="submit" class="boton-evidencia">
+                        Haz el reto →
+                    </button>
+                </form>
+
+                <!-- Si el reto ya está iniciado -->
+                <div th:if="${progreso != null and !progreso.estaCompletado()}">
+                    <p class="estado-progreso">
+                        <strong>Tu progreso:</strong>
+                        <span th:text="${progreso.progreso}">0</span>%
+                    </p>
+
+                    <a class="boton-evidencia"
+                    th:href="@{/evidencias/enviar/{id}(id=${progreso.id})}">
+                        Enviar evidencia →
+                    </a>
+                </div>
+
+                <!-- Si ya completó el reto -->
+                <p class="estado-completado"
+                th:if="${progreso != null and progreso.estaCompletado()}">
+                    ✓ Misión completada
+                </p>
+            </div>
             </article>
         </div>
     </main>

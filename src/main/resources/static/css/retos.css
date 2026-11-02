@@ -301,3 +301,45 @@ h1 {
     color: var(--gris);
     text-align: center;
 }
+.acciones-reto {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #d3e5e5;
+}
+
+.acciones-reto form {
+    margin: 0;
+}
+
+.boton-evidencia {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: #245c40;
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.boton-evidencia:hover {
+    background: #193e2d;
+}
+
+.boton-evidencia:focus-visible {
+    outline: 3px solid #ad7117;
+    outline-offset: 4px;
+}
+
+.estado-progreso {
+    margin: 0 0 14px;
+    color: #245263;
+}
+
+.estado-completado {
+    margin: 0;
+    color: #245c40;
+    font-weight: bold;
+}
