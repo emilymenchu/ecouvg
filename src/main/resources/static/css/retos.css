@@ -1,55 +1,201 @@
+/* Colores */
 :root {
-    --verde: #185b3b;
-    --verde-claro: #eaf3e5;
-    --fondo: #f8f9f4;
-    --texto: #17372b;
-    --gris: #5f6e63;
-    --borde: #dbe3d8;
+    --verde: #245c40;
+    --texto: #23434c;
+    --gris: #526d73;
+    --borde: #d3e5e5;
+    --arena: #faf6ed;
+    --mar-claro: #e1f5fb;
 }
 
+/* Configuración general */
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 32px 24px;
+    padding: 0;
     font-family: Arial, sans-serif;
-    background-color: var(--fondo);
+    background: var(--arena);
     color: var(--texto);
     line-height: 1.6;
 }
 
+a {
+    color: var(--verde);
+}
+
+a:focus-visible {
+    outline: 3px solid #ad7117;
+    outline-offset: 4px;
+}
+
+/* Encabezado */
 .retos-cabecera {
+    background: #f5fcff;
+    border-bottom: 1px solid #cce5ec;
+}
+
+.retos-barra {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 18px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px max(20px, calc((100% - 880px)/2));
-    background: #fff;
-    border-bottom: 1px solid #dbe3d8;
-    gap: 18px
+    gap: 18px;
 }
 
+.marca {
+    color: var(--verde);
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.marca span {
+    color: #68823e;
+}
+
+.frase-cabecera {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+/* Contenido */
 .contenedor {
     width: 100%;
     max-width: 1050px;
     margin: 0 auto;
+    padding: 32px 24px 48px;
 }
 
-h1 {
-    margin: 0 0 30px;
-    color: var(--texto);
-    font-size: 36px;
-    line-height: 1.2;
+/* Portada marina */
+.portada-retos {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 38px 40px 105px;
+    border: 1px solid #bcdfea;
+    border-radius: 28px;
+    background:
+        radial-gradient(
+            circle at 88% 20%,
+            #ffffffb3 0 9px,
+            transparent 10px
+        ),
+        radial-gradient(
+            circle at 12% 35%,
+            #ffffff99 0 6px,
+            transparent 7px
+        ),
+        radial-gradient(
+            circle at 78% 40%,
+            #ffffff80 0 5px,
+            transparent 6px
+        ),
+        linear-gradient(
+            135deg,
+            #edfaff 0%,
+            #ccecf7 60%,
+            #b9e5f2 100%
+        );
+    box-shadow: 0 12px 30px #48798912;
+}
+
+/* Olas y arena */
+.portada-retos::before,
+.portada-retos::after {
+    content: "";
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    height: 115px;
+    pointer-events: none;
+}
+
+.portada-retos::before {
+    bottom: -35px;
+    border-radius: 50% 45% 0 0;
+    background: #91d2e47a;
+    transform: rotate(-3deg);
+    z-index: 0;
+}
+
+.portada-retos::after {
+    bottom: -60px;
+    border-radius: 45% 60% 0 0;
+    background: #f2e4c9;
+    transform: rotate(3deg);
+    z-index: 1;
+}
+
+.portada-contenido {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    margin: 0 auto;
     text-align: center;
 }
 
-h2 {
-    color: var(--texto);
-    font-size: 21px;
+.etiqueta {
+    margin: 0 0 10px;
+    color: #326476;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
-/* Tarjetas de retos */
+h1 {
+    margin: 0 0 12px;
+    color: #234b59;
+    font-size: 38px;
+    line-height: 1.2;
+}
+
+.descripcion-portada {
+    margin: 0 auto;
+    max-width: 560px;
+    color: #426773;
+}
+
+.decoracion-mar {
+    position: absolute;
+    right: 45px;
+    bottom: 12px;
+    left: 45px;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.decoracion-mar span {
+    font-size: 28px;
+}
+
+.decoracion-mar span:first-child {
+    transform: rotate(-15deg);
+}
+
+.decoracion-mar span:last-child {
+    transform: rotate(20deg);
+}
+
+/* Lista de retos */
+.titulo-lista {
+    margin: 30px 0 4px;
+    color: #234b59;
+    font-size: 24px;
+}
+
+.introduccion-lista {
+    margin: 0 0 20px;
+    color: var(--gris);
+}
+
 .lista-retos {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -59,23 +205,30 @@ h2 {
 .area-retos {
     padding: 28px;
     border: 1px solid var(--borde);
-    border-radius: 20px;
-    background-color: white;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 6px 18px #37697908;
 }
 
 .area-retos h2 {
     margin: 0 0 12px;
+    color: #234b59;
+    font-size: 22px;
 }
 
-.area-retos p {
-    margin: 0 0 14px;
+.descripcion-reto {
+    margin: 0 0 20px;
+    color: var(--gris);
 }
 
-.area-retos p:last-child {
-    margin-bottom: 0;
+/* Dificultad */
+.fila-dificultad {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
 }
 
-/* Indicadores de dificultad */
 .dificultad {
     display: inline-block;
     padding: 4px 12px;
@@ -85,44 +238,171 @@ h2 {
 }
 
 .facil {
-    background-color: var(--verde-claro);
-    color: var(--verde);
+    background: #e5f3e8;
+    color: #245c40;
 }
 
 .media {
-    background-color: #fff3cd;
+    background: #fff3cd;
     color: #7a5b00;
 }
 
 .dificil {
-    background-color: #f8e1e4;
+    background: #f8e1e4;
     color: #842029;
 }
 
-/* Mensaje cuando no hay retos */
-.lista-vacia {
-    padding: 24px;
-    border: 1px dashed var(--borde);
+/* Fechas */
+.fechas-reto {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 18px 20px;
+    border: 1px solid #dcebf0;
     border-radius: 16px;
-    background-color: white;
+    background: #f3fafc;
+}
+
+.fechas-reto p {
+    margin: 0;
+}
+
+.fechas-reto strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #326476;
+    font-size: 13px;
+}
+
+.fechas-reto span {
+    color: var(--texto);
+}
+
+/* Puntos */
+.recompensa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 10px 16px;
+    border: 1px solid #ebdfb9;
+    border-radius: 14px;
+    background: #fff8e5;
+    color: #685421;
+}
+
+/* Lista vacía */
+.lista-vacia {
+    margin: 0 0 20px;
+    padding: 28px;
+    border: 1px dashed #bedee8;
+    border-radius: 20px;
+    background: white;
     color: var(--gris);
     text-align: center;
 }
-
 .acciones-reto {
-    margin-top: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #d3e5e5;
+}
+
+.acciones-reto form {
+    margin: 0;
 }
 
 .boton-evidencia {
     display: inline-block;
-    background-color: #267347;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: #245c40;
     color: white;
-    text-decoration: none;
-    padding: 10px 16px;
-    border-radius: 8px;
+    font: inherit;
     font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .boton-evidencia:hover {
-    background-color: #195c36;
+    background: #193e2d;
+}
+
+.boton-evidencia:focus-visible {
+    outline: 3px solid #ad7117;
+    outline-offset: 4px;
+}
+
+.estado-progreso {
+    margin: 0 0 14px;
+    color: #245263;
+}
+
+.estado-completado {
+    margin: 0;
+    color: #245c40;
+    font-weight: bold;
+}
+.eco-nadando {
+    display: block;
+    width: 140px;
+    height: auto;
+    margin: 0 auto 12px;
+    object-fit: contain;
+}
+
+.ayuda-eco .boton {
+    width: 100%;
+    text-align: center;
+}
+/* Eco flotante */
+.eco-flotante {
+    position: fixed;
+    right: 24px;
+    bottom: 20px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--verde);
+    text-decoration: none;
+    border-radius: 18px;
+}
+
+.eco-flotante img {
+    display: block;
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 5px 6px #23434c26);
+    transition: transform 0.2s ease;
+}
+
+.eco-globo {
+    padding: 7px 12px;
+    border: 1px solid #c4dfe7;
+    border-radius: 16px;
+    background: white;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px #23434c12;
+}
+
+.eco-flotante:hover img {
+    transform: translateY(-5px);
+}
+
+/* Espacio para que Eco no tape el contenido al final */
+.pagina {
+    padding-bottom: 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eco-flotante img {
+        transition: none;
+    }
+
+    .eco-flotante:hover img {
+        transform: none;
+    }
 }

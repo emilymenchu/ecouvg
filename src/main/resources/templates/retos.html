@@ -1,102 +1,150 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Retos</title>
-    <link rel="stylesheet" th:href="@{/css/retos.css}">
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Retos | EcoUVG</title>
+
+    <link rel="stylesheet"
+          href="../static/css/retos.css"
+          th:href="@{/css/retos.css}">
+
+    <link rel="stylesheet"
+          href="../static/css/navegacion.css"
+          th:href="@{/css/navegacion.css}">
 </head>
 
 <body>
-     <header class="retos-cabecera">
-        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-        <span>Cumple retos</span>
+    <header class="retos-cabecera">
+        <div class="retos-barra">
+            <a class="marca" th:href="@{/inicio}">
+                ♻ Eco<span>UVG</span>
+            </a>
+
+            <span class="frase-cabecera">
+                Pequeñas acciones, grandes cambios
+            </span>
+        </div>
     </header>
 
     <main class="contenedor">
-    <h1>Retos de la semana </h1>
-    <p class="error" th:if="${error}" th:text="${error}"> </p>
-    <p th:if="${#lists.isEmpty(retos)}">
-        No hay retos disponibles en este momento.
-    </p>
-    <div class="lista-retos">
-        <article class="area-retos" th:each="reto: ${retos}">
-        <h2 th:text="${reto.titulo}">
-            Título reto
-        </h2>
+        <section class="portada-retos" aria-labelledby="titulo-retos">
+            <div class="portada-contenido">
+                <p class="etiqueta">UN MAR DE POSIBILIDADES</p>
 
-        <p th:text="${reto.descripcion}">
-            Descripcion reto
+                <h1 id="titulo-retos">Retos de la semana</h1>
+
+                <p class="descripcion-portada">
+                    Cada acción cuenta. Descubre los desafíos,
+                    suma puntos y ayuda a cuidar nuestro planeta.
+                </p>
+            </div>
+
+            <div class="decoracion-mar" aria-hidden="true">
+                <span>🐚</span>
+                <span>⭐</span>
+                <span>🐚</span>
+            </div>
+        </section>
+
+        <h2 class="titulo-lista">Tu próxima misión</h2>
+        <p class="introduccion-lista">
+            Consulta la dificultad, las fechas y los puntos de cada reto.
         </p>
 
-        <p>
-            Dificultad: 
-           <span class="dificultad"
-                 th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
-                 th:text="${reto.dificultad}">
-                Dificultad del reto
-            </span>
-
-        </p>
-        <p>
-            Disponible desde:
-            <span th:text="${reto.fechaInicio}">
-                Fecha inicial
-            </span>
-        </p>
-        <p>
-            Disponible hasta:
-            <span th:text="${reto.fechaFin}">
-                Fecha Fin
-            </span>
-        </p>
-
-        <p>
-            Puntos de recompensa: 
-            <span th:text="${reto.puntosRecompensa}">
-                0
-            </span>
-            puntos 
-        </p>
-
-
-        <div class ="acciones-reto" th:with="progreso=${progresos[reto.id]}">
-            <p th:if="${progreso != null}">
-                Progreso: 
-                <span th:text="${progreso.progreso}">0</span>%
-            </p> 
-        
-            <p th:if="${progreso == null}">
-                No se ha iniciado esta mision
-
-            </p>
-            <form th:if="${progreso == null}"
-                th:action="@{/retos/iniciar/{id}(id=${reto.id})}" method="post">
-                <button type="submit" class="boton-evidencia">
-                    Iniciar misión
-                </button>
-            </form>
-
-            <a th:if="${progreso != null and !progreso.estaCompletado()}" th:href="@{/evidencias/enviar/{id}(id=${progreso.id})}" class="boton-evidencia">
-                    Enviar evidencia
-            </a>
-
-            <p th:if="${progreso != null and progreso.estaCompletado()}">
-                    Misión completada
-            </p>
-
-        </div>
-        </article>
-        
         <p class="lista-vacia" th:if="${#lists.isEmpty(retos)}">
             No hay retos disponibles en este momento.
         </p>
-        
-    </div>
+
+        <div class="lista-retos">
+            <article class="area-retos" th:each="reto : ${retos}">
+                <h2 th:text="${reto.titulo}">Título del reto</h2>
+
+                <p class="descripcion-reto"
+                   th:text="${reto.descripcion}">
+                    Descripción del reto.
+                </p>
+
+                <p class="fila-dificultad">
+                    <strong>Dificultad:</strong>
+
+                    <span class="dificultad"
+                          th:classappend="${reto.dificultad == 'Fácil' ? 'facil' : (reto.dificultad == 'Media' ? 'media' : 'dificil')}"
+                          th:text="${reto.dificultad}">
+                        Dificultad del reto
+                    </span>
+                </p>
+
+                <div class="fechas-reto">
+                    <p>
+                        <strong>Disponible desde</strong>
+                        <span th:text="${reto.fechaInicio}">
+                            Fecha inicial
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Disponible hasta</strong>
+                        <span th:text="${reto.fechaFin}">
+                            Fecha final
+                        </span>
+                    </p>
+                </div>
+
+                <p class="recompensa">
+                    <span aria-hidden="true">⭐</span>
+                    <strong>
+                        <span th:text="${reto.puntosRecompensa}">0</span>
+                        puntos
+                    </strong>
+                    de recompensa
+                </p>
+                
+                <div class="acciones-reto"
+                th:with="progreso=${progresos[reto.id]}">
+
+                <form th:if="${progreso == null}"
+                    th:action="@{/retos/iniciar/{id}(id=${reto.id})}"
+                    method="post">
+
+                    <button type="submit" class="boton-evidencia">
+                        Haz el reto →
+                    </button>
+                </form>
+
+                <!-- Si el reto ya está iniciado -->
+                <div th:if="${progreso != null and !progreso.estaCompletado()}">
+                    <p class="estado-progreso">
+                        <strong>Tu progreso:</strong>
+                        <span th:text="${progreso.progreso}">0</span>%
+                    </p>
+
+                    <a class="boton-evidencia"
+                    th:href="@{/evidencias/enviar/{id}(id=${progreso.id})}">
+                        Enviar evidencia →
+                    </a>
+                </div>
+
+                <!-- Si ya completó el reto -->
+                <p class="estado-completado"
+                th:if="${progreso != null and progreso.estaCompletado()}">
+                    ✓ Misión completada
+                </p>
+            </div>
+            </article>
+        </div>
+         <a class="eco-flotante"
+            th:href="@{/chat}"
+            aria-label="Hablar con Eco, asistente de reciclaje">
+
+            <span class="eco-globo">Pregúntale a Eco</span>
+
+             <img src="../static/img/eco nadando.png"
+                th:src="@{/img/eco nadando.png}"
+                alt="">
+            </a>
     </main>
+
     <nav th:replace="~{fragmentos/navegacion :: menu('retos')}"></nav>
-
-
 </body>
 </html>

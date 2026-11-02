@@ -1,45 +1,126 @@
 <!DOCTYPE html>
-<html lang="es " xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset ="UTF-8">
-    <meta name= "viewport" content= "width=device-width, initial-scale=1.0">
-    <title> Envío de EVIDENCIA - EcoUVG</title>
-    <link rel ="stylesheet" th:href="@{/css/envio-evidencia.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Enviar evidencia | EcoUVG</title>
+
+    <link rel="stylesheet"
+          href="../static/css/envio-evidencia.css"
+          th:href="@{/css/envio-evidencia.css}">
 </head>
 
 <body>
-    <main class ="contenedor">
-        <h1>Enviar evidencia</h1>
-        <p> Toma una fotografia sobre la actividad que realizaste para que otros puedan validarla</p>
-        <p class="mensaje" th:if="${mensaje}" th:text="${mensaje}"></p>
-        <p class="error" th:if="${error}" th:text="${error}"></p>
+    <header class="cabecera">
+        <div class="barra">
+            <a class="marca" th:href="@{/inicio}">
+                ♻ Eco<span>UVG</span>
+            </a>
 
-        <form th:action="@{/evidencias/enviar}" method="post" enctype ="multipart/form-data">
-            <input type="hidden" name="idProgreso" th:value="${idProgreso}">
-            <label for="fotografia">
-                Fotografia a subir de la mision: 
-            </label>
+            <a class="enlace-retos" th:href="@{/retos}">
+                ← Volver a retos
+            </a>
+        </div>
+    </header>
 
-            <input type="file" id="fotografia" name="fotografia" accept="image/jpeg, image/png, image/webp" capture="environment" required>
-            <p>
-                Formatos de imagen permitidos: JPG, PNG, webp
-                Tamaño max: 5MB
-            </p>
+    <main class="contenedor">
+        <section class="portada" aria-labelledby="titulo-evidencia">
+            <div class="portada-texto">
+                <p class="ceja">CADA ACCIÓN CUENTA</p>
 
+                <h1 id="titulo-evidencia">Enviar evidencia</h1>
 
-            <button type="submit">
-                Enviar evidencia
-            </button>
+                <p class="introduccion">
+                    Comparte una fotografía de la actividad que
+                    realizaste para que otros puedan validarla.
+                </p>
+            </div>
 
+            <span class="concha" aria-hidden="true">🐚</span>
+        </section>
 
+        <p class="mensaje"
+           role="status"
+           th:if="${mensaje}"
+           th:text="${mensaje}">
+        </p>
 
-        </form>
+        <p class="error"
+           role="alert"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
 
-        
-        <a th:href="@{/retos}" class="boton-volver">
-            Volver a retos
-        </a>
+        <section class="tarjeta-envio" aria-labelledby="titulo-foto">
+            <div class="titulo-tarjeta">
+                <span class="icono" aria-hidden="true">📷</span>
 
+                <div>
+                    <h2 id="titulo-foto">Tu misión en una foto</h2>
+                    <p>Elige una imagen donde se vea la actividad.</p>
+                </div>
+            </div>
+
+            <form th:action="@{/evidencias/enviar}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden"
+                       name="idProgreso"
+                       th:value="${idProgreso}">
+
+                <div class="campo-foto">
+                    <label for="fotografia">
+                        Fotografía de la misión
+                    </label>
+
+                    <input type="file"
+                           id="fotografia"
+                           name="fotografia"
+                           accept="image/jpeg,image/png,image/webp"
+                           capture="environment"
+                           aria-describedby="ayuda-foto"
+                           required>
+
+                    <p id="ayuda-foto" class="ayuda">
+                        Formatos permitidos: JPG, PNG y WEBP.
+                        Tamaño máximo: 5 MB.
+                    </p>
+                </div>
+
+                <p class="nota">
+                    <strong>Antes de enviar:</strong>
+                    comprueba que la fotografía sea clara y corresponda
+                    al reto que realizaste.
+                </p>
+
+                <div class="acciones">
+                    <button type="submit">Enviar evidencia</button>
+
+                    <a th:href="@{/retos}" class="boton-volver">
+                        Volver a retos
+                    </a>
+                </div>
+            </form>
+        </section>
+
+        <p class="recordatorio">
+            Enviar tu evidencia permite que la actividad sea revisada.
+        </p>
+         <a class="eco-flotante"
+            th:href="@{/chat}"
+            aria-label="Hablar con Eco, asistente de reciclaje">
+
+            <span class="eco-globo">Pregúntale a Eco</span>
+
+             <img src="../static/img/eco nadando.png"
+                th:src="@{/img/eco nadando.png}"
+                alt="">
+            </a>
     </main>
+
+    <footer>
+        EcoUVG · Cada acción suma.
+    </footer>
 </body>
 </html>
