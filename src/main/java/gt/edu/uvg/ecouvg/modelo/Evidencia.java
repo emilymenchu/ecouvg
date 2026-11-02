@@ -27,7 +27,9 @@ public class Evidencia {
     private EstadoEvidencia estado;
     private LocalDateTime fechaEnvio; 
 
-
+    protected Evidencia(){
+        
+    }
 
     public Evidencia (Usuario usuario, ProgresoReto progresoReto, String rutaFotografia){
         this.usuario = usuario; 
@@ -55,6 +57,9 @@ public class Evidencia {
 
     public LocalDateTime getFechaEnvio(){
         return fechaEnvio; 
+    }
+    public String getRutaFotografia(){
+        return rutaFotografia;
     }
 
     public boolean estaPendiente() {

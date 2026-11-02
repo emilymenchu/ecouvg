@@ -1,6 +1,7 @@
 package gt.edu.uvg.ecouvg.modelo;
 import java.time.LocalDateTime;
- 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,8 @@ public class RevisionEvidencia {
     private Usuario revisor;
     private boolean aprobada;
     private LocalDateTime fechaRevision; 
+    @Column(nullable = false) 
+    private boolean recompensada = false; 
 
     public RevisionEvidencia(){
 
@@ -69,6 +72,17 @@ public class RevisionEvidencia {
 
     public LocalDateTime getFechaRevision(){
         return fechaRevision; 
+    }
+
+    public boolean estaRecompensada(){
+        return recompensada; 
+    }
+    public void marcarRecompensada(){
+        if (recompensada){
+            throw new IllegalStateException("Esta revisión ya había sido recompensada -_-");
+
+        }
+        recompensada = true; 
     }
 
 }
