@@ -1,12 +1,15 @@
 package gt.edu.uvg.ecouvg.modelo;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint; 
 
 @Entity 
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
@@ -35,7 +38,8 @@ public class Usuario implements Comparable<Usuario> {
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
-    private int nivel;
+    private LocalDate lastActividadValida; 
+    private int nivel = 1;
     private int horasBeca;
     private String fotoPerfil;
 
@@ -46,6 +50,7 @@ public class Usuario implements Comparable<Usuario> {
     public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
+
 
     public Usuario() {
     }
@@ -136,7 +141,48 @@ public class Usuario implements Comparable<Usuario> {
         }
         this.puntos += cantidad;
         this.puntosTotales += cantidad; 
-        calcularNivel();
+        CalculadorNivel calculador = new CalculadorNivel(); 
+        this.nivel = calculador.calculadorNivel(this.puntosTotales); 
+    }
+    @Transient 
+    public String getNombreNivel(){
+        CalculadorNivel calculador = new CalculadorNivel(); 
+        return calculador.nombreNivel(nivel); 
+    }
+
+    public void registroActividadValida(LocalDate fechaActividad){
+        if (fechaActividad == null){
+            throw new IllegalArgumentException("La actividad debe contar con fecha -_-"); 
+
+        }
+        if (lastActividadValida == null){
+            diasRacha = 1; 
+        }else if(fechaActividad.equals(lastActividadValida)){ 
+            return; 
+
+        }else if(fechaActividad.equals(lastActividadValida.plusDays(1))){
+            diasRacha++;
+
+        }else if (fechaActividad.isAfter(lastActividadValida)){
+            diasRacha = 1; 
+        }else {
+            return; 
+        }
+        lastActividadValida = fechaActividad; 
+    }
+
+    public int obtenerRacha(LocalDate hoy){
+        if(hoy == null){
+            throw new IllegalArgumentException("La fecha actual es obligatoria ://// ");
+
+        }
+        if (lastActividadValida ==null){
+            return 0; 
+        }
+        if (lastActividadValida.equals(hoy)   ||  lastActividadValida.equals(hoy.minusDays(1))){
+            return diasRacha;
+        }
+        return 0; 
     }
 
     @Override

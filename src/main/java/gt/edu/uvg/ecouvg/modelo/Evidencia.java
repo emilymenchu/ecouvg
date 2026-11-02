@@ -82,4 +82,16 @@ public class Evidencia {
         this.estado = EstadoEvidencia.RECHAZADA;
     }
 
+
+        //para las revisiones de las evidencias
+    public String getTituloReto() {
+        return progresoReto.getTituloReto(); 
+    }
+    //para evitar que se guarden evidencias sin revisar
+    public void expirar(){
+        if (estado!= EstadoEvidencia.PENDIENTE){
+            throw new IllegalArgumentException("Solo evidencias que esten pendientes van a expirar");
+        }
+        estado= EstadoEvidencia.EXPIRADA; 
+    }
 }

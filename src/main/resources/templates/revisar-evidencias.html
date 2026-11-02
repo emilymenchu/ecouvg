@@ -21,6 +21,7 @@
         <section> 
             <article th:each="evidencia: ${evidencias}">
                 <h2>Evidencia pendiente </h2> 
+                <h3 th:text="${evidencia.tituloReto}">Nombre del reto </h3>
                 <img th:src="${urlsImagenes[evidencia.id]}" alt="Fotografía evidencia" width="250">
 
                 <form th:action="@{/revisiones/aprobar/{id}(id=${evidencia.id})}" method="post">
