@@ -6,6 +6,7 @@
 <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}"><span aria-hidden="true">▤</span>Guía</a>
 <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
 <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
+<a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'" th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span>Arcade</a>
 <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}"><span aria-hidden="true">👤</span>Perfil</a>
 <a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'" th:attr="aria-current=${seccion == 'chat' ? 'page' : null}"><span aria-hidden="true">💬</span>Eco</a>
 </nav>
@@ -71,6 +72,7 @@
             <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}">
                 <span aria-hidden="true">⭐</span> Retos
             </a>
+            <a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'" th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span> Eco Arcade</a>
             <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}">
                 <span aria-hidden="true">👤</span> Mi perfil
             </a>
