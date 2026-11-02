@@ -113,6 +113,14 @@ Actualmente el prototipo incluye:
 
 El proyecto continúa en desarrollo y se agregarán nuevas funcionalidades en las siguientes etapas.
 
+### Historial de Eco
+
+En **Eco → Nuevo chat** se inicia otra conversación. El historial muestra las conversaciones de la cuenta actual; al abrir Eco se recupera la última, y se puede seleccionar otra para continuarla. Se guardan automáticamente la pregunta y la respuesta cuando Eco responde correctamente. Los reintentos usan un identificador para no duplicar intercambios.
+
+La persistencia usa las tablas `conversaciones_chat` y `turnos_chat`. Con la configuración actual (`spring.jpa.hibernate.ddl-auto=update`), Hibernate las crea al reiniciar la aplicación, siempre que el usuario de base de datos tenga permisos de creación. Las conversaciones anteriores a esta funcionalidad no se pueden recuperar porque solo existían en la página del navegador.
+
+El historial completo se conserva para consultarlo. Para responder, Eco recibe los últimos 10 intercambios de la conversación seleccionada y la pregunta nueva, usando el formato de contexto de [Gemini generateContent](https://ai.google.dev/api/generate-content). Cada lectura y escritura comprueba la cuenta propietaria. Las pruebas de persistencia usan H2 y simulan Gemini; no requieren credenciales remotas ni modifican Supabase.
+
 ## Tecnologías utilizadas
 
 - Java

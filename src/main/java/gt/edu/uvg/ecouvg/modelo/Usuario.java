@@ -16,9 +16,6 @@ import jakarta.persistence.UniqueConstraint;
 public class Usuario implements Comparable<Usuario> {
 
     private static final int[] UMBRALES_NIVEL = {0, 100, 250, 500, 1000, 10000};
-    private static final String[] NOMBRES_NIVEL = {
-        "Semilla", "Brote", "Raíz", "Granito verde", "Árbol", "Guardián del planeta"
-    };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,10 +94,6 @@ public class Usuario implements Comparable<Usuario> {
 
     public int getNivel() {
         return Math.clamp(nivel, 1, UMBRALES_NIVEL.length);
-    }
-
-    public String getNombreNivel() {
-        return NOMBRES_NIVEL[getNivel() - 1];
     }
 
     public boolean isNivelMaximo() {

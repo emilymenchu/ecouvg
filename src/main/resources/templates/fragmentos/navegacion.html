@@ -7,6 +7,7 @@
 <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
 <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
 <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}"><span aria-hidden="true">👤</span>Perfil</a>
+<a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'" th:attr="aria-current=${seccion == 'chat' ? 'page' : null}"><span aria-hidden="true">💬</span>Eco</a>
 </nav>
 <th:block th:fragment="cabecera(seccion)">
     <header class="encabezado">
@@ -46,7 +47,7 @@
             </button>
         </div>
 
-        <p class="descripcion-menu">
+        <p class="descripcion-menu" th:if="${seccion != 'perfil' and seccion != 'chat'}">
             Un pequeño paso para cuidar el planeta.
         </p>
 
@@ -72,6 +73,9 @@
             </a>
             <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}">
                 <span aria-hidden="true">👤</span> Mi perfil
+            </a>
+            <a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'" th:attr="aria-current=${seccion == 'chat' ? 'page' : null}">
+                <span aria-hidden="true">💬</span> Chatea con Eco
             </a>
         </nav>
     </dialog>

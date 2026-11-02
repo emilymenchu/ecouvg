@@ -61,7 +61,7 @@ class ControladorPerfilTest {
         var resultado = mvc.perform(get("/perfil").principal(autenticacion()))
             .andExpect(status().isOk())
             .andExpect(model().attribute("misionesCompletadas", 28L))
-            .andExpect(content().string(containsString("Granito verde")))
+            .andExpect(content().string(containsString(usuario.getNombreNivel())))
             .andExpect(content().string(containsString("value=\"50\"")))
             .andExpect(content().string(containsString("mi-posicion")))
             .andExpect(content().string(containsString("aria-current=\"page\"")))
