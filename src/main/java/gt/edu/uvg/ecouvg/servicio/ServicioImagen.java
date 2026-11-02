@@ -2,6 +2,7 @@ package gt.edu.uvg.ecouvg.servicio;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.geom.AffineTransform;
 import java.io.*;
 import java.util.Iterator;
 import javax.imageio.*;
@@ -12,6 +13,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ServicioImagen {
+
+    private AffineTransform transformacionExif(int orientacion, int ancho, int alto) {
+        return switch (orientacion) {
+            case 2 -> new AffineTransform(-1, 0, 0, 1, ancho, 0);
+            case 3 -> new AffineTransform(-1, 0, 0, -1, ancho, alto);
+            case 4 -> new AffineTransform(1, 0, 0, -1, 0, alto);
+            case 5 -> new AffineTransform(0, 1, 1, 0, 0, 0);
+            case 6 -> new AffineTransform(0, 1, -1, 0, alto, 0);
+            case 7 -> new AffineTransform(0, -1, -1, 0, alto, ancho);
+            case 8 -> new AffineTransform(0, -1, 1, 0, 0, ancho);
+            default -> new AffineTransform();
+        };
+    }
 
     public byte[] comprimir(MultipartFile archivo, int anchoMaximo) throws IOException {
         if (archivo == null || archivo.isEmpty()) throw new IllegalArgumentException("Imagen vacía");
@@ -40,9 +54,12 @@ public class ServicioImagen {
             }
         }
 
-        double escala = Math.min(1.0, (double) anchoMaximo / original.getWidth());
-        int ancho = Math.max(1, (int) Math.round(original.getWidth() * escala));
-        int alto = Math.max(1, (int) Math.round(original.getHeight() * escala));
+        int orientacion = OrientacionExif.leer(datos);
+        int anchoOrientado = orientacion >= 5 ? original.getHeight() : original.getWidth();
+        int altoOrientado = orientacion >= 5 ? original.getWidth() : original.getHeight();
+        double escala = Math.min(1.0, (double) anchoMaximo / anchoOrientado);
+        int ancho = Math.max(1, (int) Math.round(anchoOrientado * escala));
+        int alto = Math.max(1, (int) Math.round(altoOrientado * escala));
 
         BufferedImage imagen = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = imagen.createGraphics();
@@ -50,7 +67,10 @@ public class ServicioImagen {
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, ancho, alto);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.drawImage(original, 0, 0, ancho, alto, null);
+            // Normalizar los píxeles antes de guardar: el JPEG de salida no conserva el EXIF.
+            g.scale((double) ancho / anchoOrientado, (double) alto / altoOrientado);
+            g.transform(transformacionExif(orientacion, original.getWidth(), original.getHeight()));
+            g.drawImage(original, 0, 0, null);
         } finally {
             g.dispose();
         }
