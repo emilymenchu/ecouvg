@@ -6,6 +6,10 @@ import gt.edu.uvg.ecouvg.modelo.Ranking;
 import gt.edu.uvg.ecouvg.servicio.ServicioUsuario;
 import gt.edu.uvg.ecouvg.servicio.ServicioReto;
 import gt.edu.uvg.ecouvg.servicio.ServicioPerfil;
+import gt.edu.uvg.ecouvg.servicio.ServicioSocial;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -34,11 +38,13 @@ public class ControladorPerfil {
     private final ServicioUsuario servicioUsuario;
     private final ServicioReto servicioReto;
     private final ServicioPerfil servicioPerfil;
+    private final ServicioSocial servicioSocial;
 
-    public ControladorPerfil(ServicioUsuario servicioUsuario, ServicioReto servicioReto, ServicioPerfil servicioPerfil) {
+    public ControladorPerfil(ServicioUsuario servicioUsuario, ServicioReto servicioReto, ServicioPerfil servicioPerfil, ServicioSocial servicioSocial) {
         this.servicioUsuario = servicioUsuario;
         this.servicioReto = servicioReto;
         this.servicioPerfil = servicioPerfil;
+        this.servicioSocial = servicioSocial;
     }
 
     @GetMapping("/perfil")
@@ -53,6 +59,25 @@ public class ControladorPerfil {
             return "redirect:/login";
         }
 
+        return cargarPerfil(usuario, usuario, nivel, model);
+    }
+
+    @GetMapping("/perfil/{id}")
+    public String verPerfil(@PathVariable Long id, Authentication authentication,
+                            @RequestParam(required = false) Integer nivel, Model model) {
+        if (authentication == null) return "redirect:/login";
+        Usuario actual = servicioUsuario.buscarPorCarnet(authentication.getName());
+        if (actual == null) return "redirect:/login";
+        if (id.equals(actual.getId())) return "redirect:/perfil";
+        Usuario perfil = servicioUsuario.buscarPorId(id);
+        if (perfil == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return cargarPerfil(perfil, actual, nivel, model);
+    }
+
+    private String cargarPerfil(Usuario usuario, Usuario actual, Integer nivel, Model model) {
+        model.addAttribute("perfilPropio", usuario.getId().equals(actual.getId()));
+        model.addAttribute("usuarioActualId", actual.getId());
+        model.addAttribute("social", servicioSocial.resumen(usuario.getId(), actual.getId()));
         int nivelSeleccionado = usuario.getNivel();
 
         if (nivel != null && nivel >= 1 && nivel <= 6) {
@@ -83,6 +108,19 @@ public class ControladorPerfil {
                 .contentType(MediaType.IMAGE_JPEG).body(imagen);
         } catch (RestClientException | IllegalArgumentException e) {
             log.warn("No se pudo cargar la foto de perfil desde Storage", e);
+            return ResponseEntity.status(502).cacheControl(CacheControl.noStore()).build();
+        }
+    }
+
+    @GetMapping("/perfil/{id}/foto")
+    public ResponseEntity<byte[]> obtenerFotoPersona(@PathVariable Long id, Authentication authentication) {
+        if (authentication == null) return ResponseEntity.status(401).cacheControl(CacheControl.noStore()).build();
+        try {
+            byte[] imagen = servicioPerfil.obtenerFotoPorId(id);
+            if (imagen == null || imagen.length == 0) return ResponseEntity.notFound().cacheControl(CacheControl.noStore()).build();
+            return ResponseEntity.ok().cacheControl(CacheControl.noStore()).contentType(MediaType.IMAGE_JPEG).body(imagen);
+        } catch (RestClientException | IllegalArgumentException e) {
+            log.warn("No se pudo cargar la foto de perfil", e);
             return ResponseEntity.status(502).cacheControl(CacheControl.noStore()).build();
         }
     }

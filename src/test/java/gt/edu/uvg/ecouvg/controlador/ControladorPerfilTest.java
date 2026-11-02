@@ -5,6 +5,7 @@ import gt.edu.uvg.ecouvg.modelo.Usuario;
 import gt.edu.uvg.ecouvg.servicio.ServicioReto;
 import gt.edu.uvg.ecouvg.servicio.ServicioUsuario;
 import gt.edu.uvg.ecouvg.servicio.ServicioPerfil;
+import gt.edu.uvg.ecouvg.servicio.ServicioSocial;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,7 @@ class ControladorPerfilTest {
     private ServicioUsuario usuarios;
     private ServicioReto retos;
     private ServicioPerfil perfil;
+    private ServicioSocial social;
     private MockMvc mvc;
     private Usuario usuario;
 
@@ -35,6 +37,8 @@ class ControladorPerfilTest {
         usuarios = mock(ServicioUsuario.class);
         retos = mock(ServicioReto.class);
         perfil = mock(ServicioPerfil.class);
+        social = mock(ServicioSocial.class);
+        when(social.resumen(anyLong(), anyLong())).thenReturn(new ServicioSocial.Resumen(3, 4, 2, false, false));
         usuario = new Usuario("Pilar", "123", "pilar@example.com", "clave");
         ReflectionTestUtils.setField(usuario, "id", 1L);
         usuario.sumarPuntos(750);
@@ -53,7 +57,7 @@ class ControladorPerfilTest {
         ThymeleafViewResolver vistas = new ThymeleafViewResolver();
         vistas.setTemplateEngine(motor);
         vistas.setCharacterEncoding("UTF-8");
-        mvc = MockMvcBuilders.standaloneSetup(new ControladorPerfil(usuarios, retos, perfil))
+        mvc = MockMvcBuilders.standaloneSetup(new ControladorPerfil(usuarios, retos, perfil, social))
             .setViewResolvers(vistas).build();
     }
 
@@ -193,6 +197,56 @@ class ControladorPerfilTest {
                 .param("nuevaContrasena", "NuevaClave123").param("confirmarContrasena", "NuevaClave123"))
             .andExpect(redirectedUrl("/login"));
         verifyNoInteractions(perfil);
+    }
+
+
+    @Test void perfilPropioMuestraContadoresYBusqueda() throws Exception {
+        mvc.perform(get("/perfil").principal(autenticacion()))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Buscar personas")))
+            .andExpect(content().string(containsString("/perfil/1/seguidores")))
+            .andExpect(content().string(containsString("/perfil/1/seguidos")))
+            .andExpect(content().string(containsString("/perfil/1/amigos")))
+            .andExpect(content().string(not(containsString("/personas/1/seguir"))));
+    }
+
+    @Test void perfilAjenoMuestraSeguimientoSinControlesPrivados() throws Exception {
+        Usuario emily = new Usuario("Emily", "456", "privado@example.com", "secreto");
+        ReflectionTestUtils.setField(emily, "id", 2L);
+        emily.setFotoPerfil("usuario_2/foto.jpg");
+        when(usuarios.buscarPorId(2L)).thenReturn(emily);
+        when(usuarios.obtenerRanking(1)).thenReturn(new Ranking(1));
+        when(social.resumen(2L, 1L)).thenReturn(new ServicioSocial.Resumen(7, 8, 1, false, true));
+        mvc.perform(get("/perfil/2").principal(autenticacion()))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("/perfil/2/foto")))
+            .andExpect(content().string(containsString("Seguir también")))
+            .andExpect(content().string(containsString("/personas/2/seguir")))
+            .andExpect(content().string(not(containsString("id=\"dialogo-foto\""))))
+            .andExpect(content().string(not(containsString("Cambiar contraseña"))))
+            .andExpect(content().string(not(containsString("privado@example.com"))))
+            .andExpect(content().string(not(containsString("secreto"))));
+    }
+
+    @Test void amistadMutuaPermiteDejarDeSeguir() throws Exception {
+        Usuario emily = new Usuario("Emily", "456", "emily@example.com", "clave");
+        ReflectionTestUtils.setField(emily, "id", 2L);
+        when(usuarios.buscarPorId(2L)).thenReturn(emily);
+        when(usuarios.obtenerRanking(1)).thenReturn(new Ranking(1));
+        when(social.resumen(2L, 1L)).thenReturn(new ServicioSocial.Resumen(1, 1, 1, true, true));
+        mvc.perform(get("/perfil/2").principal(autenticacion()))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("estado-amistad")))
+            .andExpect(content().string(containsString("/personas/2/dejar-seguir")));
+    }
+
+    @Test void perfilInexistenteDevuelve404() throws Exception {
+        mvc.perform(get("/perfil/999").principal(autenticacion())).andExpect(status().isNotFound());
+    }
+
+    @Test void fotoAjenaRequiereSesion() throws Exception {
+        mvc.perform(get("/perfil/2/foto")).andExpect(status().isUnauthorized());
+        verify(perfil, never()).obtenerFotoPorId(anyLong());
     }
 
     private UsernamePasswordAuthenticationToken autenticacion() {

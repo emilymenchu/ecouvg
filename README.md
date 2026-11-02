@@ -113,6 +113,14 @@ Actualmente el prototipo incluye:
 
 El proyecto continúa en desarrollo y se agregarán nuevas funcionalidades en las siguientes etapas.
 
+### Personas y seguimiento
+
+En **Perfil → Buscar personas** se busca por parte del nombre o del carné. Desde los resultados se puede abrir un perfil y seguir o dejar de seguir a esa persona. Los contadores de seguidores, seguidos y amigos abren sus listas, con 20 personas por página. Una amistad se forma cuando ambas personas se siguen; dejar de seguir elimina la amistad mutua y mantiene el seguimiento de la otra persona.
+
+Los perfiles y sus fotos son visibles para las cuentas que han iniciado sesión. La vista de otros perfiles muestra nombre, carné, nivel, logros y conexiones; los controles de foto y contraseña solo aparecen en el perfil propio. Las acciones de seguimiento usan la cuenta de la sesión y formularios POST protegidos por la configuración CSRF existente.
+
+La relación se guarda en `seguimientos`, con una restricción única por pareja dirigida. Con `spring.jpa.hibernate.ddl-auto=update`, la tabla se crea al reiniciar la aplicación si la cuenta de base de datos tiene permisos para crear tablas. Las pruebas usan H2 y no modifican Supabase.
+
 ### Historial de Eco
 
 En **Eco → Nuevo chat** se inicia otra conversación. El historial muestra las conversaciones de la cuenta actual; al abrir Eco se recupera la última, y se puede seleccionar otra para continuarla. Se guardan automáticamente la pregunta y la respuesta cuando Eco responde correctamente. Los reintentos usan un identificador para no duplicar intercambios.

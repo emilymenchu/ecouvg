@@ -34,6 +34,12 @@ public class ServicioPerfil {
         return ruta == null || ruta.isBlank() ? null : storage.obtenerImagen("perfiles", ruta);
     }
 
+    public byte[] obtenerFotoPorId(Long id) {
+        Usuario usuario = usuarios.findById(id).orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND));
+        String ruta = usuario.getFotoPerfil();
+        return ruta == null || ruta.isBlank() ? null : storage.obtenerImagen("perfiles", ruta);
+    }
+
     @Transactional
     public void cambiarContrasena(String carnet, String actual, String nueva, String confirmacion) {
         Usuario usuario = buscarUsuario(carnet);
