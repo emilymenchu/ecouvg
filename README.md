@@ -94,6 +94,14 @@ El proyecto está dirigido principalmente a estudiantes de la Universidad del Va
 
 ## Funcionalidades
 
+### Fotos y edición del perfil
+
+En **Perfil**, el botón de lápiz junto al avatar permite seleccionar una foto, revisar su vista previa y guardarla. Los datos editables son la foto y la contraseña. Para cambiar la contraseña se solicita la actual y la confirmación de la nueva; la clave se guarda usando el `PasswordEncoder` de la aplicación. La aplicación guarda la ruta de Storage en `usuarios.foto_perfil` y comprime la foto mediante `ServicioImagen` antes de subirla.
+
+Para usarlo en Supabase, configurar `SUPABASE_URL` y `SUPABASE_SECRET_KEY` en el entorno del servidor y disponer de un bucket llamado `perfiles`, con permisos para que la clave del servidor suba, lea y elimine objetos. La imagen se sirve mediante `GET /perfil/foto`, que usa la cuenta de la sesión y obtiene el archivo con `ServicioStorage.obtenerImagen`; la vista ya no depende de una URL pública del bucket. El formulario admite JPG o PNG de hasta 5 MB. Las fotos se almacenan bajo `usuario_ID/UUID.jpg`.
+
+La foto anterior se elimina después de confirmar la transacción de base de datos. Si el guardado se revierte, se intenta eliminar la nueva. Los errores de limpieza se registran en el log para poder retirar archivos pendientes posteriormente. Las pruebas locales simulan Storage; no comprueban credenciales ni permisos del proyecto de Supabase.
+
 Actualmente el prototipo incluye:
 
 - Inicio y cierre de sesión.
@@ -104,6 +112,22 @@ Actualmente el prototipo incluye:
 - Consulta de centros de reciclaje.
 
 El proyecto continúa en desarrollo y se agregarán nuevas funcionalidades en las siguientes etapas.
+
+### Personas y seguimiento
+
+En **Perfil → Buscar personas** se busca por parte del nombre o del carné. Desde los resultados se puede abrir un perfil y seguir o dejar de seguir a esa persona. Los contadores de seguidores, seguidos y amigos abren sus listas, con 20 personas por página. Una amistad se forma cuando ambas personas se siguen; dejar de seguir elimina la amistad mutua y mantiene el seguimiento de la otra persona.
+
+Los perfiles y sus fotos son visibles para las cuentas que han iniciado sesión. La vista de otros perfiles muestra nombre, carné, nivel, logros y conexiones; los controles de foto y contraseña solo aparecen en el perfil propio. Las acciones de seguimiento usan la cuenta de la sesión y formularios POST protegidos por la configuración CSRF existente.
+
+La relación se guarda en `seguimientos`, con una restricción única por pareja dirigida. Con `spring.jpa.hibernate.ddl-auto=update`, la tabla se crea al reiniciar la aplicación si la cuenta de base de datos tiene permisos para crear tablas. Las pruebas usan H2 y no modifican Supabase.
+
+### Historial de Eco
+
+En **Eco → Nuevo chat** se inicia otra conversación. El historial muestra las conversaciones de la cuenta actual; al abrir Eco se recupera la última, y se puede seleccionar otra para continuarla. Se guardan automáticamente la pregunta y la respuesta cuando Eco responde correctamente. Los reintentos usan un identificador para no duplicar intercambios.
+
+La persistencia usa las tablas `conversaciones_chat` y `turnos_chat`. Con la configuración actual (`spring.jpa.hibernate.ddl-auto=update`), Hibernate las crea al reiniciar la aplicación, siempre que el usuario de base de datos tenga permisos de creación. Las conversaciones anteriores a esta funcionalidad no se pueden recuperar porque solo existían en la página del navegador.
+
+El historial completo se conserva para consultarlo. Para responder, Eco recibe los últimos 10 intercambios de la conversación seleccionada y la pregunta nueva, usando el formato de contexto de [Gemini generateContent](https://ai.google.dev/api/generate-content). Cada lectura y escritura comprueba la cuenta propietaria. Las pruebas de persistencia usan H2 y simulan Gemini; no requieren credenciales remotas ni modifican Supabase.
 
 ## Tecnologías utilizadas
 

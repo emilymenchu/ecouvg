@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${perfilPropio ? 'Mi perfil | EcoUVG' : usuario.nombre + ' | EcoUVG'}">Perfil | EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/inicio.css}" href="/css/inicio.css">
+    <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
+    <link rel="stylesheet" th:href="@{/css/perfil.css}" href="/css/perfil.css">
+    <script th:src="@{/js/navegacion.js}" defer></script>
+    <script th:src="@{/js/perfil.js}" defer></script>
+</head>
+<body>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('perfil')}"></th:block>
+
+    <main class="contenedor-perfil">
+        <div class="titulo-perfil">
+            <h1 th:text="${perfilPropio ? 'Mi perfil' : 'Perfil'}">Perfil</h1>
+            <a class="boton buscar-personas" th:href="@{/personas}">Buscar personas</a>
+        </div>
+
+        <p class="aviso-perfil exito-perfil" th:if="${mensaje}" th:text="${mensaje}" role="status"></p>
+        <p class="aviso-perfil error-perfil" th:if="${error}" th:text="${error}" role="alert"></p>
+
+        <section class="perfil" aria-labelledby="nombre-perfil">
+            <div class="portada-perfil" aria-hidden="true"></div>
+            <div class="identidad-perfil">
+                <div class="contenedor-avatar">
+                  <div class="avatar-perfil">
+                    <img id="foto-actual" th:if="${!#strings.isEmpty(usuario.fotoPerfil)}" th:src="${perfilPropio} ? @{/perfil/foto} : @{/perfil/{id}/foto(id=${usuario.id})}" alt="Foto de perfil">
+                    <svg id="avatar-predeterminado" th:attr="hidden=${!#strings.isEmpty(usuario.fotoPerfil) ? 'hidden' : null}" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                        <circle cx="40" cy="29" r="14" fill="currentColor"/>
+                        <path d="M14 72c0-17 11-27 26-27s26 10 26 27" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  <button th:if="${perfilPropio}" class="editar-avatar" id="abrir-foto" type="button" aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil" aria-haspopup="dialog" aria-controls="dialogo-foto">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="m16 3 5 5M3 21l5-1L21 7a2.1 2.1 0 0 0-5-3L4 16l-1 5Z"/>
+                      </svg>
+                  </button>
+                </div>
+                <p id="error-carga-foto" class="error-carga-foto" role="status" hidden>No se pudo cargar la foto de perfil.</p>
+                <h2 id="nombre-perfil"><span th:text="${usuario.nombre}">Nombre</span> <span aria-hidden="true">🌱</span></h2>
+                <p class="carnet-perfil">Carné <span th:text="${usuario.carnet}">00000</span></p>
+                <p class="nivel-perfil">Nivel <span th:text="${usuario.nivel}">1</span> · <strong th:text="${usuario.nombreNivel}">Semilla</strong></p>
+
+                <div class="contadores-sociales" aria-label="Conexiones">
+                    <a th:href="@{/perfil/{id}/seguidores(id=${usuario.id})}"><strong th:text="${social.seguidores}">0</strong><span>Seguidores</span></a>
+                    <a th:href="@{/perfil/{id}/seguidos(id=${usuario.id})}"><strong th:text="${social.seguidos}">0</strong><span>Seguidos</span></a>
+                    <a th:href="@{/perfil/{id}/amigos(id=${usuario.id})}"><strong th:text="${social.amigos}">0</strong><span>Amigos</span></a>
+                </div>
+                <div class="acciones-sociales" th:if="${!perfilPropio}">
+                    <span class="estado-amistad" th:if="${social.amistad}">Amigos</span>
+                    <span class="estado-seguimiento" th:if="${social.teSigue and !social.siguiendo}">Te sigue</span>
+                    <form th:if="${!social.siguiendo}" th:action="@{/personas/{id}/seguir(id=${usuario.id})}" method="post">
+                        <button class="boton" type="submit" th:text="${social.teSigue ? 'Seguir también' : 'Seguir'}">Seguir</button>
+                    </form>
+                    <form th:if="${social.siguiendo}" th:action="@{/personas/{id}/dejar-seguir(id=${usuario.id})}" method="post">
+                        <button class="boton boton-secundario" type="submit">Dejar de seguir</button>
+                    </form>
+                </div>
+
+                <div class="progreso-nivel">
+                    <div class="barra-nivel">
+                        <progress max="100" th:value="${usuario.porcentajeNivel}" value="0" aria-label="Progreso de tu nivel"
+                                  th:attr="aria-valuetext=${usuario.porcentajeNivel + '% del nivel actual'}">0%</progress>
+                        <span class="insignia-nivel" aria-hidden="true">🌿</span>
+                    </div>
+                    <div class="detalle-progreso">
+                        <span th:if="${usuario.nivelMaximo}">¡Alcanzaste el nivel máximo!</span>
+                        <strong th:if="${!usuario.nivelMaximo}"><span th:text="${usuario.puntosTotales}">0</span> / <span th:text="${usuario.metaNivel}">100</span> XP</strong>
+                        <strong th:if="${usuario.nivelMaximo}"><span th:text="${usuario.puntosTotales}">10000</span> XP</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="estadisticas" aria-label="Tus logros">
+                <article class="estadistica">
+                    <span class="icono-estadistica fuego" aria-hidden="true">🔥</span>
+                    <strong th:text="${usuario.diasRacha}">0</strong>
+                    <h3>Días de racha</h3>
+                </article>
+                <article class="estadistica">
+                    <span class="icono-estadistica hoja" aria-hidden="true">✅</span>
+                    <strong th:text="${misionesCompletadas}">0</strong>
+                    <h3>Misiones completadas</h3>
+                </article>
+                <article class="estadistica">
+                    <span class="icono-estadistica estrella" aria-hidden="true">⭐</span>
+                    <strong th:text="${usuario.puntos}">0</strong>
+                    <h3>EcoPuntos</h3>
+                </article>
+            </div>
+        </section>
+
+        <dialog th:if="${perfilPropio}" id="dialogo-foto" class="dialogo-foto" aria-labelledby="titulo-foto">
+            <div class="cabecera-foto">
+                <h2 id="titulo-foto">Cambiar foto de perfil</h2>
+                <button type="button" class="cerrar-menu" id="cerrar-foto" aria-label="Cerrar">✕</button>
+            </div>
+            <form th:action="@{/perfil/foto}" method="post" enctype="multipart/form-data" class="formulario-perfil">
+                <img id="vista-previa-foto" class="vista-previa-foto" alt="Vista previa de la nueva foto" hidden>
+                <div class="campo-perfil">
+                    <label for="fotografia">Selecciona tu fotografía</label>
+                    <input id="fotografia" name="fotografia" type="file" accept="image/jpeg,image/png" required aria-describedby="ayuda-foto">
+                    <p id="ayuda-foto">JPG o PNG, hasta 5 MB.</p>
+                </div>
+                <button type="submit" class="boton">Guardar foto</button>
+            </form>
+        </dialog>
+
+        <details th:if="${perfilPropio}" class="editar-perfil" th:attr="open=${errorContrasena != null ? 'open' : null}">
+            <summary>Cambiar contraseña</summary>
+            <p class="aviso-perfil error-perfil" th:if="${errorContrasena}" th:text="${errorContrasena}" role="alert"></p>
+            <form th:action="@{/perfil/contrasena}" method="post" class="formulario-perfil">
+                <div class="campo-perfil">
+                    <label for="contrasena-actual">Contraseña actual</label>
+                    <input id="contrasena-actual" name="contrasenaActual" type="password" required autocomplete="current-password">
+                </div>
+                <div class="campo-perfil">
+                    <label for="nueva-contrasena">Nueva contraseña</label>
+                    <input id="nueva-contrasena" name="nuevaContrasena" type="password" required minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="ayuda-contrasena">
+                    <p id="ayuda-contrasena">Usa al menos 8 caracteres. Evita contraseñas demasiado largas.</p>
+                </div>
+                <div class="campo-perfil">
+                    <label for="confirmar-contrasena">Confirma la nueva contraseña</label>
+                    <input id="confirmar-contrasena" name="confirmarContrasena" type="password" required minlength="8" maxlength="72" autocomplete="new-password">
+                </div>
+                <button type="submit" class="boton">Guardar contraseña</button>
+            </form>
+        </details>
+
+        <section class="ranking-perfil" aria-labelledby="titulo-ranking">
+            <div class="cabecera-ranking">
+                <span class="icono-trofeo" aria-hidden="true">🏆</span>
+                <div>
+                    <h2 id="titulo-ranking">Ranking de EcoUVG</h2>
+                </div>
+            </div>
+            <nav class="niveles" aria-label="Filtrar ranking por nivel">
+                <a th:each="n : ${#numbers.sequence(1,6)}"
+                   th:href="${perfilPropio} ? @{/perfil(nivel=${n})} : @{/perfil/{id}(id=${usuario.id},nivel=${n})}"
+                   th:text="'Nivel ' + ${n}"
+                   th:classappend="${n == nivelSeleccionado} ? 'activo'"
+                   th:attr="aria-current=${n == nivelSeleccionado ? 'true' : null}">Nivel 1</a>
+            </nav>
+            <p class="descripcion-ranking">Nivel <strong th:text="${nivelSeleccionado}">1</strong> · Clasificación por XP acumulada</p>
+            <table class="tabla-ranking">
+                <caption class="solo-lectores">Participantes del nivel seleccionado, ordenados por XP acumulada</caption>
+                <thead>
+                    <tr><th scope="col">Puesto</th><th scope="col">Participante</th><th scope="col">XP</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="participante, estado : ${ranking}"
+                        th:classappend="${participante.id == usuarioActualId} ? 'mi-posicion'">
+                        <td class="puesto" th:text="${estado.count}">1</td>
+                        <td>
+                            <div class="participante">
+                                <span class="avatar-ranking" aria-hidden="true" th:text="${#strings.substring(participante.nombre, 0, 1)}">E</span>
+                                <a class="nombre-participante" th:href="@{/perfil/{id}(id=${participante.id})}" th:text="${participante.nombre}">Nombre</a>
+                                <span class="etiqueta-tu" th:if="${participante.id == usuarioActualId}">Tú</span>
+                            </div>
+                        </td>
+                        <td class="puntos-ranking" th:text="${participante.puntosTotales}">0</td>
+                    </tr>
+                    <tr th:if="${!ranking.iterator().hasNext()}">
+                        <td colspan="3" class="ranking-vacio">Aún no hay participantes en este nivel.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>EcoUVG</footer>
+    <nav th:replace="~{fragmentos/navegacion :: menu('perfil')}"></nav>
+</body>
+</html>

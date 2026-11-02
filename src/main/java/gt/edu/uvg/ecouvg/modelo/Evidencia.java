@@ -22,13 +22,14 @@ public class Evidencia {
     private Usuario usuario;
     @ManyToOne
     private ProgresoReto progresoReto;
-    private String rutaFotografia ;
+    private String rutaFotografia;
     @Enumerated(EnumType.STRING)
     private EstadoEvidencia estado;
     private LocalDateTime fechaEnvio; 
 
-
-
+    protected Evidencia(){
+        
+    }
 
     public Evidencia (Usuario usuario, ProgresoReto progresoReto, String rutaFotografia){
         this.usuario = usuario; 
@@ -57,6 +58,9 @@ public class Evidencia {
     public LocalDateTime getFechaEnvio(){
         return fechaEnvio; 
     }
+    public String getRutaFotografia(){
+        return rutaFotografia;
+    }
 
     public boolean estaPendiente() {
         return estado == EstadoEvidencia.PENDIENTE;
@@ -78,4 +82,16 @@ public class Evidencia {
         this.estado = EstadoEvidencia.RECHAZADA;
     }
 
+
+        //para las revisiones de las evidencias
+    public String getTituloReto() {
+        return progresoReto.getTituloReto(); 
+    }
+    //para evitar que se guarden evidencias sin revisar
+    public void expirar(){
+        if (estado!= EstadoEvidencia.PENDIENTE){
+            throw new IllegalArgumentException("Solo evidencias que esten pendientes van a expirar");
+        }
+        estado= EstadoEvidencia.EXPIRADA; 
+    }
 }

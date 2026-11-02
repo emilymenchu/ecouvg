@@ -29,7 +29,6 @@ public class ServicioEvidencia {
         this.repositorioUsuario = repositorioUsuario; 
         this.servicioStorage = servicioStorage; 
     }
-
         
     @Transactional
     public Evidencia registrarEvidencia(Long idUsuario,Long idProgreso,MultipartFile fotografia) throws IOException {

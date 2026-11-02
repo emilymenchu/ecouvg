@@ -1,7 +1,7 @@
 package gt.edu.uvg.ecouvg.controlador;
 
-import gt.edu.uvg.ecouvg.modelo.Usuario;
-import gt.edu.uvg.ecouvg.servicio.ServicioUsuario;
+import java.time.LocalDate;
+import java.time.ZoneId; 
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -9,6 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.servicio.ServicioUsuario;
 
 @Controller
 public class ControladorLogin {
@@ -65,8 +68,11 @@ public class ControladorLogin {
 
         Usuario usuario = servicioUsuario.buscarPorCarnet(carnet);
 
-        model.addAttribute("usuario", usuario);
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Guatemala")); 
+        int rachaActual = usuario.obtenerRacha(hoy); 
 
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("rachaActual", rachaActual);
         return "inicio";
     }
 }

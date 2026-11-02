@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.hasSize;
 class ControladorGuiaTest {
     private MockMvc mvc;
     @BeforeEach void preparar() {
-        mvc = MockMvcBuilders.standaloneSetup(new ControladorGuia(new ServicioGuia()))
+        mvc = MockMvcBuilders.standaloneSetup(new ControladorGuia(new ServicioGuia(gt.edu.uvg.ecouvg.GuiaPrueba.repositorio())))
             .setSingleView(org.mockito.Mockito.mock(org.springframework.web.servlet.View.class)).build();
     }
     @Test void muestraCatalogoCompleto() throws Exception {

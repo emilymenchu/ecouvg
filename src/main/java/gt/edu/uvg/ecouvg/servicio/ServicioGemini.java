@@ -2,6 +2,12 @@ package gt.edu.uvg.ecouvg.servicio;
 
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
+import java.net.http.HttpClient;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.RestClientException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,12 +23,18 @@ public class ServicioGemini {
     @Value("${gemini.modelo}")
     private String modelo;
 
-    private final RestClient restClient = RestClient.create();
+    private final RestClient restClient;
 
-    public String generarRespuesta(String pregunta) {
+    public ServicioGemini() {
+        var factory = new JdkClientHttpRequestFactory(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build());
+        factory.setReadTimeout(Duration.ofSeconds(25));
+        restClient = RestClient.builder().requestFactory(factory).build();
+    }
+
+    public String generarRespuesta(List<Map<String, Object>> contexto) {
 
         String instrucciones = """
-                Eres EcoBot, el asistente virtual de EcoUVG.
+                Eres Eco, la tortuga y asistente virtual de EcoUVG.
                 Ayudas a estudiantes con preguntas sobre reciclaje.
                 Responde en español de forma clara y amigable.
                 Explica cómo clasificar correctamente los residuos.
@@ -36,13 +48,7 @@ public class ServicioGemini {
                                 Map.of("text", instrucciones)
                         )
                 ),
-                "contents", List.of(
-                        Map.of(
-                                "parts", List.of(
-                                        Map.of("text", pregunta)
-                                )
-                        )
-                )
+                "contents", contexto
         );
 
         
@@ -56,7 +62,7 @@ public class ServicioGemini {
                     .body(JsonNode.class);
 
             if (respuesta == null) {
-                return "No recibí una respuesta de Gemini.";
+                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Eco no respondió");
             }
 
             JsonNode texto = respuesta.path("candidates")
@@ -67,14 +73,13 @@ public class ServicioGemini {
                     .path("text");
 
             if (!texto.isString()) {
-                return "No pude generar una respuesta.";
+                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Eco no pudo generar una respuesta");
             }
 
             return texto.asString();
 
-        } catch (Exception e) {
-            System.out.println("Error en Gemini: " + e.getMessage());
-            return "Lo siento, ocurrió un error. Intenta nuevamente.";
+        } catch (RestClientException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "No se pudo consultar a Eco");
         }
 
     }
