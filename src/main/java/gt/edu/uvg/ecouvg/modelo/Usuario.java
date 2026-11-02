@@ -35,6 +35,7 @@ public class Usuario implements Comparable<Usuario> {
     private int puntos;
     private int puntosTotales;
     private int diasRacha;
+    @Column(name = "last_actividad_valida")
     private LocalDate lastActividadValida; 
     private int nivel = 1;
     private int horasBeca;
