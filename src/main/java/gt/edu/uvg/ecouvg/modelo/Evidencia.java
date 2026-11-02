@@ -1,5 +1,7 @@
 package gt.edu.uvg.ecouvg.modelo;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,7 +39,7 @@ public class Evidencia {
         this.progresoReto = progresoReto; 
         this.rutaFotografia = rutaFotografia; 
         this.estado = EstadoEvidencia.PENDIENTE;
-        this.fechaEnvio = LocalDateTime.now(); 
+        this.fechaEnvio = LocalDateTime.now(ZoneId.of("America/Guatemala")); 
     }
 
     public Long getId(){
@@ -95,4 +97,17 @@ public class Evidencia {
         }
         estado= EstadoEvidencia.EXPIRADA; 
     }
+
+    public boolean estaVencida(LocalDate fechaActual){
+        if (fechaActual== null){
+            throw new IllegalArgumentException("es obligatorio tener una fecha actual _-_"); 
+        }
+        if (fechaEnvio == null){
+            throw new IllegalStateException("Sin fecha de envio no se puede estimar su estado _-_"); 
+
+        }
+        LocalDate fechaRegistro = fechaEnvio.toLocalDate(); 
+        return fechaRegistro.isBefore(fechaActual); 
+    }
+
 }
