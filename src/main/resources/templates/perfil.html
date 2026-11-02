@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mi perfil | EcoUVG</title>
+    <title th:text="${perfilPropio ? 'Mi perfil | EcoUVG' : usuario.nombre + ' | EcoUVG'}">Perfil | EcoUVG</title>
     <link rel="stylesheet" th:href="@{/css/inicio.css}" href="/css/inicio.css">
     <link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
     <link rel="stylesheet" th:href="@{/css/perfil.css}" href="/css/perfil.css">
@@ -15,7 +15,8 @@
 
     <main class="contenedor-perfil">
         <div class="titulo-perfil">
-            <h1>Mi perfil</h1>
+            <h1 th:text="${perfilPropio ? 'Mi perfil' : 'Perfil'}">Perfil</h1>
+            <a class="boton buscar-personas" th:href="@{/personas}">Buscar personas</a>
         </div>
 
         <p class="aviso-perfil exito-perfil" th:if="${mensaje}" th:text="${mensaje}" role="status"></p>
@@ -26,22 +27,38 @@
             <div class="identidad-perfil">
                 <div class="contenedor-avatar">
                   <div class="avatar-perfil">
-                    <img id="foto-actual" th:if="${!#strings.isEmpty(usuario.fotoPerfil)}" th:src="@{/perfil/foto}" alt="Tu foto de perfil">
+                    <img id="foto-actual" th:if="${!#strings.isEmpty(usuario.fotoPerfil)}" th:src="${perfilPropio} ? @{/perfil/foto} : @{/perfil/{id}/foto(id=${usuario.id})}" alt="Foto de perfil">
                     <svg id="avatar-predeterminado" th:attr="hidden=${!#strings.isEmpty(usuario.fotoPerfil) ? 'hidden' : null}" viewBox="0 0 80 80" fill="none" aria-hidden="true">
                         <circle cx="40" cy="29" r="14" fill="currentColor"/>
                         <path d="M14 72c0-17 11-27 26-27s26 10 26 27" fill="currentColor"/>
                     </svg>
                   </div>
-                  <button class="editar-avatar" id="abrir-foto" type="button" aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil" aria-haspopup="dialog" aria-controls="dialogo-foto">
+                  <button th:if="${perfilPropio}" class="editar-avatar" id="abrir-foto" type="button" aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil" aria-haspopup="dialog" aria-controls="dialogo-foto">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                           <path d="m16 3 5 5M3 21l5-1L21 7a2.1 2.1 0 0 0-5-3L4 16l-1 5Z"/>
                       </svg>
                   </button>
                 </div>
-                <p id="error-carga-foto" class="error-carga-foto" role="status" hidden>No se pudo cargar tu foto. Intenta recargar la página o selecciona otra con el lápiz.</p>
+                <p id="error-carga-foto" class="error-carga-foto" role="status" hidden>No se pudo cargar la foto de perfil.</p>
                 <h2 id="nombre-perfil"><span th:text="${usuario.nombre}">Nombre</span> <span aria-hidden="true">🌱</span></h2>
                 <p class="carnet-perfil">Carné <span th:text="${usuario.carnet}">00000</span></p>
                 <p class="nivel-perfil">Nivel <span th:text="${usuario.nivel}">1</span> · <strong th:text="${usuario.nombreNivel}">Semilla</strong></p>
+
+                <div class="contadores-sociales" aria-label="Conexiones">
+                    <a th:href="@{/perfil/{id}/seguidores(id=${usuario.id})}"><strong th:text="${social.seguidores}">0</strong><span>Seguidores</span></a>
+                    <a th:href="@{/perfil/{id}/seguidos(id=${usuario.id})}"><strong th:text="${social.seguidos}">0</strong><span>Seguidos</span></a>
+                    <a th:href="@{/perfil/{id}/amigos(id=${usuario.id})}"><strong th:text="${social.amigos}">0</strong><span>Amigos</span></a>
+                </div>
+                <div class="acciones-sociales" th:if="${!perfilPropio}">
+                    <span class="estado-amistad" th:if="${social.amistad}">Amigos</span>
+                    <span class="estado-seguimiento" th:if="${social.teSigue and !social.siguiendo}">Te sigue</span>
+                    <form th:if="${!social.siguiendo}" th:action="@{/personas/{id}/seguir(id=${usuario.id})}" method="post">
+                        <button class="boton" type="submit" th:text="${social.teSigue ? 'Seguir también' : 'Seguir'}">Seguir</button>
+                    </form>
+                    <form th:if="${social.siguiendo}" th:action="@{/personas/{id}/dejar-seguir(id=${usuario.id})}" method="post">
+                        <button class="boton boton-secundario" type="submit">Dejar de seguir</button>
+                    </form>
+                </div>
 
                 <div class="progreso-nivel">
                     <div class="barra-nivel">
@@ -76,7 +93,7 @@
             </div>
         </section>
 
-        <dialog id="dialogo-foto" class="dialogo-foto" aria-labelledby="titulo-foto">
+        <dialog th:if="${perfilPropio}" id="dialogo-foto" class="dialogo-foto" aria-labelledby="titulo-foto">
             <div class="cabecera-foto">
                 <h2 id="titulo-foto">Cambiar foto de perfil</h2>
                 <button type="button" class="cerrar-menu" id="cerrar-foto" aria-label="Cerrar">✕</button>
@@ -92,7 +109,7 @@
             </form>
         </dialog>
 
-        <details class="editar-perfil" th:attr="open=${errorContrasena != null ? 'open' : null}">
+        <details th:if="${perfilPropio}" class="editar-perfil" th:attr="open=${errorContrasena != null ? 'open' : null}">
             <summary>Cambiar contraseña</summary>
             <p class="aviso-perfil error-perfil" th:if="${errorContrasena}" th:text="${errorContrasena}" role="alert"></p>
             <form th:action="@{/perfil/contrasena}" method="post" class="formulario-perfil">
@@ -122,7 +139,7 @@
             </div>
             <nav class="niveles" aria-label="Filtrar ranking por nivel">
                 <a th:each="n : ${#numbers.sequence(1,6)}"
-                   th:href="@{/perfil(nivel=${n})}"
+                   th:href="${perfilPropio} ? @{/perfil(nivel=${n})} : @{/perfil/{id}(id=${usuario.id},nivel=${n})}"
                    th:text="'Nivel ' + ${n}"
                    th:classappend="${n == nivelSeleccionado} ? 'activo'"
                    th:attr="aria-current=${n == nivelSeleccionado ? 'true' : null}">Nivel 1</a>
@@ -135,13 +152,13 @@
                 </thead>
                 <tbody>
                     <tr th:each="participante, estado : ${ranking}"
-                        th:classappend="${participante.id == usuario.id} ? 'mi-posicion'">
+                        th:classappend="${participante.id == usuarioActualId} ? 'mi-posicion'">
                         <td class="puesto" th:text="${estado.count}">1</td>
                         <td>
                             <div class="participante">
                                 <span class="avatar-ranking" aria-hidden="true" th:text="${#strings.substring(participante.nombre, 0, 1)}">E</span>
-                                <span class="nombre-participante" th:text="${participante.nombre}">Nombre</span>
-                                <span class="etiqueta-tu" th:if="${participante.id == usuario.id}">Tú</span>
+                                <a class="nombre-participante" th:href="@{/perfil/{id}(id=${participante.id})}" th:text="${participante.nombre}">Nombre</a>
+                                <span class="etiqueta-tu" th:if="${participante.id == usuarioActualId}">Tú</span>
                             </div>
                         </td>
                         <td class="puntos-ranking" th:text="${participante.puntosTotales}">0</td>

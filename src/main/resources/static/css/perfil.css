@@ -365,3 +365,38 @@
 .cabecera-foto h2 { margin: 0; font-size: 21px; color: var(--verde-oscuro); }
 .vista-previa-foto { width: 140px; height: 140px; justify-self: center; object-fit: cover; border-radius: 50%; border: 4px solid var(--verde-claro); }
 .contenedor-perfil [hidden] { display: none !important; }
+
+.titulo-perfil { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.titulo-perfil h1 { margin: 0; }
+.buscar-personas { margin: 0; font-size: 13px; }
+.contadores-sociales { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 420px; margin: 20px auto 12px; }
+.contadores-sociales a { display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 10px; text-decoration: none; color: var(--verde-oscuro); }
+.contadores-sociales a:hover { background: var(--verde-claro); }
+.contadores-sociales strong { font-size: 22px; }
+.contadores-sociales span { color: var(--gris); font-size: 12px; }
+.acciones-sociales { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 14px 0; }
+.acciones-sociales form { margin: 0; }
+.acciones-sociales button { font: inherit; cursor: pointer; }
+.boton-secundario { border-color: var(--borde); background: white; color: var(--verde); }
+.boton-secundario:hover { background: var(--verde-claro); }
+.estado-amistad, .estado-seguimiento { padding: 5px 10px; border-radius: 8px; background: var(--verde-claro); color: var(--verde); font-size: 13px; }
+.volver-perfil { display: inline-block; margin-bottom: 16px; color: var(--verde); font-size: 14px; }
+.titulo-personas { margin-bottom: 24px; font-size: clamp(25px, 5vw, 34px); overflow-wrap: anywhere; }
+.buscador-personas { display: grid; gap: 8px; margin-bottom: 24px; }
+.buscador-personas label { color: var(--verde-oscuro); font-size: 14px; font-weight: bold; }
+.buscador-personas > div { display: flex; gap: 10px; }
+.buscador-personas input { min-width: 0; flex: 1; padding: 12px; border: 1px solid #aac8cb; border-radius: 12px; font: inherit; }
+.buscador-personas input:focus-visible { outline: 3px solid #ad7117; outline-offset: 2px; }
+.buscador-personas button { font: inherit; cursor: pointer; margin: 0; }
+.cantidad-personas { color: var(--gris); font-size: 13px; }
+.lista-personas { display: grid; gap: 12px; }
+.persona { display: flex; align-items: center; gap: 14px; padding: 18px; border: 1px solid var(--borde); border-radius: 18px; background: white; }
+.foto-persona { position: relative; display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; overflow: hidden; border-radius: 50%; background: var(--verde-claro); color: var(--verde); font-weight: bold; }
+.foto-persona img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.datos-persona { min-width: 0; flex: 1; }
+.datos-persona > a { font-weight: bold; color: var(--verde-oscuro); text-decoration: none; overflow-wrap: anywhere; }
+.datos-persona p { margin: 3px 0 0; font-size: 12px; color: var(--gris); overflow-wrap: anywhere; }
+.ver-perfil { color: var(--verde); font-size: 13px; flex-shrink: 0; }
+.paginacion-personas { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 24px; font-size: 14px; }
+.sin-personas { padding: 20px; border: 1px solid var(--borde); border-radius: 14px; background: white; color: var(--gris); }
+@media (max-width: 400px) { .persona { padding: 12px; gap: 10px; } .ver-perfil { font-size: 12px; } .foto-persona { width: 38px; height: 38px; } }

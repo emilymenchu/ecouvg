@@ -5,11 +5,11 @@ const archivoFoto = document.getElementById("fotografia");
 const vistaPreviaFoto = document.getElementById("vista-previa-foto");
 let urlVistaPrevia;
 
-abrirFoto.addEventListener("click", () => dialogoFoto.showModal());
-cerrarFoto.addEventListener("click", () => dialogoFoto.close());
-dialogoFoto.addEventListener("close", () => abrirFoto.focus());
+abrirFoto?.addEventListener("click", () => dialogoFoto.showModal());
+cerrarFoto?.addEventListener("click", () => dialogoFoto.close());
+dialogoFoto?.addEventListener("close", () => abrirFoto.focus());
 
-archivoFoto.addEventListener("change", () => {
+archivoFoto?.addEventListener("change", () => {
     if (urlVistaPrevia) URL.revokeObjectURL(urlVistaPrevia);
     vistaPreviaFoto.hidden = true;
     vistaPreviaFoto.removeAttribute("src");
