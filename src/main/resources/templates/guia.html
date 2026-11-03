@@ -12,18 +12,11 @@
     <link rel="stylesheet"
           href="../static/css/navegacion.css"
           th:href="@{/css/navegacion.css}">
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </head>
 
 <body>
-    <header class="guia-cabecera">
-        <div class="guia-barra">
-            <a th:href="@{/inicio}" class="marca">
-                ♻ Eco<span>UVG</span>
-            </a>
-
-            <span class="frase-cabecera">Aprende a separar</span>
-        </div>
-    </header>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('Guía de reciclaje')}"></th:block>
 
     <main class="guia">
         <section class="guia-portada" aria-labelledby="titulo-guia">
@@ -126,7 +119,5 @@
                 alt="">
             </a>
     </main>
-
-    <nav th:replace="~{fragmentos/navegacion :: menu('guia')}"></nav>
 </body>
 </html>

@@ -30,18 +30,13 @@
     <link rel="stylesheet"
           th:href="@{/css/navegacion.css}"
           href="/css/navegacion.css">
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </head>
 
 <body>
     <a class="salto" href="#resultados">Ir a los resultados</a>
 
-    <header class="cabecera">
-        <a class="marca" th:href="@{/inicio}">
-            <span aria-hidden="true">♻</span> EcoUVG
-        </a>
-
-        <span class="campus">Campus central · Zona 15</span>
-    </header>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('Centros de reciclaje')}"></th:block>
 
     <main>
         <section class="intro" aria-labelledby="titulo-centros">
@@ -263,7 +258,5 @@
                 alt="">
             </a>
     </main>
-
-    <nav th:replace="~{fragmentos/navegacion :: menu('centros')}"></nav>
 </body>
 </html>
