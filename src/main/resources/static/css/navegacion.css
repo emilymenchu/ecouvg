@@ -239,3 +239,9 @@ body {
         font-size: 10px;
     }
 }
+
+/* Eco Arcade: todos los destinos siguen accesibles en pantallas estrechas. */
+@media (max-width: 600px) {
+    .navegacion { justify-content: flex-start; overflow-x: auto; gap: 2px; }
+    .navegacion a { flex: 1 0 48px; }
+}
