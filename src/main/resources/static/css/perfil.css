@@ -1,13 +1,43 @@
+/* Colores y distribución de perfil y personas */
 .contenedor-perfil {
-    max-width: 900px;
+    --verde: #245c40;
+    --verde-oscuro: #193e2d;
+    --verde-claro: #e5f3ed;
+    --mar: #b9e5f2;
+    --texto: #23434c;
+    --gris: #526d73;
+    --borde: #d3e5e5;
+
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 32px 24px 180px;
 }
 
+/* Encabezado del contenido */
 .titulo-perfil {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
     margin-bottom: 24px;
+    padding: 24px 28px;
+    border: 1px solid #cce5ec;
+    border-radius: 22px;
+    background: #f0faff;
 }
 
 .titulo-perfil h1 {
-    font-size: clamp(28px, 5vw, 38px);
+    margin: 0;
+    color: #234b59;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.titulo-perfil .buscar-personas {
+    margin: 0;
+    font-size: 13px;
 }
 
 .perfil,
@@ -19,13 +49,27 @@
     box-shadow: 0 8px 24px #3769790a;
 }
 
+/* Portada marina */
 .portada-perfil {
     position: relative;
-    height: 150px;
+    height: 180px;
     overflow: hidden;
     background:
-        radial-gradient(circle at 18% 30%, #ffffff99 0 7px, transparent 8px),
-        radial-gradient(circle at 85% 25%, #ffffff99 0 12px, transparent 13px),
+        radial-gradient(
+            circle at 18% 30%,
+            #ffffff99 0 7px,
+            transparent 8px
+        ),
+        radial-gradient(
+            circle at 85% 25%,
+            #ffffff99 0 12px,
+            transparent 13px
+        ),
+        radial-gradient(
+            circle at 72% 55%,
+            #ffffff99 0 5px,
+            transparent 6px
+        ),
         linear-gradient(125deg, #edfaff, #ccecf7 60%, var(--mar));
 }
 
@@ -33,26 +77,24 @@
 .portada-perfil::after {
     content: "";
     position: absolute;
-    width: 120%;
     left: -10%;
-    height: 80px;
-    bottom: -38px;
-    border-radius: 50% 50% 0 0;
+    width: 120%;
+    height: 95px;
+    pointer-events: none;
+}
+
+.portada-perfil::before {
+    bottom: -35px;
+    border-radius: 50% 45% 0 0;
     background: #91d2e47a;
     transform: rotate(-4deg);
 }
 
 .portada-perfil::after {
     bottom: -56px;
+    border-radius: 45% 60% 0 0;
     background: white;
     transform: rotate(3deg);
-}
-
-.identidad-perfil {
-    position: relative;
-    margin-top: -70px;
-    padding: 0 32px;
-    text-align: center;
 }
 
 .avatar-perfil {
@@ -253,10 +295,12 @@
     color: var(--verde);
 }
 
-.estadisticas {
+/* Logros del perfil */
+.contenedor-perfil .estadisticas {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
+    margin: 0;
     padding: 28px 32px 32px;
 }
 
@@ -507,7 +551,7 @@
         padding: 0 18px;
     }
 
-    .estadisticas {
+    .contenedor-perfil .estadisticas {
         gap: 8px;
         padding: 24px 14px;
     }
@@ -960,4 +1004,112 @@
     .eco-flotante:hover img {
         transform: none;
     }
+}
+/* Botones dentro del perfil */
+.contenedor-perfil .boton {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: var(--verde);
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.contenedor-perfil .boton:hover {
+    background: var(--verde-oscuro);
+}
+
+.contenedor-perfil .boton-secundario {
+    border-color: var(--borde);
+    background: white;
+    color: var(--verde);
+}
+
+.contenedor-perfil .boton-secundario:hover {
+    background: var(--verde-claro);
+}
+
+/* Cierre del diálogo de fotografía */
+.dialogo-foto .cerrar-menu {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #c4dfe7;
+    border-radius: 50%;
+    background: #f3fafc;
+    color: #245263;
+    font: inherit;
+    cursor: pointer;
+}
+
+.dialogo-foto .cerrar-menu:hover {
+    background: #def2fb;
+}
+
+/* Eco queda por encima del menú inferior */
+.contenedor-perfil .eco-flotante {
+    bottom: 90px;
+}
+
+/* Distribución de la información del perfil */
+.identidad-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 28px 28px;
+    text-align: center;
+}
+
+.identidad-perfil h2 {
+    margin: 8px 0 4px;
+}
+
+.carnet-perfil {
+    margin: 2px 0 10px;
+}
+
+.nivel-perfil {
+    margin: 0 0 8px;
+}
+
+.contadores-sociales {
+    width: 100%;
+    justify-content: center;
+    margin: 20px auto 12px;
+}
+
+.progreso-nivel {
+    width: 100%;
+    margin: 20px auto 0;
+}
+
+.detalle-progreso {
+    text-align: left;
+}
+
+@media (max-width: 600px) {
+    .identidad-perfil {
+        padding: 0 18px 24px;
+    }
+
+    .contadores-sociales {
+        max-width: 100%;
+    }
+}
+
+/* Portada celeste del perfil */
+.portada-perfil {
+    background:
+        radial-gradient(circle at 18% 30%, #ffffff99 0 7px, transparent 8px),
+        radial-gradient(circle at 85% 25%, #ffffff99 0 12px, transparent 13px),
+        radial-gradient(circle at 72% 55%, #ffffff99 0 5px, transparent 6px),
+        linear-gradient(125deg, #e0f7ff, #b9e8f5 60%, #91d9eb);
 }

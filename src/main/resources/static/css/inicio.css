@@ -1,3 +1,4 @@
+/* 1. Colores y configuración general */
 :root {
     --verde: #245c40;
     --verde-oscuro: #193e2d;
@@ -33,7 +34,7 @@ button:focus-visible {
     outline-offset: 4px;
 }
 
-/* Barra lateral fija */
+/* 2. Barra lateral fija */
 .lateral {
     position: fixed;
     inset: 0 auto 0 0;
@@ -136,10 +137,11 @@ button:focus-visible {
     background: #e5f3ed;
 }
 
-/* Área junto al menú */
+/* 3. Página y encabezado */
 .pagina {
     margin-left: var(--ancho-menu);
     min-height: 100vh;
+    padding-bottom: 160px;
     background:
         radial-gradient(
             ellipse at top right,
@@ -171,15 +173,20 @@ button:focus-visible {
     gap: 10px;
 }
 
+.barra-superior a.usuario {
+    color: var(--texto);
+    text-decoration: none;
+}
+
 .avatar {
     display: grid;
     place-items: center;
+    flex-shrink: 0;
     width: 42px;
     height: 42px;
     border: 1px solid #c7dfcd;
     border-radius: 50%;
     background: #e5f3e8;
-    flex-shrink: 0;
 }
 
 .usuario strong,
@@ -196,7 +203,7 @@ button:focus-visible {
     font-size: 12px;
 }
 
-/* Distribución del dibujo */
+/* 4. Distribución del inicio */
 .panel-inicio {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 270px;
@@ -220,7 +227,7 @@ button:focus-visible {
     gap: 22px;
 }
 
-/* Bienvenida marina */
+/* 5. Bienvenida marina */
 .bienvenida {
     position: relative;
     isolation: isolate;
@@ -314,29 +321,37 @@ h1 {
     filter: drop-shadow(0 10px 8px #37697924);
 }
 
-/* Datos reales del usuario */
+/* Racha, puntos y nivel */
 .estadisticas {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 22px;
 }
 
 .dato {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     margin: 0;
-    padding: 8px 10px;
+    padding: 10px 13px;
     border: 1px solid #c4dfe7;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #fffffff0;
     color: var(--verde);
-    font-size: 12px;
+    font-size: 14px;
 }
 
-/* Tarjetas */
+.estadisticas .dato strong {
+    font-size: 16px;
+}
+
+.estadisticas .dato > span[aria-hidden="true"] {
+    font-size: 20px;
+}
+
+/* 7. Tarjetas, botones y enlaces */
 .tarjeta {
     display: flex;
     flex-direction: column;
@@ -372,15 +387,6 @@ h1 {
     font-size: 25px;
 }
 
-.amigos .icono {
-    background: #e9edf9;
-}
-
-.panel-retos .icono {
-    margin-bottom: 18px;
-    background: #fff3cd;
-}
-
 .boton {
     display: inline-block;
     margin-top: auto;
@@ -409,18 +415,78 @@ h1 {
     text-decoration: underline;
 }
 
-.proximamente {
-    display: inline-block;
-    margin-top: auto;
-    padding: 5px 10px;
-    border: 1px solid #dce5e5;
-    border-radius: 20px;
-    background: #f2f6f5;
-    color: var(--gris);
-    font-size: 12px;
+/* 8. Amigos */
+.amigos .icono {
+    background: #e9edf9;
 }
 
-/* Guía de reciclaje */
+.cantidad-amigos {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    background: #e9edf9;
+    color: #435677;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.amigos-inicio-lista {
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.amigos-inicio-lista li + li {
+    border-top: 1px solid var(--borde);
+}
+
+.amigo-inicio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 4px;
+    border-radius: 10px;
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.amigo-inicio:hover {
+    background: #f3fafc;
+}
+
+.amigo-inicial {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e5f3ed;
+    color: var(--verde);
+    font-weight: bold;
+}
+
+.amigo-nombre {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.amigo-flecha {
+    color: var(--gris);
+}
+
+.amigos .amigos-vacio {
+    padding: 14px;
+    border-radius: 12px;
+    background: #f3fafc;
+    font-size: 13px;
+}
+
+/* 9. Guía de reciclaje */
 .titulo-fila {
     display: flex;
     justify-content: space-between;
@@ -509,9 +575,14 @@ h1 {
     font-size: 11px;
 }
 
-/* Panel derecho de retos */
+/* 10. Retos */
 .panel-retos {
     background: linear-gradient(180deg, #ffffff, #f0f9fc);
+}
+
+.panel-retos .icono {
+    margin-bottom: 18px;
+    background: #fff3cd;
 }
 
 .panel-retos > .etiqueta {
@@ -520,76 +591,88 @@ h1 {
     font-size: 10px;
 }
 
-.pasos-retos {
-    margin: 0 0 22px;
-    padding-left: 22px;
-    color: var(--gris);
-    font-size: 14px;
-}
-
-.pasos-retos li {
-    margin-bottom: 12px;
-    padding-left: 4px;
-}
-
-.pasos-retos li::marker {
-    color: var(--verde);
-    font-weight: bold;
-}
-
-.mensaje-reto {
-    margin-bottom: 24px;
-    padding: 14px;
-    border-radius: 14px;
-    background: #e1f2f7;
-    color: #326476;
-    font-size: 13px;
-}
-
 .panel-retos .boton {
     width: 100%;
     text-align: center;
 }
 
-/* Espacio futuro para Eco */
-.ayuda-eco {
-    align-items: center;
-    text-align: center;
-    background: #fffdf7;
+.retos-inicio-lista {
+    width: 100%;
+    margin: 0 0 22px;
+    padding: 0;
+    list-style: none;
 }
 
-.eco-ayuda {
-    font-size: 38px;
+.reto-inicio {
+    padding: 16px 0;
 }
 
-.ayuda-eco h2 {
-    font-size: 18px;
+.reto-inicio + .reto-inicio {
+    border-top: 1px solid var(--borde);
 }
 
-.ayuda-eco p {
+.reto-inicio h3 {
+    margin: 0 0 8px;
+    color: #234b59;
+    font-size: 15px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.reto-inicio-puntos {
+    margin: 0 0 8px;
+    color: #685421;
+    font-size: 12px;
+}
+
+.reto-inicio-estado {
+    margin: 0;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+.reto-inicio-completado {
+    margin: 0;
+    color: var(--verde);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.reto-inicio-barra {
+    display: block;
+    width: 100%;
+    height: 8px;
+    margin-top: 8px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 20px;
+    background: #dfedf0;
+    accent-color: #459579;
+}
+
+.reto-inicio-barra::-webkit-progress-bar {
+    background: #dfedf0;
+    border-radius: 20px;
+}
+
+.reto-inicio-barra::-webkit-progress-value {
+    background: #459579;
+    border-radius: 20px;
+}
+
+.reto-inicio-barra::-moz-progress-bar {
+    background: #459579;
+    border-radius: 20px;
+}
+
+.panel-retos .retos-inicio-vacio {
+    padding: 14px;
+    border-radius: 12px;
+    background: #e1f2f7;
     font-size: 13px;
 }
 
-/* Pie */
-footer {
-    padding: 0 32px 24px;
-    color: var(--gris);
-    font-size: 12px;
-    text-align: center;
-}
-.eco-nadando {
-    display: block;
-    width: 140px;
-    height: auto;
-    margin: 0 auto 12px;
-    object-fit: contain;
-}
-
-.ayuda-eco .boton {
-    width: 100%;
-    text-align: center;
-}
-/* Eco flotante */
+/* 11. Eco flotante */
 .eco-flotante {
     position: fixed;
     right: 24px;
@@ -599,9 +682,9 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    border-radius: 18px;
     color: var(--verde);
     text-decoration: none;
-    border-radius: 18px;
 }
 
 .eco-flotante img {
@@ -626,11 +709,15 @@ footer {
     transform: translateY(-5px);
 }
 
-/* Espacio para que Eco no tape el contenido al final */
-.pagina {
-    padding-bottom: 160px;
+/* 12. Pie de página */
+footer {
+    padding: 0 32px 24px;
+    color: var(--gris);
+    font-size: 12px;
+    text-align: center;
 }
 
+/* Accesibilidad: reducir animaciones */
 @media (prefers-reduced-motion: reduce) {
     .eco-flotante img {
         transition: none;

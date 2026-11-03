@@ -12,20 +12,11 @@
     <link rel="stylesheet"
           href="../static/css/navegacion.css"
           th:href="@{/css/navegacion.css}">
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </head>
 
 <body>
-    <header class="retos-cabecera">
-        <div class="retos-barra">
-            <a class="marca" th:href="@{/inicio}">
-                ♻ Eco<span>UVG</span>
-            </a>
-
-            <span class="frase-cabecera">
-                Pequeñas acciones, grandes cambios
-            </span>
-        </div>
-    </header>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('Retos')}"></th:block>
 
     <main class="contenedor">
         <section class="portada-retos" aria-labelledby="titulo-retos">
@@ -145,6 +136,5 @@
             </a>
     </main>
 
-    <nav th:replace="~{fragmentos/navegacion :: menu('retos')}"></nav>
 </body>
 </html>

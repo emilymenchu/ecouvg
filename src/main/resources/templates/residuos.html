@@ -12,18 +12,11 @@
     <link rel="stylesheet"
           href="../static/css/navegacion.css"
           th:href="@{/css/navegacion.css}">
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </head>
 
 <body>
-    <header class="residuos-cabecera">
-    <div class="residuos-barra">
-        <a th:href="@{/inicio}" class="marca">
-            ♻ Eco<span>UVG</span>
-        </a>
-
-        <span class="frase-cabecera">Aprende a reciclar</span>
-    </div>
-    </header>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('residuos')}"></th:block>
     
     <main class="contenedor">
         <section class="playa" aria-labelledby="titulo-residuos">
@@ -157,6 +150,5 @@
             </a>
     </main>
 
-    <nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
 </body>
 </html>
