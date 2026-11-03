@@ -82,15 +82,17 @@
                             <span th:text="${usuario.nombre}">Usuario</span>!
                         </h1>
 
-                <p class="descripcion">
-                    Ayuda al planeta hoy. Aprende a clasificar tus
-                    residuos y encuentra dónde llevarlos.
-                </p>
+                        <p class="descripcion">
+                            Ayuda al planeta hoy. Aprende a clasificar tus
+                            residuos y encuentra dónde llevarlos.
+                        </p>
 
-                <p class="racha">
-                    🔥 <strong>Tu racha:</strong>
-                    <span th:text="${rachaVigente}">0</span> días
-                </p>
+                        <div class="estadisticas">
+                            <p class="dato">
+                                <span aria-hidden="true">🔥</span>
+                                <strong th:text="${rachaVigente}">0</strong>
+                                días de racha
+                            </p>
 
                             <p class="dato">
                                 <span aria-hidden="true">⭐</span>
@@ -109,24 +111,63 @@
                     </div>
 
                     <img class="mascota"
-                         src="../static/img/Eco sentada feliz.png"
-                         th:src="@{/img/Eco sentada feliz.png}"
-                         alt="Eco, la tortuga mascota, sentada y feliz">
+                        src="../static/img/Eco sentada feliz.png"
+                        th:src="@{/img/Eco sentada feliz.png}"
+                        alt="Eco, la tortuga mascota, sentada y feliz">
                 </section>
-
                 <div class="fila-tarjetas">
-                    <section class="tarjeta amigos"
-                             aria-labelledby="titulo-amigos">
-                        <span class="icono" aria-hidden="true">🤝</span>
-                        <h2 id="titulo-amigos">Amigos</h2>
+                <section class="tarjeta amigos" aria-labelledby="titulo-amigos">
+                    <span class="icono" aria-hidden="true">🤝</span>
 
-                        <p>
-                            Cuidar el planeta es mejor en compañía.
-                        </p>
+                    <h2 id="titulo-amigos">
+                        Amigos
+                        <span class="cantidad-amigos"
+                            th:text="${amigosInicio.totalElements}">0</span>
+                    </h2>
 
-                        <span class="proximamente">Próximamente</span>
-                    </section>
+                    <p>Cuidar el planeta es mejor en compañía.</p>
 
+                    <ul class="amigos-inicio-lista"
+                        th:if="${!amigosInicio.empty}">
+
+                        <li th:each="amigo, estado : ${amigosInicio.content}"
+                            th:if="${estado.index < 3}">
+
+                            <a class="amigo-inicio"
+                            th:href="@{/perfil/{id}(id=${amigo.id})}">
+
+                                <span class="amigo-inicial"
+                                    aria-hidden="true"
+                                    th:text="${#strings.isEmpty(amigo.nombre) ? '?' : #strings.substring(amigo.nombre, 0, 1)}">
+                                    A
+                                </span>
+
+                                <span class="amigo-nombre"
+                                    th:text="${amigo.nombre}">
+                                    Nombre
+                                </span>
+
+                                <span class="amigo-flecha" aria-hidden="true">↗</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <p class="amigos-vacio" th:if="${amigosInicio.empty}">
+                        Aún no tienes amigos conectados. Busca personas para comenzar.
+                    </p>
+
+                    <a class="boton"
+                    th:if="${!amigosInicio.empty}"
+                    th:href="@{/perfil/{id}/amigos(id=${usuario.id})}">
+                        Ver todos →
+                    </a>
+
+                    <a class="boton"
+                    th:if="${amigosInicio.empty}"
+                    th:href="@{/personas}">
+                        Buscar personas →
+                    </a>
+                </section>
                     <section class="tarjeta centros"
                              aria-labelledby="titulo-centros">
                         <span class="icono" aria-hidden="true">📍</span>
@@ -182,30 +223,65 @@
             <!-- Columna derecha -->
             <aside class="columna-derecha" aria-label="Retos y ayuda">
                 <section class="tarjeta panel-retos"
-                         aria-labelledby="titulo-retos">
-                    <span class="icono" aria-hidden="true">⭐</span>
-                    <p class="etiqueta">TU PRÓXIMA MISIÓN</p>
-                    <h2 id="titulo-retos">Retos de la semana</h2>
+                    aria-labelledby="titulo-retos">
 
-                    <p>
-                        Descubre los retos disponibles y sigue
-                        avanzando con Eco.
-                    </p>
+                <span class="icono" aria-hidden="true">⭐</span>
+                <p class="etiqueta">TU PRÓXIMA MISIÓN</p>
+                <h2 id="titulo-retos">Retos de la semana</h2>
 
-                    <ol class="pasos-retos">
-                        <li>Elige un reto.</li>
-                        <li>Realiza la actividad.</li>
-                        <li>Envía tu evidencia para su revisión.</li>
-                    </ol>
+                <p>Pequeñas acciones que hacen una gran diferencia.</p>
 
-                    <div class="mensaje-reto">
-                        Cada pequeño esfuerzo puede hacer una gran diferencia.
-                    </div>
+                <p class="retos-inicio-vacio"
+                th:if="${#lists.isEmpty(retosInicio)}">
+                    No hay retos disponibles en este momento.
+                </p>
 
-                    <a class="boton" th:href="@{/retos}">
-                        Ver mis retos →
-                    </a>
-                </section>
+                <ul class="retos-inicio-lista"
+                    th:if="${!#lists.isEmpty(retosInicio)}">
+
+                    <li class="reto-inicio"
+                        th:each="reto : ${retosInicio}"
+                        th:with="progreso=${progresosInicio[reto.id]}">
+
+                        <h3 th:text="${reto.titulo}">Título del reto</h3>
+
+                        <p class="reto-inicio-puntos">
+                            <span aria-hidden="true">⭐</span>
+                            <strong th:text="${reto.puntosRecompensa}">0</strong>
+                            puntos de recompensa
+                        </p>
+
+                        <p class="reto-inicio-estado"
+                        th:if="${progreso == null}">
+                            Por comenzar
+                        </p>
+
+                        <div th:if="${progreso != null and !progreso.estaCompletado()}">
+                            <p class="reto-inicio-estado">
+                                Progreso:
+                                <strong>
+                                    <span th:text="${progreso.progreso}">0</span>%
+                                </strong>
+                            </p>
+
+                            <progress class="reto-inicio-barra"
+                                    max="100"
+                                    th:value="${progreso.progreso}"
+                                    th:attr="aria-label=${'Progreso de ' + reto.titulo}">
+                            </progress>
+                        </div>
+
+                        <p class="reto-inicio-completado"
+                        th:if="${progreso != null and progreso.estaCompletado()}">
+                            ✓ Misión completada
+                        </p>
+                    </li>
+                </ul>
+
+                <a class="boton" th:href="@{/retos}">
+                    Ver mis retos →
+                </a>
+            </section>
             </aside>
             <a class="eco-flotante"
             th:href="@{/chat}"
