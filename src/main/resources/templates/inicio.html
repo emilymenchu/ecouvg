@@ -89,14 +89,22 @@
 
                 <p class="racha">
                     🔥 <strong>Tu racha:</strong>
-                    <span th:text="${rachaVigente}">0</span> días
+                    <span th:text="${rachaVigente}">0</span> semanas
                 </p>
 
                             <p class="dato">
                                 <span aria-hidden="true">⭐</span>
                                 <strong th:text="${usuario.puntos}">0</strong>
-                                puntos
+                                EcoPuntos
                             </p>
+
+                            <p class="dato">
+                                <span aria-hidden="true">⭐</span>
+                                <strong th:text="${usuario.puntosTotales}">0</strong>
+                                Puntos XP
+                            </p>
+
+
 
                             <p class="dato">
                                 <span aria-hidden="true">🌱</span>
