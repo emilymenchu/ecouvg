@@ -16,6 +16,17 @@ class ServicioImagenTest {
     private final ServicioImagen servicio = new ServicioImagen();
     private static final Color[] COLORES = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
 
+    @Test void rechazaArchivosMayoresACuatroMegabytesAntesDeDecodificarlos() {
+        var archivo = new MockMultipartFile("foto", new byte[4 * 1024 * 1024 + 1]);
+        var error = assertThrows(IllegalArgumentException.class, () -> servicio.comprimir(archivo, 400));
+        assertEquals("Máximo 4 MB", error.getMessage());
+    }
+
+    @Test void aceptaUnaImagenValidaDeExactamenteCuatroMegabytes() throws Exception {
+        byte[] datos = java.util.Arrays.copyOf(imagen("jpg", 120, 80), 4 * 1024 * 1024);
+        assertNotNull(comprimir(datos, 400));
+    }
+
     @Test void normalizaLasOchoOrientacionesEnAmbosOrdenesDeBytes() throws Exception {
         int[][] esperadas = {
             {0, 1, 2, 3}, {1, 0, 3, 2}, {3, 2, 1, 0}, {2, 3, 0, 1},

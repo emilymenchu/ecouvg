@@ -29,7 +29,7 @@ public class ServicioImagen {
 
     public byte[] comprimir(MultipartFile archivo, int anchoMaximo) throws IOException {
         if (archivo == null || archivo.isEmpty()) throw new IllegalArgumentException("Imagen vacía");
-        if (archivo.getSize() > 5 * 1024 * 1024) throw new IllegalArgumentException("Máximo 5 MB");
+        if (archivo.getSize() > 4 * 1024 * 1024) throw new IllegalArgumentException("Máximo 4 MB");
         if (anchoMaximo < 100 || anchoMaximo > 2000) throw new IllegalArgumentException("Ancho inválido");
 
         byte[] datos = archivo.getBytes();
@@ -67,7 +67,6 @@ public class ServicioImagen {
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, ancho, alto);
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            // Normalizar los píxeles antes de guardar: el JPEG de salida no conserva el EXIF.
             g.scale((double) ancho / anchoOrientado, (double) alto / altoOrientado);
             g.transform(transformacionExif(orientacion, original.getWidth(), original.getHeight()));
             g.drawImage(original, 0, 0, null);

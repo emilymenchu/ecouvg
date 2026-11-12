@@ -1,0 +1,108 @@
+package gt.edu.uvg.ecouvg;
+
+import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.regex.Pattern;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
+import org.springframework.session.Session;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/** HTTP real + dos repositorios independientes sobre H2; no usa servicios remotos. */
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+    "spring.datasource.url=jdbc:h2:mem:sesiones;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
+    "spring.sql.init.mode=always",
+    "spring.sql.init.schema-locations=file:docs/deploy/01-sesiones.sql"
+})
+@ActiveProfiles({"prod", "test"})
+class SesionesProduccionTest {
+    @LocalServerPort int puerto;
+    @Autowired RepositorioUsuario usuarios;
+    @Autowired PasswordEncoder encoder;
+    @Autowired JdbcTemplate jdbc;
+    @Autowired PlatformTransactionManager transacciones;
+    private final HttpClient cliente = HttpClient.newHttpClient();
+
+    @Test void conservaAutenticacionEnJdbcYRevocaElAccesoAlBorrarLaSesionDesdeOtroRepositorio() throws Exception {
+        usuarios.save(new Usuario("Prueba", "sesion-test", "sesion@example.com", encoder.encode("clave-prueba")));
+        var login = enviar("GET", "/login", null, null);
+        assertEquals(200, login.statusCode());
+        assertTrue(login.headers().firstValue("Cache-Control").orElse("").contains("no-store"));
+        String cookie = cookie(login);
+        assertTrue(login.headers().firstValue("Set-Cookie").orElseThrow().contains("Secure"));
+        assertTrue(login.headers().firstValue("Set-Cookie").orElseThrow().contains("HttpOnly"));
+        assertTrue(login.headers().firstValue("Set-Cookie").orElseThrow().contains("SameSite=Lax"));
+        var csrf = Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"").matcher(login.body());
+        assertTrue(csrf.find(), "El formulario debe incluir el token CSRF");
+        var autenticado = enviar("POST", "/login", cookie,
+            "carnet=sesion-test&contrasena=clave-prueba&_csrf=" + URLEncoder.encode(csrf.group(1), StandardCharsets.UTF_8));
+        assertEquals(302, autenticado.statusCode());
+        assertTrue(autenticado.headers().firstValue("Location").orElseThrow().endsWith("/inicio"));
+        cookie = cookie(autenticado);
+
+        var otroRepositorio = new JdbcIndexedSessionRepository(jdbc, new TransactionTemplate(transacciones));
+        otroRepositorio.setTableName("ecouvg_private.spring_session");
+        String id = new String(Base64.getDecoder().decode(cookie.substring("JSESSIONID=".length())), StandardCharsets.UTF_8);
+        Session sesion = otroRepositorio.findById(id);
+        assertNotNull(sesion);
+        SecurityContext contexto = sesion.getAttribute("SPRING_SECURITY_CONTEXT");
+        assertEquals("sesion-test", contexto.getAuthentication().getName());
+        assertEquals(200, enviar("GET", "/evidencias/enviar/1", cookie, null).statusCode());
+
+        var formulario = enviar("GET", "/evidencias/enviar/1", cookie, null);
+        var token = Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"").matcher(formulario.body());
+        assertTrue(token.find());
+        for (String ruta : new String[]{"/perfil/foto", "/evidencias/enviar"}) {
+            String prefijo = "--limite\r\nContent-Disposition: form-data; name=\"fotografia\"; filename=\"grande.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n";
+            String cuerpo = prefijo + "a".repeat(4 * 1024 * 1024 + 1) + "\r\n--limite--\r\n";
+            var solicitud = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + puerto + ruta))
+                .header("Cookie", cookie).header("X-CSRF-TOKEN", token.group(1))
+                .header("Content-Type", "multipart/form-data; boundary=limite")
+                .POST(HttpRequest.BodyPublishers.ofString(cuerpo)).build();
+            var rechazo = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
+            assertEquals(302, rechazo.statusCode(), "El exceso de tamaño debe volver al formulario: " + ruta);
+            assertTrue(rechazo.headers().firstValue("Location").orElseThrow()
+                .endsWith(ruta.equals("/perfil/foto") ? "/perfil" : "/retos"));
+        }
+
+        // Una sesión invalidada fuera de esta instancia ya no permite acceso.
+        String primaryId = jdbc.queryForObject("SELECT primary_id FROM ecouvg_private.spring_session WHERE session_id = ?", String.class, id);
+        otroRepositorio.deleteById(id);
+        var revocado = enviar("GET", "/evidencias/enviar/1", cookie, null);
+        assertEquals(302, revocado.statusCode());
+        assertTrue(revocado.headers().firstValue("Location").orElseThrow().endsWith("/login"));
+        assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM ecouvg_private.spring_session_attributes WHERE session_primary_id = ?",
+            Integer.class, primaryId));
+    }
+
+    private String cookie(HttpResponse<String> respuesta) {
+        return respuesta.headers().allValues("Set-Cookie").stream()
+            .filter(valor -> valor.startsWith("JSESSIONID=")).findFirst().orElseThrow().split(";", 2)[0];
+    }
+
+    private HttpResponse<String> enviar(String metodo, String ruta, String cookie, String cuerpo) throws Exception {
+        var solicitud = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + puerto + ruta));
+        if (cookie != null) solicitud.header("Cookie", cookie);
+        if (cuerpo == null) solicitud.GET();
+        else solicitud.header("Content-Type", "application/x-www-form-urlencoded")
+            .method(metodo, HttpRequest.BodyPublishers.ofString(cuerpo));
+        return cliente.send(solicitud.build(), HttpResponse.BodyHandlers.ofString());
+    }
+}

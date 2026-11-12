@@ -22,7 +22,7 @@ class UsuarioNivelTest {
         Usuario usuario = new Usuario("Pilar", "123", "pilar@example.com", "clave");
         usuario.sumarPuntos(750);
         assertEquals(4, usuario.getNivel());
-        assertEquals("Granito verde", usuario.getNombreNivel());
+        assertEquals("Eco Guardían", usuario.getNombreNivel());
         assertEquals(50, usuario.getPorcentajeNivel());
         usuario.sumarPuntos(9250);
         assertEquals(100, usuario.getPorcentajeNivel());
