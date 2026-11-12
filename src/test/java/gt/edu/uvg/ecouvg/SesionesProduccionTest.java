@@ -64,6 +64,14 @@ class SesionesProduccionTest {
         assertNotNull(sesion);
         SecurityContext contexto = sesion.getAttribute("SPRING_SECURITY_CONTEXT");
         assertEquals("sesion-test", contexto.getAuthentication().getName());
+        // Los recursos fallidos no deben redirigir al login ni reemplazar la sesión.
+        assertEquals(200, enviar("GET", "/img/Eco%20nadando.png", cookie, null).statusCode());
+        for (String ruta : new String[]{"/img/imagen-inexistente.png", "/favicon.ico", "/pagina-inexistente"}) {
+            var error = enviar("GET", ruta, cookie, null);
+            assertEquals(404, error.statusCode(), ruta);
+            assertTrue(error.headers().allValues("Set-Cookie").stream()
+                .noneMatch(valor -> valor.startsWith("JSESSIONID=")), "Un recurso faltante no debe reemplazar la cookie");
+        }
         assertEquals(200, enviar("GET", "/evidencias/enviar/1", cookie, null).statusCode());
 
         var formulario = enviar("GET", "/evidencias/enviar/1", cookie, null);
