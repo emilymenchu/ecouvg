@@ -1,7 +1,24 @@
 HELP.md
+PLAN_DESPLIEGUE_VERCEL.md
+DEPLOY.md
+docs/deploy/**/*.md
 
 ## SECRETOS ##
 .env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+.vercel/
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+hs_err_pid*
+.DS_Store
+src/main/resources/application-local.*
 
 target/
 .mvn/wrapper/maven-wrapper.jar

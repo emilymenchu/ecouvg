@@ -2,9 +2,12 @@ package gt.edu.uvg.ecouvg.servicio;
 
 import tools.jackson.databind.JsonNode;
 import java.io.IOException;
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +31,10 @@ public class ServicioStorage {
                            ServicioImagen servicioImagen) {
         this.url = url.replaceAll("/+$", "");
         this.servicioImagen = servicioImagen;
-        this.cliente = RestClient.builder().baseUrl(this.url + "/storage/v1")
+        var factory = new JdkClientHttpRequestFactory(HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(5)).build());
+        factory.setReadTimeout(Duration.ofSeconds(20));
+        this.cliente = RestClient.builder().requestFactory(factory).baseUrl(this.url + "/storage/v1")
                 .defaultHeader("apikey", clave).build();
     }
 
