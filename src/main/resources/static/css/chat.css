@@ -496,3 +496,48 @@
         animation: none;
     }
 }
+/* Cada conversación se distingue como una tarjeta */
+.pagina-chat #lista-conversaciones {
+    gap: 10px;
+    padding: 14px 12px;
+}
+
+.pagina-chat #lista-conversaciones a {
+    position: relative;
+    display: block;
+    padding: 14px 12px 14px 38px;
+    border: 1px solid #d9e8ec;
+    border-radius: 12px;
+    background: #f7fbfc;
+    color: #345965;
+    font-size: 13px;
+    line-height: 1.5;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.pagina-chat #lista-conversaciones a::before {
+    content: "💬";
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    font-size: 14px;
+}
+
+.pagina-chat #lista-conversaciones a:hover {
+    border-color: #a9ced9;
+    background: #eaf5f9;
+}
+
+.pagina-chat #lista-conversaciones a[aria-current="page"] {
+    border-color: #8bbfae;
+    background: #e5f3ed;
+    color: #193e2d;
+    font-weight: bold;
+    box-shadow: inset 3px 0 #245c40;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-chat #lista-conversaciones a {
+        transition: none;
+    }
+}
