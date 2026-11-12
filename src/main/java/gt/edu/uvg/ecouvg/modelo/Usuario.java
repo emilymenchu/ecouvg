@@ -2,6 +2,7 @@ package gt.edu.uvg.ecouvg.modelo;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 
 import jakarta.persistence.Column;
@@ -131,6 +132,13 @@ public class Usuario implements Comparable<Usuario> {
         this.contrasena = contrasena;
     }
 
+    @Transient
+    public int getRachaVigente() {
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Guatemala"));
+        return obtenerRacha(hoy);
+    }
+
+
     public void sumarPuntos (int cantidad){
         if (cantidad<= 0) {
             throw new IllegalArgumentException("La cantidad tiene que ser positiva"); 
@@ -208,18 +216,5 @@ public class Usuario implements Comparable<Usuario> {
     }
 
 
-    //para el canje de puntos
-    public void gastarEcoPuntos(int cantidad) {
-
-        if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser positiva");
-        }
-
-        if (cantidad > puntos) {
-            throw new IllegalStateException("EcoPuntos insuficientes");
-        }
-
-        this.puntos -= cantidad;
-    }
 
 }
