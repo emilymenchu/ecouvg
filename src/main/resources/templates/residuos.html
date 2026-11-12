@@ -6,149 +6,157 @@
     <title>Guía de residuos | EcoUVG</title>
 
     <link rel="stylesheet"
-          href="../static/css/residuos.css"
-          th:href="@{/css/residuos.css}">
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
 
     <link rel="stylesheet"
-          href="../static/css/navegacion.css"
-          th:href="@{/css/navegacion.css}">
-    <script th:src="@{/js/navegacion.js}" defer></script>
+          href="/css/residuos.css"
+          th:href="@{/css/residuos.css}">
 </head>
 
 <body>
-    <th:block th:replace="~{fragmentos/navegacion :: cabecera('residuos')}"></th:block>
-    
-    <main class="contenedor">
-        <section class="playa" aria-labelledby="titulo-residuos">
-            <div class="playa-texto">
-                <p class="etiqueta-playa">UN MAR DE PEQUEÑAS ACCIONES</p>
+    <aside th:replace="~{fragmentos/interfaz-residuos :: lateral}"></aside>
 
-                <h1 id="titulo-residuos">
-                    ¡Ayudemos a limpiar la playa!
-                </h1>
+    <div class="pagina pagina-residuos">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
 
-                <p class="descripcion-playa">
-                    Busca un residuo y descubre cómo clasificarlo
-                    correctamente. El cambio empieza contigo.
-                </p>
-            </div>
+        <main class="contenido-residuos">
+            <section class="playa" aria-labelledby="titulo-residuos">
+                <div class="playa-texto">
+                    <p class="etiqueta-playa">
+                        UN MAR DE PEQUEÑAS ACCIONES
+                    </p>
 
-            <!-- Elementos decorativos sobre la arena -->
-            <div class="residuos-playa" aria-hidden="true">
-            <img class="objeto-playa botella"
-                src="../static/img/botella.png"
-                th:src="@{/img/botella.png}"
-                alt="">
+                    <h1 id="titulo-residuos">
+                        ¡Ayudemos a limpiar la playa!
+                    </h1>
 
-            <img class="objeto-playa bolsa"
-                src="../static/img/bolsa.png"
-                th:src="@{/img/bolsa.png}"
-                alt="">
+                    <p class="descripcion-playa">
+                        Busca un residuo y descubre cómo manejarlo.
+                        Cada pequeña acción ayuda a cuidar nuestro planeta.
+                    </p>
+                </div>
 
-            <img class="objeto-playa aros"
-                src="../static/img/aros.png"
-                th:src="@{/img/aros.png}"
-                alt="">
+                <div class="residuos-playa" aria-hidden="true">
+                    <img class="objeto-playa botella"
+                         th:src="@{/img/botella.png}"
+                         alt="">
 
-            <img class="objeto-playa pajilla"
-                src="../static/img/pajilla.png"
-                th:src="@{/img/pajilla.png}"
-                alt="">
+                    <img class="objeto-playa bolsa"
+                         th:src="@{/img/bolsa.png}"
+                         alt="">
 
-            <img class="objeto-playa camisa-verde"
-                src="../static/img/camisa verde.png"
-                th:src="@{/img/camisa verde.png}"
-                alt="">
+                    <img class="objeto-playa aros"
+                         th:src="@{/img/aros.png}"
+                         alt="">
 
-            <img class="objeto-playa camisa-azul"
-                src="../static/img/camisa azul.png"
-                th:src="@{/img/camisa azul.png}"
-                alt="">
+                    <img class="objeto-playa pajilla"
+                         th:src="@{/img/pajilla.png}"
+                         alt="">
 
-            <img class="objeto-playa camisa-morada"
-                src="../static/img/camisa morada.png"
-                th:src="@{/img/camisa morada.png}"
-                alt="">
-        </div>
-        </section>
+                    <img class="objeto-playa camisa-verde"
+                         th:src="@{/img/camisa verde.png}"
+                         alt="">
 
-        <form class="buscador"
-              th:action="@{/residuos/buscar}"
-              method="get">
+                    <img class="objeto-playa camisa-azul"
+                         th:src="@{/img/camisa azul.png}"
+                         alt="">
 
-            <div class="campo-busqueda">
-                <label for="nombre">¿Qué residuo quieres consultar?</label>
+                    <img class="objeto-playa camisa-morada"
+                         th:src="@{/img/camisa morada.png}"
+                         alt="">
+                </div>
+            </section>
 
-                <input id="nombre"
-                       name="nombre"
-                       type="text"
-                       placeholder="Ej: Botella de plástico"
-                       required>
-            </div>
+            <form class="buscador"
+                  th:action="@{/residuos/buscar}"
+                  method="get"
+                  role="search">
 
-            <button type="submit">Buscar</button>
-        </form>
+                <div class="campo-busqueda">
+                    <label for="nombre">
+                        ¿Qué residuo quieres consultar?
+                    </label>
 
-        <h2 class="titulo-lista">Guía de residuos</h2>
-        <p class="introduccion-lista">
-            Aprende cómo manejar cada material antes de desecharlo.
-        </p>
+                    <input id="nombre"
+                           name="nombre"
+                           type="search"
+                           placeholder="Ej. Botella plástica"
+                           required>
+                </div>
 
-        <p class="lista-vacia" th:if="${#lists.isEmpty(residuos)}">
-            No existen residuos en el registro.
-        </p>
+                <button class="boton" type="submit">
+                    Buscar →
+                </button>
+            </form>
 
-        <div class="lista-residuos">
-            <article class="area-residuo"
-                     th:each="residuo : ${residuos}">
+            <section aria-labelledby="titulo-lista">
+                <div class="cabecera-resultados">
+                    <div>
+                        <h2 class="titulo-lista" id="titulo-lista">
+                            Guía de residuos
+                        </h2>
 
-                <h2 th:text="${residuo.nombre}">
-                    Nombre del residuo
-                </h2>
+                        <p class="introduccion-lista">
+                            Conoce cada material y consulta cómo manejarlo.
+                        </p>
+                    </div>
 
-                <p>
-                    <strong>Tipo:</strong>
-                    <span class="tipo-residuo"
-                          th:text="${residuo.tipo}">
-                        Tipo
+                    <span class="contador-residuos">
+                        <strong th:text="${#lists.size(residuos)}">0</strong>
+                        residuos
                     </span>
+                </div>
+
+                <p class="lista-vacia"
+                   th:if="${#lists.isEmpty(residuos)}">
+                    Aún no hay residuos registrados.
                 </p>
 
-                <p th:text="${residuo.descripcion}">
-                    Descripción del residuo.
-                </p>
+                <div class="lista-residuos">
+                    <article class="area-residuo"
+                             th:each="residuo : ${residuos}">
 
-                <p>
-                    <strong>Instrucciones:</strong>
-                    <span th:text="${residuo.instrucciones}">
-                        Instrucciones
-                    </span>
-                </p>
+                        <div class="tarjeta-residuo-superior">
+                            <span class="icono-residuo"
+                                  aria-hidden="true">🌊</span>
 
-                <p>
-                    <strong>¿Es reciclable?</strong>
-                    <span th:text="${residuo.reciclable ? 'Sí' : 'No'}">
-                        Sí
-                    </span>
-                </p>
+                            <span class="estado-residuo"
+                                  th:classappend="${residuo.reciclable ? 'reciclable' : 'no-reciclable'}"
+                                  th:text="${residuo.reciclable ? 'Reciclable' : 'No reciclable'}">
+                                Reciclable
+                            </span>
+                        </div>
 
-                <a class="botones"
-                   th:href="@{/residuos/buscar(nombre=${residuo.nombre})}">
-                    Ver detalle →
-                </a>
-            </article>
-        </div>
-         <a class="eco-flotante"
-            th:href="@{/chat}"
-            aria-label="Hablar con Eco, asistente de reciclaje">
+                        <h3 th:text="${residuo.nombre}">
+                            Nombre del residuo
+                        </h3>
 
-            <span class="eco-globo">Pregúntale a Eco</span>
+                        <p class="tipo-residuo">
+                            Tipo:
+                            <span th:text="${residuo.tipo}">Material</span>
+                        </p>
 
-             <img src="../static/img/eco nadando.png"
-                th:src="@{/img/eco nadando.png}"
-                alt="">
-            </a>
-    </main>
+                        <p class="resumen-residuo"
+                           th:text="${residuo.descripcion}">
+                            Descripción del residuo.
+                        </p>
 
+                        <a class="boton"
+                           th:href="@{/residuos/buscar(nombre=${residuo.nombre})}"
+                           th:attr="aria-label=${'Cómo manejar: ' + residuo.nombre}">
+                            Cómo manejarlo →
+                        </a>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
+
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>

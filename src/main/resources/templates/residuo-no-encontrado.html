@@ -1,26 +1,74 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
-
     <meta charset="UTF-8">
-    <title>Residuos</title>
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Residuo no encontrado | EcoUVG</title>
+
+    <link rel="stylesheet"
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
+
+    <link rel="stylesheet"
+          href="/css/residuos.css"
+          th:href="@{/css/residuos.css}">
 </head>
+
 <body>
-    <main class="mensaje-error">
-    <h1>No se ha encontrado el residuo consultado</h1>
+    <aside th:replace="~{fragmentos/interfaz-residuos :: lateral}"></aside>
 
-    <p>
-        Por favor vuelva a la lista.
-    </p>
+    <div class="pagina pagina-residuos">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
 
-    <a class= "botones" th:href="@{/residuos}">
-        Volver a la lista de residuos
-    </a>
-    </main>
+        <main class="contenido-residuos contenido-ficha">
+            <a class="volver-residuos" th:href="@{/residuos}">
+                ← Volver a la guía de residuos
+            </a>
 
-<nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
+            <section class="mensaje-error"
+                     aria-labelledby="titulo-no-encontrado">
+                <span class="icono-residuo" aria-hidden="true">🔎</span>
+
+                <h1 id="titulo-no-encontrado">
+                    No encontramos ese residuo
+                </h1>
+
+                <p>
+                    Revisa el nombre e intenta nuevamente,
+                    o consulta los residuos disponibles en la guía.
+                </p>
+
+                <form class="buscador"
+                      th:action="@{/residuos/buscar}"
+                      method="get"
+                      role="search">
+                    <div class="campo-busqueda">
+                        <label for="nombre">Buscar otro residuo</label>
+
+                        <input id="nombre"
+                               name="nombre"
+                               type="search"
+                               placeholder="Ej. Botella plástica"
+                               required>
+                    </div>
+
+                    <button class="boton" type="submit">
+                        Buscar →
+                    </button>
+                </form>
+
+                <a class="boton boton-secundario"
+                   th:href="@{/residuos}">
+                    Ver todos los residuos
+                </a>
+            </section>
+        </main>
+
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
+
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>
