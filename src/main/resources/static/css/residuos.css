@@ -16,7 +16,7 @@
 
 body {
     margin: 0;
-    padding: 32px 24px;
+    padding: 0;
     font-family: Arial, sans-serif;
     background: var(--arena);
     color: var(--texto);
@@ -24,19 +24,41 @@ body {
 }
 
 .residuos-cabecera {
+    background: #f5fcff;
+    border-bottom: 1px solid #cce5ec;
+}
+
+.residuos-barra {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 18px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px max(20px, calc((100% - 880px)/2));
-    background: #fff;
-    border-bottom: 1px solid #dbe3d8;
-    gap: 18px
+    gap: 18px;
+}
+
+.residuos-cabecera .marca {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--verde);
+    text-decoration: none;
+}
+
+.residuos-cabecera .marca span {
+    color: #68823e;
+}
+
+.frase-cabecera {
+    color: var(--gris);
+    font-size: 14px;
 }
 
 .contenedor {
     width: 100%;
     max-width: 1050px;
     margin: 0 auto;
+    padding: 32px 24px 48px;
 }
 
 h1 {
@@ -146,38 +168,52 @@ a {
 }
 
 .botella {
-    width: 95px;
-    left: 7%;
-    bottom: 27px;
+    width: 85px;
+    left: 4%;
+    bottom: 25px;
     transform: rotate(-18deg);
 }
 
 .bolsa {
-    width: 75px;
-    left: 28%;
+    width: 65px;
+    left: 18%;
     bottom: 15px;
     transform: rotate(14deg);
 }
 
 .aros {
-    width: 85px;
-    left: 48%;
+    width: 75px;
+    left: 32%;
     bottom: 30px;
     transform: rotate(-12deg);
 }
 
 .pajilla {
-    width: 45px;
-    right: 26%;
-    bottom: 27px;
+    width: 35px;
+    left: 47%;
+    bottom: 20px;
     transform: rotate(28deg);
 }
 
-.playera {
-    width: 88px;
-    right: 7%;
-    bottom: 35px;
+.camisa-verde {
+    width: 75px;
+    left: 59%;
+    bottom: 30px;
     transform: rotate(16deg);
+}
+
+.camisa-azul {
+    width: 75px;
+    left: 73%;
+    bottom: 15px;
+    transform: rotate(-12deg);
+}
+
+.camisa-morada {
+    width: 75px;
+    left: 86%;
+    bottom: 35px;
+    transform: rotate(20deg);
 }
 
 /* Buscador */
@@ -335,4 +371,67 @@ a {
 .buscador button:focus-visible {
     outline: 3px solid #ad7117;
     outline-offset: 4px;
+}
+.eco-nadando {
+    display: block;
+    width: 140px;
+    height: auto;
+    margin: 0 auto 12px;
+    object-fit: contain;
+}
+
+.ayuda-eco .boton {
+    width: 100%;
+    text-align: center;
+}
+/* Eco flotante */
+.eco-flotante {
+    position: fixed;
+    right: 24px;
+    bottom: 20px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--verde);
+    text-decoration: none;
+    border-radius: 18px;
+}
+
+.eco-flotante img {
+    display: block;
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 5px 6px #23434c26);
+    transition: transform 0.2s ease;
+}
+
+.eco-globo {
+    padding: 7px 12px;
+    border: 1px solid #c4dfe7;
+    border-radius: 16px;
+    background: white;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px #23434c12;
+}
+
+.eco-flotante:hover img {
+    transform: translateY(-5px);
+}
+
+/* Espacio para que Eco no tape el contenido al final */
+.pagina {
+    padding-bottom: 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eco-flotante img {
+        transition: none;
+    }
+
+    .eco-flotante:hover img {
+        transform: none;
+    }
 }

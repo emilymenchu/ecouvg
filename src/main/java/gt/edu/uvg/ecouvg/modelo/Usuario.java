@@ -1,6 +1,8 @@
 package gt.edu.uvg.ecouvg.modelo;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +36,8 @@ public class Usuario implements Comparable<Usuario> {
 
     private int puntos;
     private int puntosTotales;
-    private int diasRacha;
+    private int semanasRacha;
+    @Column(name = "last_actividad_valida")
     private LocalDate lastActividadValida; 
     private int nivel = 1;
     private int horasBeca;
@@ -88,8 +91,8 @@ public class Usuario implements Comparable<Usuario> {
         return puntosTotales;
     }
 
-    public int getDiasRacha() {
-        return diasRacha;
+    public int getSemanasRacha() {
+        return semanasRacha;
     }
 
     public int getNivel() {
@@ -140,7 +143,7 @@ public class Usuario implements Comparable<Usuario> {
     @Transient 
     public String getNombreNivel(){
         CalculadorNivel calculador = new CalculadorNivel(); 
-        return calculador.nombreNivel(nivel); 
+        return calculador.nombreNivel(getNivel()); 
     }
 
     public void registroActividadValida(LocalDate fechaActividad){
@@ -148,21 +151,29 @@ public class Usuario implements Comparable<Usuario> {
             throw new IllegalArgumentException("La actividad debe contar con fecha -_-"); 
 
         }
+        LocalDate semanaActual = fechaActividad.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY) );
+
         if (lastActividadValida == null){
-            diasRacha = 1; 
-        }else if(fechaActividad.equals(lastActividadValida)){ 
-            return; 
-
-        }else if(fechaActividad.equals(lastActividadValida.plusDays(1))){
-            diasRacha++;
-
-        }else if (fechaActividad.isAfter(lastActividadValida)){
-            diasRacha = 1; 
+            semanasRacha = 1; 
         }else {
-            return; 
-        }
+            LocalDate semanaAnterior = lastActividadValida.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            if (semanaActual.equals(semanaAnterior)){
+                    return; 
+                } else if (semanaActual.equals(semanaAnterior.plusWeeks(1))) {
+                    semanasRacha++;
+
+                } else if (semanaActual.isAfter(semanaAnterior)) {
+                    semanasRacha = 1;
+
+                } else {
+                    return;
+                }
+            }
+            
+    
         lastActividadValida = fechaActividad; 
     }
+
 
     public int obtenerRacha(LocalDate hoy){
         if(hoy == null){
@@ -170,10 +181,14 @@ public class Usuario implements Comparable<Usuario> {
 
         }
         if (lastActividadValida ==null){
+
             return 0; 
         }
-        if (lastActividadValida.equals(hoy)   ||  lastActividadValida.equals(hoy.minusDays(1))){
-            return diasRacha;
+        LocalDate semanaActual = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate ultimaSemana = lastActividadValida.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        if (ultimaSemana.equals(semanaActual)|| ultimaSemana.equals(semanaActual.minusWeeks(1))) {
+        return semanasRacha;
         }
         return 0; 
     }
@@ -191,4 +206,20 @@ public class Usuario implements Comparable<Usuario> {
             }
         }
     }
+
+
+    //para el canje de puntos
+    public void gastarEcoPuntos(int cantidad) {
+
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser positiva");
+        }
+
+        if (cantidad > puntos) {
+            throw new IllegalStateException("EcoPuntos insuficientes");
+        }
+
+        this.puntos -= cantidad;
+    }
+
 }

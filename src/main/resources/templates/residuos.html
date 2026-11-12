@@ -12,13 +12,11 @@
     <link rel="stylesheet"
           href="../static/css/navegacion.css"
           th:href="@{/css/navegacion.css}">
+    <script th:src="@{/js/navegacion.js}" defer></script>
 </head>
 
 <body>
-    <header class="residuos-cabecera">
-        <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-        <span>Aprende a reciclar</span>
-    </header>
+    <th:block th:replace="~{fragmentos/navegacion :: cabecera('residuos')}"></th:block>
     
     <main class="contenedor">
         <section class="playa" aria-labelledby="titulo-residuos">
@@ -37,31 +35,41 @@
 
             <!-- Elementos decorativos sobre la arena -->
             <div class="residuos-playa" aria-hidden="true">
-                <img class="objeto-playa botella"
-                     src="../static/img/playa/botella.png"
-                     th:src="@{/img/playa/botella.png}"
-                     alt="">
+            <img class="objeto-playa botella"
+                src="../static/img/botella.png"
+                th:src="@{/img/botella.png}"
+                alt="">
 
-                <img class="objeto-playa bolsa"
-                     src="../static/img/playa/bolsa.png"
-                     th:src="@{/img/playa/bolsa.png}"
-                     alt="">
+            <img class="objeto-playa bolsa"
+                src="../static/img/bolsa.png"
+                th:src="@{/img/bolsa.png}"
+                alt="">
 
-                <img class="objeto-playa aros"
-                     src="../static/img/playa/aros.png"
-                     th:src="@{/img/playa/aros.png}"
-                     alt="">
+            <img class="objeto-playa aros"
+                src="../static/img/aros.png"
+                th:src="@{/img/aros.png}"
+                alt="">
 
-                <img class="objeto-playa pajilla"
-                     src="../static/img/playa/pajilla.png"
-                     th:src="@{/img/playa/pajilla.png}"
-                     alt="">
+            <img class="objeto-playa pajilla"
+                src="../static/img/pajilla.png"
+                th:src="@{/img/pajilla.png}"
+                alt="">
 
-                <img class="objeto-playa playera"
-                     src="../static/img/playa/playera-verde.png"
-                     th:src="@{/img/playa/playera-verde.png}"
-                     alt="">
-            </div>
+            <img class="objeto-playa camisa-verde"
+                src="../static/img/camisa verde.png"
+                th:src="@{/img/camisa verde.png}"
+                alt="">
+
+            <img class="objeto-playa camisa-azul"
+                src="../static/img/camisa azul.png"
+                th:src="@{/img/camisa azul.png}"
+                alt="">
+
+            <img class="objeto-playa camisa-morada"
+                src="../static/img/camisa morada.png"
+                th:src="@{/img/camisa morada.png}"
+                alt="">
+        </div>
         </section>
 
         <form class="buscador"
@@ -130,8 +138,17 @@
                 </a>
             </article>
         </div>
+         <a class="eco-flotante"
+            th:href="@{/chat}"
+            aria-label="Hablar con Eco, asistente de reciclaje">
+
+            <span class="eco-globo">Pregúntale a Eco</span>
+
+             <img src="../static/img/eco nadando.png"
+                th:src="@{/img/eco nadando.png}"
+                alt="">
+            </a>
     </main>
 
-    <nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
 </body>
 </html>

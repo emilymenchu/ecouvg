@@ -1,3 +1,162 @@
+/* HEADER PRINCIPAL */
+.encabezado {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    background: #d5f3f8;
+    border-bottom: 1px solid #e5e0d4;
+}
+
+.barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    min-height: 58px;
+    padding: 8px 20px;
+    box-sizing: border-box;
+}
+
+/* BOTÓN MENÚ */
+.abrir-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 9px 14px;
+    border: 1px solid #cbd8d0;
+    border-radius: 10px;
+    background: white;
+    color: #245c40;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.abrir-menu:hover {
+    background: #e8f1df;
+}
+
+/* LOGO */
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-right: auto;
+    color: #245c40;
+    font-size: 25px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.marca:hover {
+    color: #193e2d;
+}
+
+/* CERRAR SESIÓN */
+.sesion {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: auto;
+    margin: 0 0 0 auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.boton-salir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 10px 16px;
+    border: 1px solid #cbd8d0;
+    border-radius: 10px;
+    background: white;
+    color: #245c40;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-salir:hover {
+    background: #e8f1df;
+}
+
+/* MENÚ LATERAL */
+.menu-lateral {
+    width: min(380px, calc(100% - 32px));
+    max-height: calc(100% - 40px);
+    padding: 24px;
+    border: 1px solid #d3e5e5;
+    border-radius: 20px;
+    background: white;
+    color: #23434c;
+}
+
+.menu-lateral::backdrop {
+    background: #193e2d66;
+}
+
+.cabecera-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.cabecera-menu h2 {
+    margin: 0;
+    color: #245c40;
+    font-size: 21px;
+}
+
+.descripcion-menu {
+    color: #526d73;
+    font-size: 13px;
+}
+
+.enlaces-menu {
+    display: grid;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.enlaces-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    color: #245c40;
+    text-decoration: none;
+}
+
+.enlaces-menu a:hover,
+.enlaces-menu a.activo {
+    background: #e8f1df;
+    font-weight: bold;
+}
+
+.cerrar-menu {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid #cbd8d0;
+    border-radius: 50%;
+    background: white;
+    color: #245c40;
+    cursor: pointer;
+}
+
+/* NAVEGACIÓN INFERIOR */
 .navegacion {
     position: fixed;
     bottom: 0;
@@ -39,15 +198,50 @@
     font-weight: 750;
 }
 
-.navegacion a:focus-visible {
+.navegacion a:focus-visible,
+.abrir-menu:focus-visible,
+.boton-salir:focus-visible {
     outline: 3px solid #9c6510;
     outline-offset: 2px;
 }
 
 body {
-    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    padding-bottom: 0;
 }
+
+/* RESPONSIVE */
 @media (max-width: 600px) {
-    .navegacion { gap: 2px; }
-    .navegacion a { flex: 1 1 0; font-size: 10px; }
+    .barra {
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .marca {
+        font-size: 20px;
+    }
+
+    .abrir-menu {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .boton-salir {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .navegacion {
+        gap: 2px;
+    }
+
+    .navegacion a {
+        flex: 1 1 0;
+        font-size: 10px;
+    }
+}
+
+/* Eco Arcade: todos los destinos siguen accesibles en pantallas estrechas. */
+@media (max-width: 600px) {
+    .navegacion { justify-content: flex-start; overflow-x: auto; gap: 2px; }
+    .navegacion a { flex: 1 0 48px; }
 }
