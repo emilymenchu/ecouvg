@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${status == 404} ? 'Página no encontrada | EcoUVG' : 'Algo salió mal | EcoUVG'">EcoUVG</title>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+    <main class="tarjeta">
+        <a class="marca" th:href="@{/}">♻ EcoUVG</a>
+        <p class="codigo" th:text="${status}">404</p>
+        <h1 th:text="${status == 404} ? 'Esta página no existe' : 'No pudimos completar tu solicitud'">Esta página no existe</h1>
+        <p th:text="${status == 404} ? 'La dirección puede estar incompleta o la página ya no está disponible.' : 'Inténtalo de nuevo en unos momentos. Puedes volver a EcoUVG para continuar.'">La dirección puede estar incompleta o la página ya no está disponible.</p>
+        <a class="boton" th:href="@{/}">Volver a EcoUVG</a>
+    </main>
+</body>
+</html>

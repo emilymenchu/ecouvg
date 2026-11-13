@@ -41,6 +41,9 @@ class SesionesProduccionTest {
     private final HttpClient cliente = HttpClient.newHttpClient();
 
     @Test void conservaAutenticacionEnJdbcYRevocaElAccesoAlBorrarLaSesionDesdeOtroRepositorio() throws Exception {
+        var entradaAnonima = enviar("GET", "/", null, null);
+        assertEquals(302, entradaAnonima.statusCode());
+        assertTrue(entradaAnonima.headers().firstValue("Location").orElseThrow().endsWith("/login"));
         usuarios.save(new Usuario("Prueba", "sesion-test", "sesion@example.com", encoder.encode("clave-prueba")));
         var login = enviar("GET", "/login", null, null);
         assertEquals(200, login.statusCode());
@@ -56,6 +59,17 @@ class SesionesProduccionTest {
         assertEquals(302, autenticado.statusCode());
         assertTrue(autenticado.headers().firstValue("Location").orElseThrow().endsWith("/inicio"));
         cookie = cookie(autenticado);
+        var entradaAutenticada = enviar("GET", "/", cookie, null);
+        assertEquals(302, entradaAutenticada.statusCode());
+        assertTrue(entradaAutenticada.headers().firstValue("Location").orElseThrow().endsWith("/inicio"));
+
+        var paginaInexistente = cliente.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + puerto + "/pagina-inexistente"))
+            .header("Cookie", cookie).header("Accept", "text/html").GET().build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, paginaInexistente.statusCode());
+        assertTrue(paginaInexistente.body().contains("Esta página no existe"));
+        assertTrue(paginaInexistente.body().contains("Volver a EcoUVG"));
+        assertFalse(paginaInexistente.body().contains("Whitelabel"));
+        assertEquals(200, enviar("GET", "/css/error.css", null, null).statusCode());
 
         var otroRepositorio = new JdbcIndexedSessionRepository(jdbc, new TransactionTemplate(transacciones));
         otroRepositorio.setTableName("ecouvg_private.spring_session");
