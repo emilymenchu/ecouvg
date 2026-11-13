@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar evidencia | EcoUVG</title>
 
     <link rel="stylesheet"
@@ -74,49 +74,26 @@
                         Fotografía de la misión
                     </label>
 
-                    <input type="file"
-                           id="fotografia"
-                           name="fotografia"
-                           accept="image/jpeg,image/png,image/webp"
-                           capture="environment"
-                           aria-describedby="ayuda-foto"
-                           required>
+            <input type="file" id="fotografia" name="fotografia" accept="image/jpeg, image/png, image/webp" capture="environment" required>
+            <p>
+                Formatos de imagen permitidos: JPG, PNG, webp
+                Tamaño max: 5MB
+            </p>
 
-                    <p id="ayuda-foto" class="ayuda">
-                        Formatos permitidos: JPG, PNG y WEBP.
-                        Tamaño máximo: 5 MB.
-                    </p>
-                </div>
 
-                <p class="nota">
-                    <strong>Antes de enviar:</strong>
-                    comprueba que la fotografía sea clara y corresponda
-                    al reto que realizaste.
-                </p>
+            <button type="submit">
+                Enviar evidencia
+            </button>
 
-                <div class="acciones">
-                    <button type="submit">Enviar evidencia</button>
 
-                    <a th:href="@{/retos}" class="boton-volver">
-                        Volver a retos
-                    </a>
-                </div>
-            </form>
-        </section>
 
-        <p class="recordatorio">
-            Enviar tu evidencia permite que la actividad sea revisada.
-        </p>
-         <a class="eco-flotante"
-            th:href="@{/chat}"
-            aria-label="Hablar con Eco, asistente de reciclaje">
+        </form>
 
-            <span class="eco-globo">Pregúntale a Eco</span>
+        
+        <a th:href="@{/retos}" class="boton-volver">
+            Volver a retos
+        </a>
 
-             <img src="../static/img/eco nadando.png"
-                th:src="@{/img/eco nadando.png}"
-                alt="">
-            </a>
     </main>
 
     <footer>

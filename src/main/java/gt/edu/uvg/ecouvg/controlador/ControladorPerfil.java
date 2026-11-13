@@ -1,4 +1,3 @@
-
 package gt.edu.uvg.ecouvg.controlador;
 
 import gt.edu.uvg.ecouvg.modelo.Usuario;
@@ -23,10 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.client.RestClientException;
@@ -164,9 +161,4 @@ public class ControladorPerfil {
         return "redirect:/perfil";
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public String fotografiaDemasiadoGrande(RedirectAttributes atributos) {
-        atributos.addFlashAttribute("error", "La fotografía no debe superar los 5 MB.");
-        return "redirect:/perfil";
-    }
 }
