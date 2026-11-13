@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="popup">
+
+    <div hidden>
+        <th:block th:each="reto : ${retos}"
+                  th:with="progreso=${progresos[reto.id]}">
+
+            <span class="celebracion-dato"
+                  th:if="${progreso != null and progreso.estaCompletado()}"
+                  th:attr="data-clave=${progreso.usuario.id + '-' + progreso.id},
+                           data-titulo=${reto.titulo},
+                           data-puntos=${reto.puntosRecompensa}">
+            </span>
+        </th:block>
+    </div>
+
+    <dialog id="eco-felicita"
+            aria-labelledby="eco-felicita-titulo">
+
+        <img th:src="@{/img/Eco celebrando.png}"
+             alt="Eco celebrando">
+
+        <p class="eco-etiqueta">CADA ACCIÓN CUENTA</p>
+
+        <h2 id="eco-felicita-titulo">¡Lo lograste!</h2>
+
+        <p>Completaste el reto:</p>
+
+        <strong id="eco-reto-completado"></strong>
+
+        <p class="eco-recompensa">
+            ⭐ Recompensa del reto:
+            <strong id="eco-puntos-reto"></strong>
+            puntos
+        </p>
+
+        <p>¡Gracias por cuidar el planeta conmigo! 💚</p>
+
+        <button id="eco-cerrar-felicitacion" type="button">
+            ¡Vamos por más!
+        </button>
+    </dialog>
+
+    <style>
+        #eco-felicita {
+            width: min(420px, calc(100% - 32px));
+            max-height: calc(100dvh - 40px);
+            padding: 28px;
+            overflow-y: auto;
+            border: 1px solid #bcdfea;
+            border-radius: 26px;
+            background: linear-gradient(#e1f5fb, #fffdf8);
+            color: #23434c;
+            font: 14px/1.6 Arial, sans-serif;
+            text-align: center;
+            box-shadow: 0 20px 60px #153b4b40;
+        }
+
+        #eco-felicita::backdrop {
+            background: #153b4b80;
+        }
+
+        #eco-felicita img {
+            display: block;
+            width: 150px;
+            height: 160px;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        #eco-felicita .eco-etiqueta {
+            margin: 14px 0 8px;
+            color: #326476;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        #eco-felicita h2 {
+            margin: 0 0 12px;
+            color: #245c40;
+            font-size: 28px;
+            line-height: 1.2;
+        }
+
+        #eco-reto-completado {
+            display: block;
+            font-size: 20px;
+            overflow-wrap: anywhere;
+        }
+
+        #eco-felicita .eco-recompensa {
+            margin: 18px 0;
+            padding: 12px;
+            border: 1px solid #ebdfb9;
+            border-radius: 12px;
+            background: #fff3cd;
+            color: #685421;
+        }
+
+        #eco-cerrar-felicitacion {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border: 0;
+            border-radius: 12px;
+            background: #245c40;
+            color: white;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #eco-cerrar-felicitacion:hover {
+            background: #193e2d;
+        }
+
+        #eco-cerrar-felicitacion:focus-visible {
+            outline: 3px solid #ad7117;
+            outline-offset: 4px;
+        }
+    </style>
+
+    <script>
+    (() => {
+        const dialogo = document.getElementById("eco-felicita");
+        const datos = [
+            ...document.querySelectorAll(".celebracion-dato")
+        ];
+
+        const vistosEnPagina = new Set();
+        let actual = null;
+        let focoAnterior = null;
+
+        function fueVista(clave) {
+            if (vistosEnPagina.has(clave)) return true;
+
+            try {
+                return localStorage.getItem(clave) === "vista";
+            } catch {
+                return false;
+            }
+        }
+
+        function siguiente() {
+            actual = datos.find(dato => {
+                const clave =
+                    "eco-felicitacion-" + dato.dataset.clave;
+
+                return !fueVista(clave);
+            });
+
+            if (!actual) {
+                if (focoAnterior?.isConnected) {
+                    focoAnterior.focus();
+                }
+                return;
+            }
+
+            document.getElementById("eco-reto-completado")
+                .textContent = actual.dataset.titulo;
+
+            document.getElementById("eco-puntos-reto")
+                .textContent = actual.dataset.puntos;
+
+            dialogo.showModal();
+        }
+
+        dialogo.addEventListener("close", () => {
+            if (!actual) return;
+
+            const clave =
+                "eco-felicitacion-" + actual.dataset.clave;
+
+            vistosEnPagina.add(clave);
+
+            try {
+                localStorage.setItem(clave, "vista");
+            } catch {
+                // Si el guardado está bloqueado, no se repite
+                // durante esta visita a la página.
+            }
+
+            actual = null;
+            siguiente();
+        });
+
+        document.getElementById("eco-cerrar-felicitacion")
+            .addEventListener("click", () => dialogo.close());
+
+        focoAnterior = document.activeElement;
+        siguiente();
+    })();
+    </script>
+
+</th:block>
+</body>
+</html>

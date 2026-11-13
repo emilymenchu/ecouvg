@@ -1,60 +1,170 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${titulo + ' | EcoUVG'}">Personas | EcoUVG</title>
-    <link rel="stylesheet" th:href="@{/css/inicio.css}">
-    <link rel="stylesheet" th:href="@{/css/navegacion.css}">
-    <link rel="stylesheet" th:href="@{/css/perfil.css}">
-    <script th:src="@{/js/navegacion.js}" defer></script>
-    <script th:src="@{/js/personas.js}" defer></script>
+
+    <title th:text="${titulo + ' | EcoUVG'}">
+        Personas | EcoUVG
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
+
+    <link rel="stylesheet"
+          href="/css/perfil.css"
+          th:href="@{/css/perfil.css}">
+
+    <link rel="stylesheet"
+          href="/css/personas.css"
+          th:href="@{/css/personas.css}">
+
+    <script src="/js/personas.js"
+            th:src="@{/js/personas.js}"
+            defer></script>
 </head>
 
 <body>
-    <th:block th:replace="~{fragmentos/navegacion :: cabecera('perfil')}"></th:block>
-    <main class="contenedor-perfil">
-        <a class="volver-perfil" th:href="${perfilOrigen != null} ? @{/perfil/{id}(id=${perfilOrigen})} : @{/perfil}">←
-            Volver al perfil</a>
-        <h1 class="titulo-personas" th:text="${titulo}">Buscar personas</h1>
-        <form class="buscador-personas" method="get" th:action="@{/personas}">
-            <label for="buscar-persona">Nombre o carné</label>
-            <div>
-                <input id="buscar-persona" name="q" type="search" maxlength="100" th:value="${q}"
-                    placeholder="Nombre o carné" required>
-                <button class="boton" type="submit">Buscar</button>
-            </div>
-        </form>
-        <p class="cantidad-personas" th:if="${!q.isEmpty() or perfilOrigen != null}"><span
-                th:text="${resultados.totalElements}">0</span> personas</p>
-        <section class="lista-personas" aria-label="Personas">
-            <article class="persona" th:each="persona : ${resultados.content}">
-                <span class="foto-persona" aria-hidden="true">
-                    <span
-                        th:text="${#strings.isEmpty(persona.nombre) ? '?' : #strings.substring(persona.nombre, 0, 1)}">P</span>
-                    <img th:if="${!#strings.isEmpty(persona.fotoPerfil)}"
-                        th:src="@{/perfil/{id}/foto(id=${persona.id})}" alt="" loading="lazy" data-foto-persona>
-                </span>
-                <div class="datos-persona">
-                    <a th:href="@{/perfil/{id}(id=${persona.id})}" th:text="${persona.nombre}">Nombre</a>
-                    <p>Carné <span th:text="${persona.carnet}">00000</span> <span
-                            th:if="${persona.id == usuarioActualId}">· Tú</span></p>
-                </div>
-                <a class="ver-perfil" th:href="@{/perfil/{id}(id=${persona.id})}">Ver perfil</a>
-            </article>
-            <p class="sin-personas" th:if="${resultados.empty and (!q.isEmpty() or perfilOrigen != null)}">No se
-                encontraron personas.</p>
-        </section>
-        <nav class="paginacion-personas" aria-label="Páginas de personas" th:if="${resultados.totalPages > 1}">
-            <a th:if="${resultados.hasPrevious()}" th:href="@{${ruta}(q=${q},pagina=${resultados.number - 1})}">←
-                Anterior</a>
-            <span th:text="${'Página ' + (resultados.number + 1) + ' de ' + resultados.totalPages}">Página</span>
-            <a th:if="${resultados.hasNext()}" th:href="@{${ruta}(q=${q},pagina=${resultados.number + 1})}">Siguiente
-                →</a>
-        </nav>
-    </main>
-    <nav th:replace="~{fragmentos/navegacion :: menu('perfil')}"></nav>
-</body>
+    <aside th:replace="~{fragmentos/interfaz-perfil :: lateral}"></aside>
 
+    <div class="pagina pagina-personas">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
+
+        <main class="contenedor-perfil">
+            <a class="volver-perfil"
+               th:href="${perfilOrigen != null} ? @{/perfil/{id}(id=${perfilOrigen})} : @{/perfil}">
+                ← Volver al perfil
+            </a>
+
+            <section class="portada-personas"
+                     aria-labelledby="titulo-personas">
+                <div>
+                    <p class="etiqueta">CRECEMOS EN COMUNIDAD</p>
+
+                    <h1 id="titulo-personas"
+                        class="titulo-personas"
+                        th:text="${titulo}">
+                        Buscar personas
+                    </h1>
+
+                    <p class="descripcion-personas">
+                        Cuidar el planeta es mejor en compañía.
+                        Conecta con la comunidad de EcoUVG.
+                    </p>
+                </div>
+
+                <span class="icono-comunidad" aria-hidden="true">🤝</span>
+            </section>
+
+            <form class="buscador-personas"
+                  method="get"
+                  th:action="@{/personas}"
+                  role="search">
+                <label for="buscar-persona">Nombre o carné</label>
+
+                <div>
+                    <input id="buscar-persona"
+                           name="q"
+                           type="search"
+                           maxlength="100"
+                           th:value="${q}"
+                           placeholder="Busca a alguien de la comunidad"
+                           required>
+
+                    <button class="boton" type="submit">
+                        Buscar →
+                    </button>
+                </div>
+            </form>
+
+            <p class="cantidad-personas"
+               th:if="${!#strings.isEmpty(q) or perfilOrigen != null}">
+                <strong th:text="${resultados.totalElements}">0</strong>
+                personas
+            </p>
+
+            <section class="lista-personas"
+                     aria-label="Personas">
+                <article class="persona"
+                         th:each="persona : ${resultados.content}">
+                    <span class="foto-persona" aria-hidden="true">
+                        <span th:text="${#strings.isEmpty(persona.nombre) ? '?' : #strings.substring(persona.nombre, 0, 1)}">
+                            P
+                        </span>
+
+                        <img th:if="${!#strings.isEmpty(persona.fotoPerfil)}"
+                             th:src="@{/perfil/{id}/foto(id=${persona.id})}"
+                             alt=""
+                             loading="lazy"
+                             data-foto-persona>
+                    </span>
+
+                    <div class="datos-persona">
+                        <a th:href="@{/perfil/{id}(id=${persona.id})}"
+                           th:text="${persona.nombre}">
+                            Nombre
+                        </a>
+
+                        <p>
+                            Carné
+                            <span th:text="${persona.carnet}">00000</span>
+
+                            <span th:if="${persona.id == usuarioActualId}">
+                                · Tú
+                            </span>
+                        </p>
+                    </div>
+
+                    <a class="ver-perfil"
+                       th:href="@{/perfil/{id}(id=${persona.id})}"
+                       th:attr="aria-label=${'Ver perfil de ' + persona.nombre}">
+                        Ver perfil →
+                    </a>
+                </article>
+
+                <div class="sin-personas"
+                     th:if="${resultados.empty and (!#strings.isEmpty(q) or perfilOrigen != null)}">
+                    <span class="icono-vacio" aria-hidden="true">🔎</span>
+                    <h2>No se encontraron personas</h2>
+                    <p>Prueba con otro nombre o carné.</p>
+                </div>
+
+                <div class="inicio-busqueda"
+                     th:if="${resultados.empty and #strings.isEmpty(q) and perfilOrigen == null}">
+                    <span class="icono-vacio" aria-hidden="true">🌱</span>
+                    <h2>Encuentra a tu comunidad</h2>
+                    <p>
+                        Escribe un nombre o carné para comenzar
+                        a buscar personas.
+                    </p>
+                </div>
+            </section>
+
+            <nav class="paginacion-personas"
+                 aria-label="Páginas de personas"
+                 th:if="${resultados.totalPages > 1}">
+                <a th:if="${resultados.hasPrevious()}"
+                   th:href="@{${ruta}(q=${q},pagina=${resultados.number - 1})}">
+                    ← Anterior
+                </a>
+
+                <span th:text="${'Página ' + (resultados.number + 1) + ' de ' + resultados.totalPages}">
+                    Página
+                </span>
+
+                <a th:if="${resultados.hasNext()}"
+                   th:href="@{${ruta}(q=${q},pagina=${resultados.number + 1})}">
+                    Siguiente →
+                </a>
+            </nav>
+        </main>
+
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
+
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
+</body>
 </html>

@@ -1,0 +1,248 @@
+/* Se carga después de inicio.css y perfil.css. */
+
+/* Distribución */
+.pagina-personas .contenedor-perfil {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 28px 32px 40px;
+}
+
+.pagina-personas .volver-perfil {
+    margin-bottom: 20px;
+    color: var(--verde);
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.pagina-personas .volver-perfil:hover {
+    text-decoration: underline;
+}
+
+/* Portada marina */
+.pagina-personas .portada-personas {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 22px;
+    padding: 30px 28px 65px;
+    border: 1px solid #bcdfea;
+    border-radius: 26px;
+    background:
+        radial-gradient(
+            circle at 90% 18%,
+            #ffffffb3 0 8px,
+            transparent 9px
+        ),
+        linear-gradient(135deg, #edfaff, #b9e5f2);
+    box-shadow: 0 10px 25px #48798912;
+}
+
+.pagina-personas .portada-personas::before,
+.pagina-personas .portada-personas::after {
+    content: "";
+    position: absolute;
+    left: -10%;
+    z-index: -1;
+    width: 120%;
+    height: 100px;
+    pointer-events: none;
+}
+
+.pagina-personas .portada-personas::before {
+    bottom: -48px;
+    border-radius: 50% 45% 0 0;
+    background: #91d2e47a;
+    transform: rotate(-3deg);
+}
+
+.pagina-personas .portada-personas::after {
+    bottom: -67px;
+    border-radius: 45% 60% 0 0;
+    background: var(--arena);
+    transform: rotate(3deg);
+}
+
+.pagina-personas .portada-personas > div {
+    min-width: 0;
+}
+
+.pagina-personas .etiqueta {
+    margin: 0 0 10px;
+    color: #326476;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.6px;
+}
+
+.pagina-personas .titulo-personas {
+    margin: 0 0 12px;
+    color: #234b59;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.pagina-personas .descripcion-personas {
+    max-width: 580px;
+    margin: 0;
+    color: #426773;
+    font-size: 14px;
+}
+
+.pagina-personas .icono-comunidad {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 76px;
+    height: 76px;
+    border: 1px solid #ffffff99;
+    border-radius: 22px;
+    background: #ffffff80;
+    font-size: 40px;
+}
+
+/* Buscador */
+.pagina-personas .buscador-personas {
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 22px 24px;
+    border: 1px solid var(--borde);
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 6px 18px #37697908;
+}
+
+.pagina-personas .buscador-personas label {
+    color: #245263;
+    font-size: 14px;
+}
+
+.pagina-personas .buscador-personas > div {
+    gap: 12px;
+}
+
+.pagina-personas .buscador-personas input {
+    padding: 11px 14px;
+    border-color: #c4dfe7;
+    background: #f7fcfd;
+    color: var(--texto);
+    font-size: 14px;
+}
+
+.pagina-personas .buscador-personas .boton {
+    margin: 0;
+    padding: 11px 18px;
+    font-size: 14px;
+}
+
+.pagina-personas .cantidad-personas {
+    margin: 0 0 16px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+/* Resultados */
+.pagina-personas .lista-personas {
+    gap: 12px;
+}
+
+.pagina-personas .persona {
+    min-width: 0;
+    gap: 16px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    box-shadow: 0 4px 14px #37697906;
+}
+
+.pagina-personas .foto-persona {
+    width: 46px;
+    height: 46px;
+    font-size: 18px;
+}
+
+.pagina-personas .datos-persona > a {
+    font-size: 15px;
+}
+
+.pagina-personas .datos-persona > a:hover {
+    text-decoration: underline;
+}
+
+.pagina-personas .datos-persona p {
+    margin-top: 4px;
+}
+
+.pagina-personas .ver-perfil {
+    padding: 8px 12px;
+    border: 1px solid #c4dfe7;
+    border-radius: 10px;
+    background: #f3fafc;
+    color: #245263;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.pagina-personas .ver-perfil:hover {
+    background: #def2fb;
+}
+
+/* Estados de búsqueda */
+.pagina-personas .sin-personas,
+.pagina-personas .inicio-busqueda {
+    margin: 0;
+    padding: 32px;
+    border: 1px dashed #bedee8;
+    border-radius: 22px;
+    background: white;
+    text-align: center;
+}
+
+.pagina-personas .icono-vacio {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: #eaf7fb;
+    font-size: 26px;
+}
+
+.pagina-personas .sin-personas h2,
+.pagina-personas .inicio-busqueda h2 {
+    margin: 0 0 8px;
+    color: #234b59;
+    font-size: 21px;
+}
+
+.pagina-personas .sin-personas p,
+.pagina-personas .inicio-busqueda p {
+    margin: 0;
+    color: var(--gris);
+    font-size: 14px;
+}
+
+/* Paginación */
+.pagina-personas .paginacion-personas {
+    margin-top: 24px;
+    font-size: 13px;
+}
+
+.pagina-personas .paginacion-personas a {
+    padding: 8px 12px;
+    border: 1px solid #c4dfe7;
+    border-radius: 10px;
+    background: white;
+    color: var(--verde);
+    text-decoration: none;
+}
+
+.pagina-personas .paginacion-personas a:hover {
+    background: #eaf7fb;
+}
