@@ -21,7 +21,7 @@ export class Pelota extends Entidad {
     constructor(x,y) { super(x,y); this.vx=155; this.vy=-235; this.radio=8; }
 }
 export class Partida {
-    constructor() { this.puntos=0; this.vidas=3; this.nivel=1; this.estado='lista'; }
+    constructor() { this.puntos=0; this.aciertos=0; this.vidas=3; this.nivel=1; this.estado='lista'; }
     sumar(puntos) { this.puntos=Math.max(0,this.puntos+puntos); }
 }
 export class Juego {
@@ -114,7 +114,7 @@ export class EcoRun extends Juego {
         if(material!==this.carga.material) {
             this.partida.sumar(-5); this.mensaje=`Ese residuo pertenece a ${this.materiales[this.carga.material].nombre}. Conservas tu carga.`; return;
         }
-        this.partida.sumar(25); this.mensaje=this.materiales[material].preparacion;
+        this.partida.aciertos++; this.partida.sumar(25); this.mensaje=this.materiales[material].preparacion;
         this.carga=null; for(const m of this.monstruos) m.arbol=3;
         if(this.residuos.length===0) {
             this.partida.sumar(50);
@@ -173,7 +173,7 @@ export class EcoSnake extends Juego {
         if(residuo) {
             this.ultimoResiduo={...residuo,correcto:crece};
             if(crece) {
-                this.colorFila=residuo.material; this.correctos++; this.partida.sumar(20); this.mensaje=this.materiales[this.material].preparacion;
+                this.colorFila=residuo.material; this.correctos++; this.partida.aciertos++; this.partida.sumar(20); this.mensaje=this.materiales[this.material].preparacion;
                 if(this.correctos===12) { this.ganar(); return; }
                 if(this.correctos%3===0) { this.material=(this.material+1)%4; this.partida.nivel++; this.mensaje=`Nueva ronda: recoge ${this.materiales[this.material].nombre}.`; }
             } else {
@@ -214,7 +214,7 @@ export class EcoBreakout extends Juego {
     get objetivo() { return `Rompe ${this.material+1} · ${this.materiales[this.material].nombre} · Quedan ${this.bloques.filter(b=>b.activo).length} bloques`; }
     golpear(b) {
         if(!b.activo || b.material!==this.material) return; // Los otros materiales son atravesables en esta ronda.
-        b.activo=false; this.sinProgreso=0; this.ultimoResiduo={material:b.material,ejemplo:this.materiales[b.material].nombre,correcto:true}; this.partida.sumar(15); this.mensaje=this.materiales[b.material].preparacion;
+        b.activo=false; this.partida.aciertos++; this.sinProgreso=0; this.ultimoResiduo={material:b.material,ejemplo:this.materiales[b.material].nombre,correcto:true}; this.partida.sumar(15); this.mensaje=this.materiales[b.material].preparacion;
         const restantes=this.bloques.filter(b=>b.activo);
         if(!restantes.length) { this.ganar(); return; }
         if(!restantes.some(b=>b.material===this.material)) {

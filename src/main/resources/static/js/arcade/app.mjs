@@ -1,3 +1,4 @@
+import {MisionRacha} from './mision.mjs';
 import {EcoRun,EcoSnake,EcoBreakout} from './modelo.mjs';
 import {Dibujante,PALETA} from './vista.mjs';
 const CONFIG={
@@ -15,6 +16,12 @@ class EcoArcade {
         this.raiz=document.querySelector('#arcade'); this.canvas=document.querySelector('#tablero');
         this.vista=new Dibujante(this.canvas); this.records=new Records(); this.juego=null; this.id=null;
         this.materiales=[]; this.ultimo=0; this.estadoAnterior=null; this.actualizarRecords();
+        this.mision=new MisionRacha({url:this.raiz.dataset.misionUrl,
+            csrf:document.querySelector('meta[name="_csrf"]')?.content,
+            header:document.querySelector('meta[name="_csrf_header"]')?.content,
+            notificar:(texto,reintentar)=>{this.texto('estado-mision',texto);document.querySelector('#reintentar-mision').hidden=!reintentar;}});
+        document.querySelector('#reintentar-mision').addEventListener('click',()=>this.mision.reintentar());
+        this.mision.cargar();
         this.conectar(); this.cargar(); requestAnimationFrame(t=>this.fotograma(t));
     }
     async cargar() {
@@ -80,6 +87,7 @@ class EcoArcade {
         window.addEventListener('blur',()=>this.pausarAutomaticamente());
     }
     seleccionar(id) {
+        void this.mision.cargar();
         if(this.juego) this.records.guardar(this.id,this.juego.partida.puntos);
         this.id=id;this.juego=new CONFIG[id].clase(this.materiales);this.estadoAnterior=null;
         document.querySelector('#salon').hidden=true;document.querySelector('#partida').hidden=false;
@@ -88,7 +96,7 @@ class EcoArcade {
         document.querySelector('.controles').classList.toggle('breakout',id==='eco-breakout');
         this.canvas.setAttribute('aria-label',`${CONFIG[id].nombre}. ${id==='eco-breakout'?'Usa izquierda y derecha.':'Usa las flechas o WASD.'} P para pausar.`);
         this.sincronizar();this.vista.dibujar(this.juego);
-        document.querySelector('#accion').focus({preventScroll:true});document.querySelector('#partida').scrollIntoView({block:'start'});
+        document.querySelector('#accion').focus({preventScroll:true});this.raiz.scrollIntoView({block:'start'});
     }
     volver() {
         this.records.guardar(this.id,this.juego.partida.puntos);this.juego=null;this.actualizarRecords();
@@ -107,6 +115,7 @@ class EcoArcade {
     sincronizar() {
         if(!this.juego) return;
         const j=this.juego,p=j.partida;
+        this.texto('aciertos-mision',`${Math.min(p.aciertos,5)}/5`);this.mision.observar(this.id,p);
         this.texto('puntos',p.puntos);this.texto('vidas',p.vidas);this.texto('nivel',p.nivel);
         this.texto('objetivo',j.objetivo);this.texto('mensaje',j.mensaje);this.actualizarMaterial(j);
         const residuos=j.residuos?.map(r=>`${r.material+1}: ${r.ejemplo}`) || [];
