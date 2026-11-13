@@ -4,6 +4,23 @@ import {EcoRun,EcoSnake,EcoBreakout,Residuo} from '../../main/resources/static/j
 import {MisionRacha} from '../../main/resources/static/js/arcade/mision.mjs';
 const materiales=['Plástico','Metal','Papel','Cartón'].map(nombre=>({nombre,ejemplos:[nombre],preparacion:'Preparar'}));
 const tick=()=>new Promise(r=>setImmediate(r));
+test('La petición por defecto conserva el contexto global de fetch al consultar y guardar',async(t)=>{
+ const llamadas=[];
+ t.mock.method(globalThis,'fetch',function(url,op){
+  if(this!==globalThis) throw new TypeError('Illegal invocation');
+  llamadas.push({url,op});
+  return Promise.resolve({ok:true,status:200,json:async()=>({completada:op.method==='POST',semanasRacha:2})});
+ });
+ const m=new MisionRacha({url:'/api/arcade/mision',csrf:'token',header:'X-CSRF-TOKEN',notificar:()=>{}});
+ await m.cargar();
+ assert.equal(m.error,false,'Consultar la misión debe funcionar con el fetch del navegador');
+ assert.equal(m.estado.completada,false);
+ m.observar('eco-run',{aciertos:5});await tick();
+ assert.equal(m.error,false);
+ assert.equal(m.estado.completada,true);
+ assert.equal(llamadas.length,2);
+ assert.equal(llamadas[1].op.headers['X-CSRF-TOKEN'],'token');
+});
 test('Eco Run cuenta entregas, no recogidas ni puntos de nivel; conserva cinco entre niveles',()=>{
  const j=new EcoRun(materiales);j.iniciar();
  for(let i=0;i<5;i++) {const r=j.residuos.shift();j.carga=r;j.depositar((r.material+1)%4);assert.equal(j.partida.aciertos,i);j.depositar(r.material);}
