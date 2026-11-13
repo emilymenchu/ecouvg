@@ -22,6 +22,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth ->
                 auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers(
+                        "/",
+                        "/error",
                         "/login",
                         "/registro",
                         "/recuperar",

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId; 
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,13 @@ public class ControladorLogin {
         this.servicioUsuario = servicioUsuario;
         this.servicioSocial = servicioSocial;
         this.servicioReto = servicioReto;
+    }
+
+    @GetMapping("/")
+    public String entrada(Authentication authentication) {
+        boolean sesionActiva = authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken);
+        return sesionActiva ? "redirect:/inicio" : "redirect:/login";
     }
 
     @GetMapping("/login")
