@@ -40,6 +40,35 @@ class SesionesProduccionTest {
     @Autowired PlatformTransactionManager transacciones;
     private final HttpClient cliente = HttpClient.newHttpClient();
 
+
+    @Test void cacheaSoloRecursosPublicosYConservaPrivadasLasPaginasDelUsuario() throws Exception {
+        for (String recurso : new String[]{"/css/inicio.css", "/js/perfil.js", "/img/Eco%20nadando.png"}) {
+            var publico = enviar("GET", recurso, null, null);
+            assertEquals(200, publico.statusCode(), recurso);
+            String cache = publico.headers().firstValue("Cache-Control").orElse("");
+            assertTrue(cache.contains("max-age=3600"), recurso);
+            assertTrue(cache.contains("public"), recurso);
+            assertFalse(cache.contains("no-store"), recurso);
+        }
+        usuarios.save(new Usuario("Prueba caché", "cache-test", "cache@example.com", encoder.encode("clave-prueba")));
+        var login = enviar("GET", "/login", null, null);
+        assertEquals(200, login.statusCode());
+        assertTrue(login.headers().firstValue("Cache-Control").orElse("").contains("no-store"));
+        var csrf = Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"").matcher(login.body());
+        assertTrue(csrf.find());
+        var autenticado = enviar("POST", "/login", cookie(login),
+            "carnet=cache-test&contrasena=clave-prueba&_csrf=" + URLEncoder.encode(csrf.group(1), StandardCharsets.UTF_8));
+        assertEquals(302, autenticado.statusCode());
+        String cookie = cookie(autenticado);
+        for (String ruta : new String[]{"/perfil", "/chat", "/perfil/foto"}) {
+            var privada = enviar("GET", ruta, cookie, null);
+            assertEquals(ruta.equals("/perfil/foto") ? 404 : 200, privada.statusCode(), ruta);
+            String cache = privada.headers().firstValue("Cache-Control").orElse("");
+            assertTrue(cache.contains("no-store"), ruta);
+            assertFalse(cache.contains("public"), ruta);
+        }
+    }
+
     @Test void conservaAutenticacionEnJdbcYRevocaElAccesoAlBorrarLaSesionDesdeOtroRepositorio() throws Exception {
         var entradaAnonima = enviar("GET", "/", null, null);
         assertEquals(302, entradaAnonima.statusCode());
