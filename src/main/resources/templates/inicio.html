@@ -39,11 +39,6 @@
             <a th:href="@{/retos}">
                 <span aria-hidden="true">⭐</span> Retos
             </a>
-
-            <a th:href="@{/arcade}">
-                <span aria-hidden="true">🎮</span>
-                Eco Arcade
-            </a>
         </nav>
 
         <div class="lateral-pie">
@@ -111,6 +106,8 @@
                                 Puntos XP
                             </p>
 
+
+
                             <p class="dato">
                                 <span aria-hidden="true">🌱</span>
                                 <span>Nivel:</span>
@@ -121,9 +118,10 @@
                         </div>
                     </div>
 
-                <img class="mascota" 
-                    th:src="@{/img/{archivo}(archivo=${imagenEco})}" 
-                    alt="Eco, tu compañera de reciclaje">
+                    <img class="mascota"
+                        src="../static/img/Eco sentada feliz.png"
+                        th:src="@{/img/Eco sentada feliz.png}"
+                        alt="Eco, la tortuga mascota, sentada y feliz">
                 </section>
                 <div class="fila-tarjetas">
                 <section class="tarjeta amigos" aria-labelledby="titulo-amigos">
@@ -238,12 +236,18 @@
                 <span class="icono" aria-hidden="true">⭐</span>
                 <p class="etiqueta">TU PRÓXIMA MISIÓN</p>
                 <h2 id="titulo-retos">Retos de la semana</h2>
+                <div class="reto-arcade-semanal">
+                    <h3>Juega y cuida tu racha</h3>
+                    <p>Consigue 5 aciertos en una misma partida de Eco Run, Eco Snake o Eco Breakout.</p>
+                    <p th:if="${misionArcade.completada}">✓ Misión Arcade completada esta semana.</p>
+                    <a th:href="@{/arcade}" th:text="${misionArcade.completada ? 'Volver a jugar' : 'Completar misión en Arcade'}">Ir al Arcade</a>
+                </div>
 
                 <p>Pequeñas acciones que hacen una gran diferencia.</p>
 
                 <p class="retos-inicio-vacio"
                 th:if="${#lists.isEmpty(retosInicio)}">
-                    No hay retos disponibles en este momento.
+                    No hay otros retos disponibles en este momento.
                 </p>
 
                 <ul class="retos-inicio-lista"
