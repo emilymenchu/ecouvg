@@ -69,7 +69,7 @@ class ControladorPerfilTest {
             .andExpect(content().string(containsString("value=\"50\"")))
             .andExpect(content().string(containsString("mi-posicion")))
             .andExpect(content().string(containsString("aria-current=\"page\"")))
-            .andExpect(content().string(containsString("/js/navegacion.js")))
+            .andExpect(content().string(containsString("/css/perfil-panel.css")))
             .andReturn();
         String vistaPrevia = System.getProperty("perfil.preview");
         if (vistaPrevia != null) {

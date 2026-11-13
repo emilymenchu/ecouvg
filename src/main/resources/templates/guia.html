@@ -6,118 +6,120 @@
     <title>Guía de reciclaje | EcoUVG</title>
 
     <link rel="stylesheet"
-          href="../static/css/guia.css"
-          th:href="@{/css/guia.css}">
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
 
     <link rel="stylesheet"
-          href="../static/css/navegacion.css"
-          th:href="@{/css/navegacion.css}">
-    <script th:src="@{/js/navegacion.js}" defer></script>
+          href="/css/guia.css"
+          th:href="@{/css/guia.css}">
 </head>
 
 <body>
-    <th:block th:replace="~{fragmentos/navegacion :: cabecera('Guía de reciclaje')}"></th:block>
+    <aside th:replace="~{fragmentos/interfaz-guia :: lateral}"></aside>
 
-    <main class="guia">
-        <section class="guia-portada" aria-labelledby="titulo-guia">
-            <div class="guia-portada-texto">
-                <p class="ceja">CADA RESIDUO EN SU LUGAR</p>
+    <div class="pagina pagina-guia">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
 
-                <h1 id="titulo-guia">Guía de reciclaje</h1>
+        <main class="guia">
+            <section class="guia-portada" aria-labelledby="titulo-guia">
+                <div class="guia-portada-texto">
+                    <p class="ceja">CADA RESIDUO EN SU LUGAR</p>
 
-                <p class="introduccion">
-                    Cuidar el mar empieza en tierra.
-                    Elige un contenedor para aprender a separar tus residuos.
+                    <h1 id="titulo-guia">Guía de reciclaje</h1>
+
+                    <p class="introduccion">
+                        Cuidar el mar empieza en tierra.
+                        Elige un contenedor para aprender a separar tus residuos.
+                    </p>
+                </div>
+
+                <div class="guia-conchas" aria-hidden="true">
+                    <span>🐚</span>
+                    <span>🐚</span>
+                </div>
+            </section>
+
+            <form class="guia-buscador"
+                  th:action="@{/guia}"
+                  method="get"
+                  role="search">
+                <label for="q">Busca un material o residuo</label>
+
+                <div>
+                    <input type="search"
+                           id="q"
+                           name="q"
+                           maxlength="120"
+                           th:value="${q}"
+                           placeholder="Ej. botella, cartón o pilas">
+
+                    <button class="guia-boton" type="submit">
+                        Buscar →
+                    </button>
+                </div>
+            </form>
+
+            <div class="guia-resultados">
+                <p>
+                    <strong th:text="${#lists.size(categorias)}">8</strong>
+                    categorías
                 </p>
+
+                <a th:href="@{/guia}"
+                   th:if="${!#strings.isEmpty(q)}">
+                    Limpiar búsqueda
+                </a>
             </div>
 
-            <div class="guia-conchas" aria-hidden="true">
-                <span>🐚</span>
-                <span>🐚</span>
-            </div>
-        </section>
+            <section class="guia-vacio"
+                     th:if="${#lists.isEmpty(categorias)}"
+                     aria-labelledby="titulo-vacio">
+                <span class="guia-icono-vacio" aria-hidden="true">🔎</span>
 
-        <form class="guia-buscador"
-              th:action="@{/guia}"
-              method="get"
-              role="search">
+                <h2 id="titulo-vacio">No encontramos coincidencias</h2>
 
-            <label for="q">Busca un material o residuo</label>
+                <p>
+                    Prueba con otro material o consulta todas las categorías.
+                </p>
 
-            <div>
-                <input type="search"
-                       id="q"
-                       name="q"
-                       maxlength="120"
-                       th:value="${q}"
-                       placeholder="Ej. botella, cartón o pilas">
+                <a class="guia-boton" th:href="@{/guia}">
+                    Ver todos los contenedores
+                </a>
+            </section>
 
-                <button type="submit">Buscar</button>
-            </div>
-        </form>
+            <div class="guia-cuadricula">
+                <a class="guia-tarjeta"
+                   th:each="categoria : ${categorias}"
+                   th:classappend="${categoria.color}"
+                   th:href="@{/guia/{slug}(slug=${categoria.slug},q=${q})}">
 
-        <div class="guia-resultados">
-            <p>
-                <strong th:text="${#lists.size(categorias)}">8</strong>
-                categorías
-            </p>
-
-            <a th:href="@{/guia}"
-               th:if="${!#strings.isEmpty(q)}">
-                Limpiar búsqueda
-            </a>
-        </div>
-
-        <section class="guia-vacio"
-                 th:if="${#lists.isEmpty(categorias)}">
-
-            <h2>No encontramos coincidencias</h2>
-
-            <p>
-                Prueba con otro material o consulta todas las categorías.
-            </p>
-
-            <a th:href="@{/guia}">
-                Ver todos los contenedores
-            </a>
-        </section>
-
-        <div class="guia-cuadricula">
-            <a class="guia-tarjeta"
-               th:each="categoria : ${categorias}"
-               th:classappend="${categoria.color}"
-               th:href="@{/guia/{slug}(slug=${categoria.slug},q=${q})}">
-
-                <span class="contenedor-dibujo" aria-hidden="true">
-                    <span class="tapa"></span>
-                    <span class="cuerpo">
-                        <span th:text="${categoria.simbolo}">♻</span>
+                    <span class="contenedor-dibujo" aria-hidden="true">
+                        <span class="tapa"></span>
+                        <span class="cuerpo">
+                            <span th:text="${categoria.simbolo}">♻</span>
+                        </span>
                     </span>
-                </span>
 
-                <h2 th:text="${categoria.nombre}">Material</h2>
+                    <h2 th:text="${categoria.nombre}">Material</h2>
 
-                <span class="tarjeta-accion">
-                    Qué va aquí
-                    <span aria-hidden="true">↗</span>
-                </span>
-            </a>
-        </div>
+                    <span class="tarjeta-accion">
+                        Qué va aquí
+                        <span aria-hidden="true">↗</span>
+                    </span>
+                </a>
+            </div>
 
-        <p class="guia-nota">
-            Los colores son ilustrativos. Sigue la rotulación del
-            contenedor y confirma qué recibe cada centro.
-        </p>
-         <a class="eco-flotante"
-            th:href="@{/chat}"
-            aria-label="Hablar con Eco, asistente de reciclaje">
+            <p class="guia-nota">
+                Los colores son ilustrativos. Sigue la rotulación del
+                contenedor y confirma qué recibe cada centro.
+            </p>
+        </main>
 
-            <span class="eco-globo">Pregúntale a Eco</span>
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
 
-             <img src="../static/img/Eco nadando.png"
-                th:src="@{/img/Eco nadando.png}"
-                alt="">
-            </a>
-    </main>
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>

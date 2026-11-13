@@ -24,6 +24,9 @@ public class Usuario implements Comparable<Usuario> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @jakarta.persistence.Version
+    private Long version;
+
     private String nombre;
 
     @Column(nullable = false, unique = true, length = 20)

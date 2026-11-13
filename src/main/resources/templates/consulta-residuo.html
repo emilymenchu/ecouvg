@@ -1,41 +1,112 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/residuos.css" th:href="@{/css/residuos.css}">
-
     <meta charset="UTF-8">
-    <title>Residuos</title>
-<link rel="stylesheet" th:href="@{/css/navegacion.css}" href="/css/navegacion.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <main class="detalle-residuo">
-    <h1>Consulta de residuos</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    
-    <div th:each="residuo : ${residuo}">
-        <h2 th:text="${residuo.nombre}">Nombre del residuo</h2>
-        <p>
-            Tipo:
-            <span th:text="${residuo.tipo}">Tipo</span>
-        </p>
-        <p th:text="${residuo.descripcion}">
-            Descripción:
-        </p>
-        <p>
-            Instrucciones:
-            <span th:text="${residuo.instrucciones}">Instrucciones</span>
-        </p>
-        <p>
-            ¿Es reciclable?:
-            <span th:text="${residuo.reciclable ? 'Si' : 'No'}"></span>
-        </p>
-        <a class="botones" th:href="@{/residuos}">
-            Volver a la lista de residuos
-        </a>
-        <hr>
+    <title th:text="${residuo.nombre + ' | EcoUVG'}">
+        Consulta de residuos | EcoUVG
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
+
+    <link rel="stylesheet"
+          href="/css/residuos.css"
+          th:href="@{/css/residuos.css}">
+</head>
+
+<body>
+    <aside th:replace="~{fragmentos/interfaz-residuos :: lateral}"></aside>
+
+    <div class="pagina pagina-residuos">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
+
+        <main class="contenido-residuos contenido-ficha">
+            <a class="volver-residuos" th:href="@{/residuos}">
+                ← Volver a la guía de residuos
+            </a>
+
+            <section class="cabecera-detalle"
+                     aria-labelledby="nombre-residuo">
+                <p class="etiqueta-playa">
+                    CADA RESIDUO EN SU LUGAR
+                </p>
+
+                <h1 id="nombre-residuo" th:text="${residuo.nombre}">
+                    Nombre del residuo
+                </h1>
+
+                <div class="datos-detalle">
+                    <p class="tipo-residuo">
+                        Tipo:
+                        <span th:text="${residuo.tipo}">Material</span>
+                    </p>
+
+                    <span class="estado-residuo"
+                          th:classappend="${residuo.reciclable ? 'reciclable' : 'no-reciclable'}"
+                          th:text="${residuo.reciclable ? 'Reciclable' : 'No reciclable'}">
+                        Reciclable
+                    </span>
+                </div>
+            </section>
+
+            <article class="detalle-residuo"
+                     aria-label="Información del residuo">
+                <section class="bloque-detalle"
+                         aria-labelledby="titulo-descripcion">
+                    <h2 id="titulo-descripcion">¿Qué es?</h2>
+
+                    <p th:text="${#strings.isEmpty(residuo.descripcion) ? 'Todavía no hay una descripción disponible.' : residuo.descripcion}">
+                        Descripción del residuo.
+                    </p>
+                </section>
+
+                <section class="bloque-detalle"
+                         aria-labelledby="titulo-instrucciones">
+                    <h2 id="titulo-instrucciones">Cómo manejarlo</h2>
+
+                    <div class="instrucciones-residuo">
+                        <p th:text="${#strings.isEmpty(residuo.instrucciones) ? 'Todavía no hay instrucciones registradas para este residuo.' : residuo.instrucciones}">
+                            Instrucciones de manejo.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="bloque-detalle"
+                         aria-labelledby="titulo-siguiente">
+                    <h2 id="titulo-siguiente">Continúa tu consulta</h2>
+
+                    <p>
+                        Revisa la guía de separación o consulta los materiales
+                        que reciben los centros de reciclaje.
+                    </p>
+
+                    <div class="acciones-detalle">
+                        <a class="boton" th:href="@{/guia}">
+                            Guía de reciclaje →
+                        </a>
+
+                        <a class="boton boton-secundario"
+                           th:href="@{/centros}">
+                            Consultar centros →
+                        </a>
+                    </div>
+                </section>
+            </article>
+
+            <p class="nota-residuo">
+                Confirma con el centro si recibe este material
+                y cuáles son sus condiciones de entrega.
+            </p>
+        </main>
+
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
     </div>
-    </main>
-<nav th:replace="~{fragmentos/navegacion :: menu('residuos')}"></nav>
+
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>

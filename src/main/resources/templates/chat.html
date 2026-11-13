@@ -4,97 +4,244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chat con Eco | EcoUVG</title>
-    <link rel="stylesheet" th:href="@{/css/inicio.css}">
-    <link rel="stylesheet" th:href="@{/css/navegacion.css}">
-    <link rel="stylesheet" th:href="@{/css/chat.css}">
-    <script th:src="@{/js/navegacion.js}" defer></script>
-    <script th:src="@{/js/chat.js}" defer></script>
-    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
-</head>
-<body>
-    <th:block th:replace="~{fragmentos/navegacion :: cabecera('chat')}"></th:block>
-    <main class="contenedor-chat">
-        <aside class="historial-chat" aria-labelledby="titulo-historial">
-            <div class="cabecera-historial">
-                <h2 id="titulo-historial">Historial</h2>
-                <a class="nuevo-chat" th:href="@{/chat(nuevo=true)}">＋ Nuevo chat</a>
-            </div>
-            <nav id="lista-conversaciones" aria-label="Conversaciones guardadas" th:attr="data-chat-url=@{/chat}">
-                <p id="historial-vacio" th:if="${conversaciones.isEmpty()}">Sin conversaciones</p>
-                <a th:each="c : ${conversaciones}" th:href="@{/chat(conversacion=${c.id})}"
-                   th:text="${c.titulo}" th:attr="data-chat-id=${c.id},aria-current=${c.id == conversacionId ? 'page' : null}">Conversación</a>
-            </nav>
-        </aside>
-        <section class="chat" aria-labelledby="titulo-chat">
-            <header class="chat-header">
-                <div class="presentacion-eco">
-                    <span class="etiqueta-chat">ASISTENTE DE IA</span>
-                    <h1 id="titulo-chat">Eco</h1>
-                </div>
-                <img class="eco-cabecera" th:src="@{/img/Eco sentada feliz.png}" alt="Eco, la tortuga de EcoUVG">
-            </header>
 
-            <section class="mensajes" id="mensajes" role="log" aria-label="Conversación con Eco" aria-live="polite" aria-relevant="additions text">
-                <article class="fila-mensaje bot" id="bienvenida-chat" th:if="${turnos.isEmpty()}">
-                    <img class="avatar-chat avatar-eco" th:src="@{/img/Eco sentada feliz.png}" alt="Eco">
-                    <div class="contenido-mensaje">
-                        <span class="autor-chat">Eco</span>
-                        <div class="burbuja-chat">¿Qué residuo quieres reciclar?</div>
+    <link rel="stylesheet"
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
+
+    <link rel="stylesheet"
+          href="/css/chat.css"
+          th:href="@{/css/chat.css}">
+
+    <script src="/js/chat.js"
+            th:src="@{/js/chat.js}"
+            defer></script>
+
+    <meta name="_csrf"
+          th:if="${_csrf != null}"
+          th:content="${_csrf.token}">
+
+    <meta name="_csrf_header"
+          th:if="${_csrf != null}"
+          th:content="${_csrf.headerName}">
+</head>
+
+<body>
+    <aside th:replace="~{fragmentos/interfaz-chat :: lateral}"></aside>
+
+    <div class="pagina pagina-chat">
+        <header class="barra-superior">
+            <p>Tu rincón para cuidar el planeta</p>
+
+            <a class="usuario"
+               th:href="@{/perfil}"
+               aria-label="Ver mi perfil">
+                <span class="avatar" aria-hidden="true">🌱</span>
+
+                <div>
+                    <strong th:text="${usuario.nombre}">Usuario</strong>
+                    <span th:text="${usuario.nombreNivel}">Semilla</span>
+                </div>
+            </a>
+        </header>
+
+        <main class="contenedor-chat">
+            <aside class="historial-chat"
+                   aria-labelledby="titulo-historial">
+                <div class="cabecera-historial">
+                    <div>
+                        <p class="ceja-historial">TUS CONVERSACIONES</p>
+                        <h2 id="titulo-historial">Historial</h2>
                     </div>
-                </article>
-                <th:block th:each="turno : ${turnos}">
-                    <article class="fila-mensaje usuario">
-                        <span th:replace="~{chat :: avatarUsuario}"></span>
-                        <div class="contenido-mensaje">
-                            <span class="autor-chat">Tú</span>
-                            <div class="burbuja-chat" th:text="${turno.pregunta}"></div>
-                            <time class="hora-chat" th:datetime="${turno.creado}" data-fecha-guardada></time>
-                        </div>
-                    </article>
-                    <article class="fila-mensaje bot">
-                        <img class="avatar-chat avatar-eco" th:src="@{/img/Eco sentada feliz.png}" alt="Eco">
+
+                    <a class="nuevo-chat"
+                       th:href="@{/chat(nuevo=true)}">
+                        ＋ Nuevo chat
+                    </a>
+                </div>
+
+                <nav id="lista-conversaciones"
+                     aria-label="Conversaciones guardadas"
+                     th:attr="data-chat-url=@{/chat}">
+
+                    <p id="historial-vacio"
+                       th:if="${conversaciones.isEmpty()}">
+                        Tus conversaciones aparecerán aquí.
+                    </p>
+
+                    <a th:each="c : ${conversaciones}"
+                       th:href="@{/chat(conversacion=${c.id})}"
+                       th:text="${c.titulo}"
+                       th:attr="data-chat-id=${c.id},aria-current=${c.id == conversacionId ? 'page' : null}">
+                        Conversación
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="chat" aria-labelledby="titulo-chat">
+                <header class="chat-header">
+                    <div class="presentacion-eco">
+                        <span class="etiqueta-chat">ASISTENTE DE IA</span>
+
+                        <h1 id="titulo-chat">Pregúntale a Eco</h1>
+
+                        <p class="descripcion-chat">
+                            ¿Qué aprendemos hoy?
+                            Resolvamos tus dudas sobre reciclaje.
+                        </p>
+                    </div>
+
+                    <img class="eco-cabecera"
+                         th:src="@{/img/Eco sentada feliz.png}"
+                         alt="Eco, la tortuga de EcoUVG">
+                </header>
+
+                <section class="mensajes"
+                         id="mensajes"
+                         role="log"
+                         aria-label="Conversación con Eco"
+                         aria-live="polite"
+                         aria-relevant="additions text">
+
+                    <article class="fila-mensaje bot"
+                             id="bienvenida-chat"
+                             th:if="${turnos.isEmpty()}">
+                        <img class="avatar-chat avatar-eco"
+                             th:src="@{/img/Eco sentada feliz.png}"
+                             alt="Eco">
+
                         <div class="contenido-mensaje">
                             <span class="autor-chat">Eco</span>
-                            <div class="burbuja-chat" data-respuesta-guardada th:text="${turno.respuesta}"></div>
+
+                            <div class="burbuja-chat">¡Hola! Soy Eco 🐢💚 ¿Qué residuo quieres reciclar hoy?</div>
                         </div>
                     </article>
-                </th:block>
-            </section>
 
-            <div class="sugerencias-chat" id="sugerencias" aria-label="Preguntas sugeridas" th:attr="hidden=${!turnos.isEmpty() ? 'hidden' : null}">
-                <button type="button" data-pregunta="¿Cómo reciclo una botella de plástico?">♻️ Botellas de plástico</button>
-                <button type="button" data-pregunta="¿Dónde debo desechar las pilas usadas?">🔋 Pilas usadas</button>
-                <button type="button" data-pregunta="¿Puedo reciclar una caja de pizza con grasa?">📦 Cajas de pizza</button>
-            </div>
+                    <th:block th:each="turno : ${turnos}">
+                        <article class="fila-mensaje usuario">
+                            <span th:replace="~{chat :: avatarUsuario}"></span>
 
-            <div class="zona-escritura">
-                <p id="estado-chat" class="estado-chat" role="status"></p>
-                <form id="form-chat" class="form-chat" th:attr="data-url=@{/chat/preguntar},data-crear-url=@{/chat/conversaciones},data-conversacion-id=${conversacionId}">
-                    <label class="solo-lectores" for="pregunta">Tu mensaje para Eco</label>
-                    <textarea id="pregunta" name="pregunta" rows="1" placeholder="Escribe un mensaje…" maxlength="1000" required aria-describedby="ayuda-chat contador-chat"></textarea>
-                    <button type="submit" id="btn-enviar" aria-label="Enviar mensaje" title="Enviar mensaje">
-                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="m22 2-7 20-4-9L2 9 22 2Z"/>
-                            <path d="m22 2-11 11"/>
-                        </svg>
+                            <div class="contenido-mensaje">
+                                <span class="autor-chat">Tú</span>
+
+                                <div class="burbuja-chat"
+                                     th:text="${turno.pregunta}"></div>
+
+                                <time class="hora-chat"
+                                      th:datetime="${turno.creado}"
+                                      data-fecha-guardada></time>
+                            </div>
+                        </article>
+
+                        <article class="fila-mensaje bot">
+                            <img class="avatar-chat avatar-eco"
+                                 th:src="@{/img/Eco sentada feliz.png}"
+                                 alt="Eco">
+
+                            <div class="contenido-mensaje">
+                                <span class="autor-chat">Eco</span>
+
+                                <div class="burbuja-chat"
+                                     data-respuesta-guardada
+                                     th:text="${turno.respuesta}"></div>
+                            </div>
+                        </article>
+                    </th:block>
+                </section>
+
+                <div class="sugerencias-chat"
+                     id="sugerencias"
+                     aria-label="Preguntas sugeridas"
+                     th:attr="hidden=${!turnos.isEmpty() ? 'hidden' : null}">
+
+                    <button type="button"
+                            data-pregunta="¿Cómo reciclo una botella de plástico?">
+                        ♻️ Botellas de plástico
                     </button>
-                </form>
-                <div class="ayuda-chat">
-                    <span id="ayuda-chat">Enter para enviar · Shift + Enter para una nueva línea</span>
-                    <span id="contador-chat">0 / 1000</span>
+
+                    <button type="button"
+                            data-pregunta="¿Dónde debo desechar las pilas usadas?">
+                        🔋 Pilas usadas
+                    </button>
+
+                    <button type="button"
+                            data-pregunta="¿Puedo reciclar una caja de pizza con grasa?">
+                        📦 Cajas de pizza
+                    </button>
                 </div>
-            </div>
-        </section>
-    </main>
+
+                <div class="zona-escritura">
+                    <p id="estado-chat"
+                       class="estado-chat"
+                       role="status"></p>
+
+                    <form id="form-chat"
+                          class="form-chat"
+                          th:attr="data-url=@{/chat/preguntar},data-crear-url=@{/chat/conversaciones},data-conversacion-id=${conversacionId}">
+
+                        <label class="solo-lectores" for="pregunta">
+                            Tu mensaje para Eco
+                        </label>
+
+                        <textarea id="pregunta"
+                                  name="pregunta"
+                                  rows="1"
+                                  placeholder="Escribe tu pregunta para Eco…"
+                                  maxlength="1000"
+                                  required
+                                  aria-describedby="ayuda-chat contador-chat"></textarea>
+
+                        <button type="submit"
+                                id="btn-enviar"
+                                aria-label="Enviar mensaje"
+                                title="Enviar mensaje">
+                            <svg viewBox="0 0 24 24"
+                                 width="22"
+                                 height="22"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <path d="m22 2-7 20-4-9L2 9 22 2Z"/>
+                                <path d="m22 2-11 11"/>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="ayuda-chat">
+                        <span id="ayuda-chat">
+                            Enter para enviar · Shift + Enter para una nueva línea
+                        </span>
+
+                        <span id="contador-chat">0 / 1000</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <template id="avatar-eco">
-        <img class="avatar-chat avatar-eco" th:src="@{/img/Eco sentada feliz.png}" alt="Eco">
+        <img class="avatar-chat avatar-eco"
+             th:src="@{/img/Eco sentada feliz.png}"
+             alt="Eco">
     </template>
+
     <template id="avatar-usuario">
-        <span class="avatar-chat avatar-usuario" aria-label="Tú" th:fragment="avatarUsuario">
-            <span class="inicial-usuario" aria-hidden="true" th:text="${#strings.isEmpty(usuario.nombre) ? 'T' : #strings.substring(usuario.nombre, 0, 1)}">T</span>
-            <img th:if="${!#strings.isEmpty(usuario.fotoPerfil)}" th:src="@{/perfil/foto}" alt="Tu foto de perfil">
+        <span class="avatar-chat avatar-usuario"
+              aria-label="Tú"
+              th:fragment="avatarUsuario">
+
+            <span class="inicial-usuario"
+                  aria-hidden="true"
+                  th:text="${#strings.isEmpty(usuario.nombre) ? 'T' : #strings.substring(usuario.nombre, 0, 1)}">
+                T
+            </span>
+
+            <img th:if="${!#strings.isEmpty(usuario.fotoPerfil)}"
+                 th:src="@{/perfil/foto}"
+                 alt="Tu foto de perfil">
         </span>
     </template>
 </body>

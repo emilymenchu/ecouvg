@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <aside class="lateral" th:fragment="lateral">
+        <a class="marca" th:href="@{/inicio}">
+            ♻ Eco<span>UVG</span>
+        </a>
+
+        <p class="lateral-titulo">EXPLORA ECOUVG</p>
+
+        <nav class="menu" aria-label="Navegación principal">
+            <a th:href="@{/inicio}">
+                <span aria-hidden="true">🏡</span> Inicio
+            </a>
+
+            <a th:href="@{/residuos}">
+                <span aria-hidden="true">♻️</span> Residuos
+            </a>
+
+            <a class="activo"
+               th:href="@{/centros}"
+               aria-current="page">
+                <span aria-hidden="true">📍</span> Centros
+            </a>
+
+            <a th:href="@{/guia}">
+                <span aria-hidden="true">📖</span> Guía de reciclaje
+            </a>
+
+            <a th:href="@{/retos}">
+                <span aria-hidden="true">⭐</span> Retos
+            </a>
+
+            <a th:href="@{/arcade}">
+                <span aria-hidden="true">🎮</span> Eco Arcade
+            </a>
+        </nav>
+
+        <div class="lateral-pie">
+            <p>
+                Pequeñas acciones.<br>
+                Un planeta más limpio.
+            </p>
+
+            <form th:action="@{/logout}" method="post">
+                <button class="boton-salir" type="submit">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </aside>
+</body>
+</html>

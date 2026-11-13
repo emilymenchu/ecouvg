@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.ZoneId; 
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,18 +26,13 @@ public class ControladorLogin {
     private final ServicioUsuario servicioUsuario;
     private final ServicioSocial servicioSocial;
     private final ServicioReto servicioReto;
+    private final gt.edu.uvg.ecouvg.servicio.ServicioMisionArcade misionArcade;
 
-    public ControladorLogin(ServicioUsuario servicioUsuario, ServicioSocial servicioSocial, ServicioReto servicioReto) {
+    public ControladorLogin(ServicioUsuario servicioUsuario, ServicioSocial servicioSocial, ServicioReto servicioReto, gt.edu.uvg.ecouvg.servicio.ServicioMisionArcade misionArcade) {
         this.servicioUsuario = servicioUsuario;
         this.servicioSocial = servicioSocial;
         this.servicioReto = servicioReto;
-    }
-
-    @GetMapping("/")
-    public String entrada(Authentication authentication) {
-        boolean sesionActiva = authentication != null && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken);
-        return sesionActiva ? "redirect:/inicio" : "redirect:/login";
+        this.misionArcade = misionArcade;
     }
 
     @GetMapping("/login")
@@ -92,6 +86,7 @@ public class ControladorLogin {
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("rachaVigente", rachaVigente);
+        model.addAttribute("misionArcade", misionArcade.consultar(carnet));
 
         model.addAttribute(
             "amigosInicio",

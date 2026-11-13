@@ -6,8 +6,8 @@
     <title th:text="${centro.nombre + ' | EcoUVG'}">Centro | EcoUVG</title>
 
     <link rel="stylesheet"
-          href="../static/css/centros.css"
-          th:href="@{/css/centros.css}">
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
 
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -15,8 +15,12 @@
           crossorigin="anonymous">
 
     <link rel="stylesheet"
-          th:href="@{/css/mapa-centros.css}"
-          href="/css/mapa-centros.css">
+          href="/css/mapa-centros.css"
+          th:href="@{/css/mapa-centros.css}">
+
+    <link rel="stylesheet"
+          href="/css/centros.css"
+          th:href="@{/css/centros.css}">
 
     <script defer
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -24,150 +28,151 @@
             crossorigin="anonymous"></script>
 
     <script defer
-            th:src="@{/js/mapa-centros.js}"
-            src="/js/mapa-centros.js"></script>
-
-    <link rel="stylesheet"
-          th:href="@{/css/navegacion.css}"
-          href="/css/navegacion.css">
+            src="/js/mapa-centros.js"
+            th:src="@{/js/mapa-centros.js}"></script>
 </head>
 
 <body>
-    <header class="cabecera">
-        <a class="marca" th:href="@{/inicio}">
-            <span aria-hidden="true">♻</span> EcoUVG
-        </a>
+    <aside th:replace="~{fragmentos/interfaz-centros :: lateral}"></aside>
 
-        <a th:href="@{/centros}">← Todos los centros</a>
-    </header>
+    <div class="pagina pagina-centros">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
 
-    <main class="ficha">
-        <section class="intro intro-detalle"
-                 aria-labelledby="titulo-centro">
-            <p class="ceja">PUNTO DE ACOPIO</p>
+        <main class="contenido-centros ficha-centro">
+            <a class="volver-centros" th:href="@{/centros}">
+                ← Todos los centros
+            </a>
 
-            <h1 id="titulo-centro" th:text="${centro.nombre}">
-                Nombre del centro
-            </h1>
+            <section class="intro" aria-labelledby="titulo-centro">
+                <p class="ceja">PUNTO DE ACOPIO</p>
 
-            <p class="direccion" th:text="${centro.ubicacion}">
-                Dirección del centro
-            </p>
-        </section>
+                <h1 id="titulo-centro" th:text="${centro.nombre}">
+                    Nombre del centro
+                </h1>
 
-        <section class="tarjeta">
-            <h2>Antes de tu visita</h2>
+                <p th:text="${centro.ubicacion}">
+                    Dirección del centro
+                </p>
+            </section>
 
-            <dl>
-                <dt>Horario de recepción</dt>
-                <dd th:text="${centro.horario ?: 'Por confirmar con el centro'}">
-                </dd>
+            <section class="tarjeta-centro informacion-centro"
+                     aria-labelledby="titulo-visita">
+                <h2 id="titulo-visita">Antes de tu visita</h2>
 
-                <dt>Información del punto</dt>
-                <dd th:text="${centro.descripcion}"></dd>
-            </dl>
+                <dl>
+                    <dt>Horario de recepción</dt>
+                    <dd th:text="${centro.horario ?: 'Por confirmar con el centro'}">
+                        Por confirmar con el centro
+                    </dd>
 
-            <h2>Materiales que recibe</h2>
+                    <dt>Información del punto</dt>
+                    <dd th:text="${centro.descripcion}"></dd>
+                </dl>
 
-            <div class="materiales">
-                <span th:each="residuo : ${centro.residuosAceptados}"
-                      th:text="${residuo.nombre}">
-                </span>
+                <h2>Materiales que recibe</h2>
 
-                <span th:if="${#lists.isEmpty(centro.residuosAceptados)}">
-                    Por confirmar
-                </span>
-            </div>
+                <div class="materiales">
+                    <span th:each="residuo : ${centro.residuosAceptados}"
+                          th:text="${residuo.nombre}">
+                        Material
+                    </span>
 
-            <p th:if="${centro.fuenteUrl != null}">
-                <a th:href="${centro.fuenteUrl}"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    Consultar fuente del centro ↗
-                </a>
-            </p>
-
-            <p class="nota" th:if="${centro.fechaConsulta != null}">
-                Fuente consultada:
-                <span th:text="${centro.fechaConsulta}"></span>.
-                Confirma las condiciones antes de trasladarte.
-            </p>
-        </section>
-
-        <section class="mapa-panel" aria-labelledby="titulo-mapa">
-            <div class="mapa-cabecera">
-                <div>
-                    <p class="ceja">UBICACIÓN DEL CENTRO</p>
-                    <h2 id="titulo-mapa">Ubica este centro</h2>
+                    <span th:if="${#lists.isEmpty(centro.residuosAceptados)}">
+                        Por confirmar
+                    </span>
                 </div>
 
-                <button id="mapa-encuadrar" type="button" disabled>
-                    Centrar ubicación
-                </button>
-            </div>
-
-            <p id="mapa-estado"
-               class="mapa-estado"
-               role="status"
-               aria-live="polite">
-                Cargando ubicación…
-            </p>
-
-            <p id="mapa-aviso"
-               class="mapa-aviso"
-               role="status"
-               hidden></p>
-
-            <div id="mapa-centros"
-                 class="mapa-lienzo"
-                 role="region"
-                 aria-label="Mapa de ubicación del centro"
-                 aria-describedby="mapa-ayuda"
-                 aria-busy="true"
-                 tabindex="0"
-                 data-modo="detalle"
-                 hidden
-                 th:attr="data-api-url=@{/api/centros/mapa/{id}(id=${centro.id})},data-centro-id=${centro.id}"
-                 data-tiles-url="https://tile.openstreetmap.org/{z}/{x}/{y}.png">
-            </div>
-
-            <div class="mapa-pie">
-                <p id="mapa-ayuda">
-                    Usa + y − para acercar o alejar el mapa.
-                    Pulsa el punto para consultar sus datos.
+                <p th:if="${centro.fuenteUrl != null}">
+                    <a class="enlace-fuente"
+                       th:href="${centro.fuenteUrl}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Consultar fuente del centro ↗
+                    </a>
                 </p>
 
-                <button id="mapa-reintentar" type="button" hidden>
-                    Reintentar carga
-                </button>
-
-                <a id="mapa-login"
-                   th:href="@{/login}"
-                   href="/login"
-                   hidden>
-                    Volver a iniciar sesión
-                </a>
-            </div>
-
-            <noscript>
-                <p class="mapa-aviso">
-                    Activa JavaScript para ver el mapa.
-                    Puedes consultar la dirección del centro arriba.
+                <p class="nota" th:if="${centro.fechaConsulta != null}">
+                    Fuente consultada:
+                    <span th:text="${centro.fechaConsulta}"></span>.
+                    Confirma las condiciones antes de trasladarte.
                 </p>
-            </noscript>
-        </section>
-         <a class="eco-flotante"
-            th:href="@{/chat}"
-            aria-label="Hablar con Eco, asistente de reciclaje">
+            </section>
 
-            <span class="eco-globo">Pregúntale a Eco</span>
+            <section class="mapa-panel" aria-labelledby="titulo-mapa">
+                <div class="mapa-cabecera">
+                    <div>
+                        <p class="ceja">UBICACIÓN DEL CENTRO</p>
+                        <h2 id="titulo-mapa">Ubica este centro</h2>
+                    </div>
 
-             <img src="../static/img/Eco nadando.png"
-                th:src="@{/img/Eco nadando.png}"
-                alt="">
-            </a>
-    </main>
+                    <button id="mapa-encuadrar"
+                            class="boton-centros secundario"
+                            type="button"
+                            disabled>
+                        Centrar ubicación
+                    </button>
+                </div>
 
-    <nav th:replace="~{fragmentos/navegacion :: menu('centros')}"></nav>
+                <p id="mapa-estado"
+                   class="mapa-estado"
+                   role="status"
+                   aria-live="polite">
+                    Cargando ubicación…
+                </p>
+
+                <p id="mapa-aviso"
+                   class="mapa-aviso"
+                   role="status"
+                   hidden></p>
+
+                <div id="mapa-centros"
+                     class="mapa-lienzo"
+                     role="region"
+                     aria-label="Mapa de ubicación del centro"
+                     aria-describedby="mapa-ayuda"
+                     aria-busy="true"
+                     tabindex="0"
+                     data-modo="detalle"
+                     hidden
+                     th:attr="data-api-url=@{/api/centros/mapa/{id}(id=${centro.id})},data-centro-id=${centro.id}"
+                     data-tiles-url="https://tile.openstreetmap.org/{z}/{x}/{y}.png">
+                </div>
+
+                <div class="mapa-pie">
+                    <p id="mapa-ayuda">
+                        Usa + y − para acercar o alejar el mapa.
+                        Pulsa el punto para consultar sus datos.
+                    </p>
+
+                    <button id="mapa-reintentar"
+                            class="boton-centros secundario"
+                            type="button"
+                            hidden>
+                        Reintentar carga
+                    </button>
+
+                    <a id="mapa-login"
+                       th:href="@{/login}"
+                       href="/login"
+                       hidden>
+                        Volver a iniciar sesión
+                    </a>
+                </div>
+
+                <noscript>
+                    <p class="mapa-aviso">
+                        Activa JavaScript para ver el mapa.
+                        Puedes consultar la dirección del centro arriba.
+                    </p>
+                </noscript>
+            </section>
+        </main>
+
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
+
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>

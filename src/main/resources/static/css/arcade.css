@@ -12,3 +12,5 @@
 .ayuda li{border-radius:10px;padding:5px}.ayuda li canvas{width:32px;height:32px;flex:none}
 .ayuda li.material-activo{background:#edf4e3;outline:2px solid #7d995c;font-weight:800}
 @media(max-width:580px){.objetivo-panel{padding:10px;gap:10px;min-height:86px}.objetivo-panel canvas{width:52px;height:52px}.objetivo-panel .objetivo{font-size:15px}.recogida-panel p{font-size:12px}}
+
+.mision-arcade{border:1px solid #c4d9ad;border-radius:18px;background:#edf4e4;padding:20px 24px;margin-bottom:24px}.mision-arcade h2{font-size:21px;margin-bottom:8px}.mision-arcade p{margin-bottom:8px;font-size:14px}#estado-mision{font-weight:750}.marcador{flex-wrap:wrap}@media(max-width:580px){.marcador{gap:12px}.marcador strong{font-size:20px}}
