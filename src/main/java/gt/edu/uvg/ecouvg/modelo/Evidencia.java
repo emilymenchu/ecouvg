@@ -1,5 +1,4 @@
 package gt.edu.uvg.ecouvg.modelo;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -89,24 +88,8 @@ public class Evidencia {
     public String getTituloReto() {
         return progresoReto.getTituloReto(); 
     }
-    //para evitar que se guarden evidencias sin revisar
-    public void expirar(){
-        if (estado!= EstadoEvidencia.PENDIENTE){
-            throw new IllegalArgumentException("Solo evidencias que esten pendientes van a expirar");
-        }
-        estado= EstadoEvidencia.EXPIRADA; 
-    }
 
-    public boolean estaVencida(LocalDate fechaActual){
-        if (fechaActual== null){
-            throw new IllegalArgumentException("es obligatorio tener una fecha actual _-_"); 
-        }
-        if (fechaEnvio == null){
-            throw new IllegalStateException("Sin fecha de envio no se puede estimar su estado _-_"); 
 
-        }
-        LocalDate fechaRegistro = fechaEnvio.toLocalDate(); 
-        return fechaRegistro.isBefore(fechaActual); 
-    }
+   
 
 }

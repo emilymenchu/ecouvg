@@ -71,7 +71,7 @@ public class ControladorReto {
     @PostMapping("/retos/iniciar/{idReto}")
     public String inicioReto(@PathVariable Long idReto, Authentication authentication, RedirectAttributes atributos){
         if (authentication == null || !authentication.isAuthenticated()|| "anonymousUser".equals(authentication.getPrincipal())){
-            return "redirect/:login"; 
+            return "redirect:/login";
         }
         try{
             String carnet = authentication.getName();

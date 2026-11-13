@@ -16,8 +16,8 @@ archivoFoto?.addEventListener("change", () => {
     archivoFoto.setCustomValidity("");
     const foto = archivoFoto.files[0];
     if (!foto) return;
-    if (foto.size > 5 * 1024 * 1024) {
-        archivoFoto.setCustomValidity("La fotografía no debe superar los 5 MB.");
+    if (foto.size > 4 * 1024 * 1024) {
+        archivoFoto.setCustomValidity("La fotografía no debe superar los 4 MB.");
         archivoFoto.reportValidity();
         return;
     }

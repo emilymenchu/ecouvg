@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="../static/css/recompensa.css" th:href="@{/css/recompensa.css}">
+
+    <title>EcoRecompensas | EcoUVG</title>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>EcoRecompensas</h1>
+
+    <section class="saldo">
+        <h2>Tus EcoPuntos</h2>
+        <p>
+            <strong th:text="${usuario != null ? usuario.puntos : 0}">
+                0
+            </strong>
+            EcoPuntos disponibles
+        </p>
+    </section>
+
+    <section class="catalogo">
+
+        <article class="recompensa">
+            <h2>5 horas beca</h2>
+            <p>50 EcoPuntos</p>
+            <button type="button">
+                Canjear
+            </button>
+        </article>
+
+        <article class="recompensa">
+            <h2>Descuento en MCmenú</h2>
+            <p>150 EcoPuntos</p>
+            <button type="button">
+                Canjear
+            </button>
+        </article>
+    </section>
+
+    <p class="aviso">
+        Esta sección es una demostración.
+        Los canjes no descuentan EcoPuntos reales.
+    </p>
+
+</div>
+
+</body>
+</html>

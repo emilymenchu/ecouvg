@@ -1,0 +1,17 @@
+# Lista de archivos permitidos para la construcción.
+**
+!Dockerfile
+!.dockerignore
+!pom.xml
+!src/
+!src/main/
+!src/main/**
+**/.env
+**/.env.*
+**/application-local.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.log
+**/.DS_Store

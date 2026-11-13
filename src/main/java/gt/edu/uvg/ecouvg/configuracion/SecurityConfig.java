@@ -1,5 +1,6 @@
 package gt.edu.uvg.ecouvg.configuracion;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,12 +20,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(auth ->
-                auth.requestMatchers(
+                auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                .requestMatchers(
+                        "/",
+                        "/error",
                         "/login",
                         "/registro",
                         "/recuperar",
                         "/verificar-codigo",
                         "/nueva-contrasena",
+                        "/favicon.ico",
                         "/css/**",
                         "/js/**",
                         "/img/**"

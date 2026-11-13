@@ -51,7 +51,7 @@ class ControladorChatTest {
         mvc.perform(get("/chat").principal(new UsernamePasswordAuthenticationToken("123", "clave")))
             .andExpect(status().isOk()).andExpect(view().name("chat"))
             .andExpect(model().attribute("usuario", usuario))
-            .andExpect(content().string(containsString("<h1 id=\"titulo-chat\">Eco</h1>")))
+            .andExpect(content().string(containsString("<h1 id=\"titulo-chat\">Pregúntale a Eco</h1>")))
             .andExpect(content().string(not(containsString("EcoBot"))))
             .andExpect(content().string(containsString("id=\"avatar-eco\"")))
             .andExpect(content().string(containsString("src=\"/perfil/foto\"")))
@@ -62,7 +62,7 @@ class ControladorChatTest {
     @Test void sinFotoUsaLaInicial() throws Exception {
         mvc.perform(get("/chat").principal(new UsernamePasswordAuthenticationToken("123", "clave")))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("class=\"inicial-usuario\" aria-hidden=\"true\">P</span>")))
+            .andExpect(content().string(org.hamcrest.Matchers.matchesPattern("(?s).*class=\"inicial-usuario\"\\s+aria-hidden=\"true\"\\s*>\\s*P\\s*</span>.*")))
             .andExpect(content().string(not(containsString("src=\"/perfil/foto\""))));
     }
 

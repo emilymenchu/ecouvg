@@ -2,6 +2,7 @@ package gt.edu.uvg.ecouvg.modelo;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
@@ -162,6 +163,13 @@ public class Usuario implements Comparable<Usuario> {
         CalculadorNivel calculador = new CalculadorNivel();
         return calculador.nombreNivel(getNivel());
     }
+
+    @Transient
+    public int getRachaVigente() {
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Guatemala"));
+        return obtenerRacha(hoy);
+    }
+
 
     public void sumarPuntos(int cantidad) {
         if (cantidad <= 0) {
