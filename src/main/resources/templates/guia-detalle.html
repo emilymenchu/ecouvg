@@ -3,97 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detalle de reciclaje | EcoUVG</title>
+
+    <title th:text="${categoria.nombre + ' | EcoUVG'}">
+        Detalle de reciclaje | EcoUVG
+    </title>
 
     <link rel="stylesheet"
-          href="../static/css/guia.css"
+          href="/css/inicio.css"
+          th:href="@{/css/inicio.css}">
+
+    <link rel="stylesheet"
+          href="/css/guia.css"
           th:href="@{/css/guia.css}">
-
-    <link rel="stylesheet"
-          href="../static/css/navegacion.css"
-          th:href="@{/css/navegacion.css}">
 </head>
 
 <body>
-    <header class="guia-cabecera">
-        <div class="guia-barra">
-            <a th:href="@{/inicio}" class="marca">
-                ♻ Eco<span>UVG</span>
+    <aside th:replace="~{fragmentos/interfaz-guia :: lateral}"></aside>
+
+    <div class="pagina pagina-guia">
+        <header th:replace="~{fragmentos/interfaz-residuos :: cabecera}"></header>
+
+        <main class="guia guia-ficha">
+            <a class="volver" th:href="@{/guia(q=${q})}">
+                ← Volver a la guía
             </a>
 
-            <span class="frase-cabecera">Aprende a separar</span>
-        </div>
-    </header>
+            <section class="guia-presentacion"
+                     th:classappend="${categoria.color}"
+                     aria-labelledby="titulo-categoria">
 
-    <main class="guia guia-ficha">
-        <a class="volver" th:href="@{/guia(q=${q})}">
-            ← Volver a la guía
-        </a>
-
-        <section class="guia-presentacion"
-                 th:classappend="${categoria.color}"
-                 aria-labelledby="titulo-categoria">
-
-            <span class="contenedor-dibujo" aria-hidden="true">
-                <span class="tapa"></span>
-                <span class="cuerpo">
-                    <span th:text="${categoria.simbolo}">♻</span>
+                <span class="contenedor-dibujo" aria-hidden="true">
+                    <span class="tapa"></span>
+                    <span class="cuerpo">
+                        <span th:text="${categoria.simbolo}">♻</span>
+                    </span>
                 </span>
-            </span>
 
-            <div>
-                <p class="ceja">GUÍA DE SEPARACIÓN</p>
+                <div class="guia-presentacion-texto">
+                    <p class="ceja">GUÍA DE SEPARACIÓN</p>
 
-                <h1 id="titulo-categoria"
-                    th:text="${categoria.nombre}">
-                    Nombre de la categoría
-                </h1>
+                    <h1 id="titulo-categoria"
+                        th:text="${categoria.nombre}">
+                        Nombre de la categoría
+                    </h1>
 
-                <p th:text="${categoria.descripcion}">
-                    Descripción de la categoría.
-                </p>
-            </div>
-        </section>
+                    <p th:text="${categoria.descripcion}">
+                        Descripción de la categoría.
+                    </p>
+                </div>
+            </section>
 
-        <section class="guia-contenido">
-            <h2>Ejemplos de residuos</h2>
-            <p>Confirma su aceptación antes de depositarlos.</p>
+            <article class="guia-contenido"
+                     aria-label="Información de separación">
+                <section class="guia-bloque"
+                         aria-labelledby="titulo-ejemplos">
+                    <h2 id="titulo-ejemplos">Ejemplos de residuos</h2>
 
-            <ul>
-                <li th:each="ejemplo : ${categoria.ejemplos}"
-                    th:text="${ejemplo}">
-                    Ejemplo de residuo
-                </li>
-            </ul>
+                    <p>Confirma su aceptación antes de depositarlos.</p>
 
-            <h2>Antes de llevarlos</h2>
+                    <ul class="guia-ejemplos">
+                        <li th:each="ejemplo : ${categoria.ejemplos}"
+                            th:text="${ejemplo}">
+                            Ejemplo de residuo
+                        </li>
+                    </ul>
+                </section>
 
-            <p th:text="${categoria.preparacion}">
-                Instrucciones para preparar los residuos.
+                <section class="guia-bloque"
+                         aria-labelledby="titulo-preparacion">
+                    <h2 id="titulo-preparacion">Antes de llevarlos</h2>
+
+                    <div class="guia-preparacion">
+                        <p th:text="${categoria.preparacion}">
+                            Instrucciones para preparar los residuos.
+                        </p>
+                    </div>
+                </section>
+
+                <div class="guia-acciones">
+                    <a class="guia-boton" th:href="@{/centros}">
+                        Consultar centros de reciclaje →
+                    </a>
+
+                    <a class="guia-boton guia-boton-secundario"
+                       th:href="@{/guia(q=${q})}">
+                        Ver otras categorías
+                    </a>
+                </div>
+            </article>
+
+            <p class="guia-nota">
+                Los colores son ilustrativos. Sigue la rotulación del
+                contenedor y confirma qué recibe cada centro.
             </p>
 
-            <a class="guia-boton" th:href="@{/centros}">
-                Consultar centros de reciclaje
-            </a>
-        </section>
+            <p class="guia-fuente">
+                Referencia educativa:
+                <a th:href="${categoria.fuenteUrl}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    EPA · Consultar orientación ↗
+                </a>.
+                Consulta: 15/10/2026. No es una norma de colores de
+                Guatemala ni confirma la aceptación en un centro local.
+            </p>
+        </main>
 
-        <p class="guia-nota">
-            Los colores son ilustrativos. Sigue la rotulación del
-            contenedor y confirma qué recibe cada centro.
-        </p>
+        <footer>
+            EcoUVG · Construyamos una comunidad más verde.
+        </footer>
+    </div>
 
-        <p class="guia-fuente">
-            Referencia educativa:
-            <a th:href="${categoria.fuenteUrl}"
-               target="_blank"
-               rel="noopener noreferrer">
-                EPA · Consultar orientación ↗
-            </a>.
-            Consulta: 15/10/2026. No es una norma de colores de
-            Guatemala ni confirma la aceptación en un centro local.
-        </p>
-    </main>
-
-    <nav th:replace="~{fragmentos/navegacion :: menu('guia')}"></nav>
+    <a th:replace="~{fragmentos/interfaz-residuos :: eco}"></a>
 </body>
 </html>

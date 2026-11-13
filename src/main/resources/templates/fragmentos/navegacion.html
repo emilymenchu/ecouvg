@@ -1,86 +1,98 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
-<nav class="navegacion" aria-label="Navegación principal" th:fragment="menu(seccion)">
-<a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'" th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}"><span aria-hidden="true">⌂</span>Inicio</a>
-<a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'" th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}"><span aria-hidden="true">♻</span>Residuos</a>
-<a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}"><span aria-hidden="true">▤</span>Guía</a>
-<a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
-<a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
-<a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'" th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span>Arcade</a>
-<a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}"><span aria-hidden="true">👤</span>Perfil</a>
-<a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'" th:attr="aria-current=${seccion == 'chat' ? 'page' : null}"><span aria-hidden="true">💬</span>Eco</a>
-</nav>
-<th:block th:fragment="cabecera(seccion)">
-    <header class="encabezado">
-        <div class="barra">
-            <button class="abrir-menu"
-                    id="abrir-menu"
-                    type="button"
-                    aria-haspopup="dialog"
-                    aria-controls="menu-lateral"
-                    aria-expanded="false">
-                <span aria-hidden="true">🐚</span> Menú
-            </button>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-            <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
-
-            <form class="sesion" th:action="@{/logout}" method="post">
-                <button class="boton-salir" type="submit">
-                    Cerrar sesión
+<body>
+    <nav class="navegacion" aria-label="Navegación principal" th:fragment="menu(seccion)">
+        <a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}"><span aria-hidden="true">⌂</span>Inicio</a>
+        <a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}"><span
+                aria-hidden="true">♻</span>Residuos</a>
+        <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'guia' ? 'page' : null}"><span aria-hidden="true">▤</span>Guía</a>
+        <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'retos' ? 'page' : null}"><span aria-hidden="true">✓</span>Retos</a>
+        <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'centros' ? 'page' : null}"><span aria-hidden="true">⌖</span>Centros</a>
+        <a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span>Arcade</a>
+        <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}"><span aria-hidden="true">👤</span>Perfil</a>
+        <a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'"
+            th:attr="aria-current=${seccion == 'chat' ? 'page' : null}"><span aria-hidden="true">💬</span>Eco</a>
+    </nav>
+    <th:block th:fragment="cabecera(seccion)">
+        <header class="encabezado">
+            <div class="barra">
+                <button class="abrir-menu" id="abrir-menu" type="button" aria-haspopup="dialog"
+                    aria-controls="menu-lateral" aria-expanded="false">
+                    <span aria-hidden="true">🐚</span> Menú
                 </button>
-            </form>
-        </div>
-    </header>
 
-    <dialog class="menu-lateral"
-            id="menu-lateral"
-            aria-labelledby="titulo-menu">
+                <a th:href="@{/inicio}" class="marca">♻ EcoUVG</a>
 
-        <div class="cabecera-menu">
-            <h2 id="titulo-menu">Explora EcoUVG</h2>
+                <form class="sesion" th:action="@{/logout}" method="post">
+                    <button class="boton-salir" type="submit">
+                        Cerrar sesión
+                    </button>
+                </form>
+            </div>
+        </header>
 
-            <button class="cerrar-menu"
-                    id="cerrar-menu"
-                    type="button"
-                    aria-label="Cerrar menú"
-                    autofocus>
-                ✕
-            </button>
-        </div>
+        <dialog class="menu-lateral" id="menu-lateral" aria-labelledby="titulo-menu">
 
-        <p class="descripcion-menu" th:if="${seccion != 'perfil' and seccion != 'chat'}">
-            Un pequeño paso para cuidar el planeta.
-        </p>
+            <div class="cabecera-menu">
+                <h2 id="titulo-menu">Explora EcoUVG</h2>
 
-        <nav class="enlaces-menu" aria-label="Navegación principal">
-            <a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'" th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}">
-                <span aria-hidden="true">🏡</span> Inicio
-            </a>
+                <button class="cerrar-menu" id="cerrar-menu" type="button" aria-label="Cerrar menú" autofocus>
+                    ✕
+                </button>
+            </div>
 
-            <a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'" th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}">
-                <span aria-hidden="true">♻️</span> Residuos
-            </a>
+            <p class="descripcion-menu" th:if="${seccion != 'perfil' and seccion != 'chat'}">
+                Un pequeño paso para cuidar el planeta.
+            </p>
 
-            <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'" th:attr="aria-current=${seccion == 'centros' ? 'page' : null}">
-                <span aria-hidden="true">📍</span> Centros de reciclaje
-            </a>
+            <nav class="enlaces-menu" aria-label="Navegación principal">
+                <a th:href="@{/inicio}" th:classappend="${seccion == 'inicio'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'inicio' ? 'page' : null}">
+                    <span aria-hidden="true">🏡</span> Inicio
+                </a>
 
-            <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'" th:attr="aria-current=${seccion == 'guia' ? 'page' : null}">
-                <span aria-hidden="true">📖</span> Guía de reciclaje
-            </a>
+                <a th:href="@{/residuos}" th:classappend="${seccion == 'residuos'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'residuos' ? 'page' : null}">
+                    <span aria-hidden="true">♻️</span> Residuos
+                </a>
 
-            <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'" th:attr="aria-current=${seccion == 'retos' ? 'page' : null}">
-                <span aria-hidden="true">⭐</span> Retos
-            </a>
-            <a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'" th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span> Eco Arcade</a>
-            <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'" th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}">
-                <span aria-hidden="true">👤</span> Mi perfil
-            </a>
-            <a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'" th:attr="aria-current=${seccion == 'chat' ? 'page' : null}">
-                <span aria-hidden="true">💬</span> Chatea con Eco
-            </a>
-        </nav>
-    </dialog>
+                <a th:href="@{/centros}" th:classappend="${seccion == 'centros'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'centros' ? 'page' : null}">
+                    <span aria-hidden="true">📍</span> Centros de reciclaje
+                </a>
 
-</th:block>
-</body></html>
+                <a th:href="@{/guia}" th:classappend="${seccion == 'guia'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'guia' ? 'page' : null}">
+                    <span aria-hidden="true">📖</span> Guía de reciclaje
+                </a>
+
+                <a th:href="@{/retos}" th:classappend="${seccion == 'retos'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'retos' ? 'page' : null}">
+                    <span aria-hidden="true">⭐</span> Retos
+                </a>
+                <a th:href="@{/arcade}" th:classappend="${seccion == 'arcade'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'arcade' ? 'page' : null}"><span aria-hidden="true">🎮</span> Eco
+                    Arcade</a>
+                <a th:href="@{/perfil}" th:classappend="${seccion == 'perfil'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'perfil' ? 'page' : null}">
+                    <span aria-hidden="true">👤</span> Mi perfil
+                </a>
+                <a th:href="@{/chat}" th:classappend="${seccion == 'chat'} ? 'activo'"
+                    th:attr="aria-current=${seccion == 'chat' ? 'page' : null}">
+                    <span aria-hidden="true">💬</span> Chatea con Eco
+                </a>
+            </nav>
+        </dialog>
+
+    </th:block>
+</body>
+
+</html>

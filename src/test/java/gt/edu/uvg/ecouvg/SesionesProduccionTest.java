@@ -1,7 +1,9 @@
 package gt.edu.uvg.ecouvg;
 
 import gt.edu.uvg.ecouvg.modelo.Usuario;
+import gt.edu.uvg.ecouvg.modelo.CentroReciclaje;
 import gt.edu.uvg.ecouvg.repositorio.RepositorioUsuario;
+import gt.edu.uvg.ecouvg.repositorio.RepositorioCentro;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -35,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SesionesProduccionTest {
     @LocalServerPort int puerto;
     @Autowired RepositorioUsuario usuarios;
+    @Autowired RepositorioCentro centros;
     @Autowired PasswordEncoder encoder;
     @Autowired JdbcTemplate jdbc;
     @Autowired PlatformTransactionManager transacciones;
@@ -59,6 +62,13 @@ class SesionesProduccionTest {
         assertEquals(302, autenticado.statusCode());
         assertTrue(autenticado.headers().firstValue("Location").orElseThrow().endsWith("/inicio"));
         cookie = cookie(autenticado);
+        var centro = centros.save(new CentroReciclaje("Centro de prueba", "Zona de prueba", 14.6, -90.5,
+            "Por confirmar", "Punto de recepción", java.util.List.of()));
+        for (String ruta : new String[]{"/perfil", "/centros", "/centros/" + centro.getId(), "/guia", "/residuos", "/retos", "/evidencias/enviar/1"}) {
+            var pagina = enviar("GET", ruta, cookie, null);
+            assertEquals(200, pagina.statusCode(), "La plantilla combinada debe renderizarse: " + ruta);
+            assertFalse(pagina.body().contains("<<<<<<<"));
+        }
         var entradaAutenticada = enviar("GET", "/", cookie, null);
         assertEquals(302, entradaAutenticada.statusCode());
         assertTrue(entradaAutenticada.headers().firstValue("Location").orElseThrow().endsWith("/inicio"));

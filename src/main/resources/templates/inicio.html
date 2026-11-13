@@ -39,6 +39,11 @@
             <a th:href="@{/retos}">
                 <span aria-hidden="true">⭐</span> Retos
             </a>
+
+            <a th:href="@{/arcade}">
+                <span aria-hidden="true">🎮</span>
+                Eco Arcade
+            </a>
         </nav>
 
         <div class="lateral-pie">
@@ -106,8 +111,6 @@
                                 Puntos XP
                             </p>
 
-
-
                             <p class="dato">
                                 <span aria-hidden="true">🌱</span>
                                 <span>Nivel:</span>
@@ -118,10 +121,9 @@
                         </div>
                     </div>
 
-                    <img class="mascota"
-                        src="../static/img/Eco sentada feliz.png"
-                        th:src="@{/img/Eco sentada feliz.png}"
-                        alt="Eco, la tortuga mascota, sentada y feliz">
+                <img class="mascota" 
+                    th:src="@{/img/{archivo}(archivo=${imagenEco})}" 
+                    alt="Eco, tu compañera de reciclaje">
                 </section>
                 <div class="fila-tarjetas">
                 <section class="tarjeta amigos" aria-labelledby="titulo-amigos">

@@ -64,7 +64,7 @@ class ControladorPersonasTest {
         when(social.buscar("nadie", 0)).thenReturn(Page.empty());
         mvc.perform(get("/personas").param("q", "nadie").principal(autenticacion))
             .andExpect(status().isOk()).andExpect(content().string(
-                org.hamcrest.Matchers.matchesPattern("(?s).*No\\s+se\\s+encontraron\\s+personas\\..*")));
+                org.hamcrest.Matchers.matchesPattern("(?s).*No\\s+se\\s+encontraron\\s+personas\\.?\\s*</h2>.*")));
     }
     @Test void seguirUsaLaCuentaDeLaSesionAunqueSeEnvieOtroId() throws Exception {
         mvc.perform(post("/personas/2/seguir").param("usuarioId", "999").principal(autenticacion))

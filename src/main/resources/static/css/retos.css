@@ -1,408 +1,400 @@
-/* Colores */
-:root {
-    --verde: #245c40;
-    --texto: #23434c;
-    --gris: #526d73;
-    --borde: #d3e5e5;
-    --arena: #faf6ed;
-    --mar-claro: #e1f5fb;
-}
+/* Se carga después de inicio.css. */
 
-/* Configuración general */
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: var(--arena);
-    color: var(--texto);
-    line-height: 1.6;
-}
-
-a {
-    color: var(--verde);
-}
-
-a:focus-visible {
-    outline: 3px solid #ad7117;
-    outline-offset: 4px;
-}
-
-/* Encabezado */
-.retos-cabecera {
-    background: #f5fcff;
-    border-bottom: 1px solid #cce5ec;
-}
-
-.retos-barra {
-    max-width: 1050px;
-    margin: 0 auto;
-    padding: 18px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 18px;
-}
-
-.marca {
-    color: var(--verde);
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.marca span {
-    color: #68823e;
-}
-
-.frase-cabecera {
-    color: var(--gris);
-    font-size: 14px;
-}
-
-/* Contenido */
-.contenedor {
+/* Distribución */
+.pagina-retos .contenido-retos {
     width: 100%;
-    max-width: 1050px;
+    max-width: 1450px;
     margin: 0 auto;
-    padding: 32px 24px 48px;
+    padding: 28px 32px 40px;
+}
+
+.pagina-retos h1,
+.pagina-retos h2,
+.pagina-retos h3 {
+    color: #234b59;
+    overflow-wrap: anywhere;
+}
+
+.pagina-retos h1 {
+    margin: 0 0 12px;
+    font-size: 32px;
+    line-height: 1.2;
 }
 
 /* Portada marina */
-.portada-retos {
+.pagina-retos .portada-retos {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: 38px 40px 105px;
+    margin-bottom: 26px;
+    padding: 30px 28px 82px;
     border: 1px solid #bcdfea;
-    border-radius: 28px;
+    border-radius: 26px;
     background:
         radial-gradient(
-            circle at 88% 20%,
-            #ffffffb3 0 9px,
-            transparent 10px
+            circle at 90% 18%,
+            #ffffffb3 0 8px,
+            transparent 9px
         ),
         radial-gradient(
-            circle at 12% 35%,
-            #ffffff99 0 6px,
-            transparent 7px
-        ),
-        radial-gradient(
-            circle at 78% 40%,
-            #ffffff80 0 5px,
+            circle at 78% 35%,
+            #ffffff99 0 5px,
             transparent 6px
         ),
-        linear-gradient(
-            135deg,
-            #edfaff 0%,
-            #ccecf7 60%,
-            #b9e5f2 100%
-        );
-    box-shadow: 0 12px 30px #48798912;
+        linear-gradient(135deg, #edfaff, #b9e5f2);
+    box-shadow: 0 10px 25px #48798912;
 }
 
-/* Olas y arena */
-.portada-retos::before,
-.portada-retos::after {
+.pagina-retos .portada-retos::before,
+.pagina-retos .portada-retos::after {
     content: "";
     position: absolute;
     left: -10%;
     width: 120%;
-    height: 115px;
+    height: 100px;
     pointer-events: none;
 }
 
-.portada-retos::before {
-    bottom: -35px;
+.pagina-retos .portada-retos::before {
+    bottom: -42px;
+    z-index: 0;
     border-radius: 50% 45% 0 0;
     background: #91d2e47a;
     transform: rotate(-3deg);
-    z-index: 0;
 }
 
-.portada-retos::after {
+.pagina-retos .portada-retos::after {
     bottom: -60px;
-    border-radius: 45% 60% 0 0;
-    background: #f2e4c9;
-    transform: rotate(3deg);
     z-index: 1;
+    border-radius: 45% 60% 0 0;
+    background: var(--arena);
+    transform: rotate(3deg);
 }
 
-.portada-contenido {
+.pagina-retos .portada-contenido {
     position: relative;
     z-index: 2;
     max-width: 650px;
-    margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
 
-.etiqueta {
+.pagina-retos .etiqueta {
     margin: 0 0 10px;
     color: #326476;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 1.6px;
 }
 
-h1 {
-    margin: 0 0 12px;
-    color: #234b59;
-    font-size: 38px;
-    line-height: 1.2;
-}
-
-.descripcion-portada {
-    margin: 0 auto;
-    max-width: 560px;
+.pagina-retos .descripcion-portada {
+    margin: 0;
     color: #426773;
+    font-size: 14px;
 }
 
-.decoracion-mar {
+.pagina-retos .decoracion-mar {
     position: absolute;
-    right: 45px;
-    bottom: 12px;
-    left: 45px;
+    right: 32px;
+    bottom: 10px;
+    left: 32px;
     z-index: 2;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    font-size: 23px;
     pointer-events: none;
 }
 
-.decoracion-mar span {
-    font-size: 28px;
-}
-
-.decoracion-mar span:first-child {
+.pagina-retos .decoracion-mar span:first-child {
     transform: rotate(-15deg);
 }
 
-.decoracion-mar span:last-child {
+.pagina-retos .decoracion-mar span:last-child {
     transform: rotate(20deg);
 }
 
-/* Lista de retos */
-.titulo-lista {
-    margin: 30px 0 4px;
-    color: #234b59;
-    font-size: 24px;
-}
-
-.introduccion-lista {
-    margin: 0 0 20px;
-    color: var(--gris);
-}
-
-.lista-retos {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-}
-
-.area-retos {
-    padding: 28px;
+/* Mensajes del servidor */
+.pagina-retos .aviso-retos {
+    margin: 0 0 22px;
+    padding: 16px 20px;
     border: 1px solid var(--borde);
-    border-radius: 24px;
+    border-radius: 14px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.pagina-retos .error-retos {
+    border-color: #efc9c4;
+    background: #fff0ee;
+    color: #8b2920;
+}
+
+.pagina-retos .mensaje-retos {
+    border-color: #c9e2d1;
+    background: #e5f3e8;
+    color: var(--verde-oscuro);
+}
+
+/* Encabezado de la lista */
+.pagina-retos .cabecera-lista {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.pagina-retos .titulo-lista {
+    margin: 0 0 5px;
+    font-size: 23px;
+    line-height: 1.3;
+}
+
+.pagina-retos .introduccion-lista {
+    margin: 0;
+    color: var(--gris);
+    font-size: 14px;
+}
+
+.pagina-retos .contador-retos {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border: 1px solid #cce5ec;
+    border-radius: 20px;
+    background: #e8f5f9;
+    color: #245263;
+    font-size: 12px;
+}
+
+/* Tarjetas */
+.pagina-retos .lista-retos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.pagina-retos .area-retos {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--borde);
+    border-radius: 22px;
     background: white;
     box-shadow: 0 6px 18px #37697908;
 }
 
-.area-retos h2 {
-    margin: 0 0 12px;
-    color: #234b59;
-    font-size: 22px;
+.pagina-retos .tarjeta-retos-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.descripcion-reto {
+.pagina-retos .icono-reto {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #fff3cd;
+    font-size: 25px;
+}
+
+.pagina-retos .area-retos h3 {
+    margin: 0 0 10px;
+    font-size: 21px;
+    line-height: 1.3;
+}
+
+.pagina-retos .descripcion-reto {
     margin: 0 0 20px;
     color: var(--gris);
+    font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 /* Dificultad */
-.fila-dificultad {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 20px;
-}
-
-.dificultad {
+.pagina-retos .dificultad {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 5px 10px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
 }
 
-.facil {
+.pagina-retos .facil {
     background: #e5f3e8;
     color: #245c40;
 }
 
-.media {
+.pagina-retos .media {
     background: #fff3cd;
     color: #7a5b00;
 }
 
-.dificil {
+.pagina-retos .dificil {
     background: #f8e1e4;
     color: #842029;
 }
 
 /* Fechas */
-.fechas-reto {
+.pagina-retos .fechas-reto {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    padding: 18px 20px;
+    gap: 16px;
+    padding: 16px;
     border: 1px solid #dcebf0;
-    border-radius: 16px;
+    border-radius: 14px;
     background: #f3fafc;
 }
 
-.fechas-reto p {
+.pagina-retos .fechas-reto p {
     margin: 0;
+    min-width: 0;
 }
 
-.fechas-reto strong {
+.pagina-retos .fechas-reto strong {
     display: block;
     margin-bottom: 4px;
     color: #326476;
+    font-size: 12px;
+}
+
+.pagina-retos .fechas-reto span {
+    color: var(--texto);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* Recompensa */
+.pagina-retos .recompensa {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    margin: 18px 0 22px;
+    padding: 9px 12px;
+    border: 1px solid #ebdfb9;
+    border-radius: 12px;
+    background: #fff8e5;
+    color: #685421;
     font-size: 13px;
 }
 
-.fechas-reto span {
-    color: var(--texto);
+.pagina-retos .recompensa > span[aria-hidden="true"] {
+    font-size: 20px;
 }
 
-/* Puntos */
-.recompensa {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 20px 0 0;
-    padding: 10px 16px;
-    border: 1px solid #ebdfb9;
-    border-radius: 14px;
-    background: #fff8e5;
-    color: #685421;
+/* Acciones */
+.pagina-retos .acciones-reto {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--borde);
 }
 
-/* Lista vacía */
-.lista-vacia {
-    margin: 0 0 20px;
-    padding: 28px;
-    border: 1px dashed #bedee8;
-    border-radius: 20px;
-    background: white;
-    color: var(--gris);
-    text-align: center;
-}
-.acciones-reto {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #d3e5e5;
-}
-
-.acciones-reto form {
+.pagina-retos .acciones-reto form {
     margin: 0;
 }
 
-.boton-evidencia {
-    display: inline-block;
-    padding: 11px 18px;
+.pagina-retos .estado-reto {
+    margin: 0 0 14px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.pagina-retos .boton-evidencia {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 11px 16px;
     border: 1px solid transparent;
     border-radius: 12px;
-    background: #245c40;
+    background: var(--verde);
     color: white;
     font: inherit;
+    font-size: 14px;
     font-weight: bold;
+    line-height: 1.5;
+    text-align: center;
     text-decoration: none;
     cursor: pointer;
 }
 
-.boton-evidencia:hover {
-    background: #193e2d;
+.pagina-retos .boton-evidencia:hover {
+    background: var(--verde-oscuro);
 }
 
-.boton-evidencia:focus-visible {
-    outline: 3px solid #ad7117;
-    outline-offset: 4px;
-}
-
-.estado-progreso {
-    margin: 0 0 14px;
-    color: #245263;
-}
-
-.estado-completado {
-    margin: 0;
-    color: #245c40;
-    font-weight: bold;
-}
-.eco-nadando {
-    display: block;
-    width: 140px;
-    height: auto;
-    margin: 0 auto 12px;
-    object-fit: contain;
-}
-
-.ayuda-eco .boton {
-    width: 100%;
-    text-align: center;
-}
-/* Eco flotante */
-.eco-flotante {
-    position: fixed;
-    right: 24px;
-    bottom: 20px;
-    z-index: 20;
+/* Progreso */
+.pagina-retos .estado-progreso {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    color: var(--verde);
-    text-decoration: none;
-    border-radius: 18px;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 10px;
+    color: #245263;
+    font-size: 13px;
 }
 
-.eco-flotante img {
+.pagina-retos .barra-progreso-reto {
     display: block;
-    width: 110px;
-    height: auto;
-    filter: drop-shadow(0 5px 6px #23434c26);
-    transition: transform 0.2s ease;
+    appearance: none;
+    width: 100%;
+    height: 9px;
+    margin: 0 0 18px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 20px;
+    background: #dfedf0;
+    accent-color: #459579;
 }
 
-.eco-globo {
-    padding: 7px 12px;
-    border: 1px solid #c4dfe7;
-    border-radius: 16px;
-    background: white;
-    font-size: 12px;
+.pagina-retos .barra-progreso-reto::-webkit-progress-bar {
+    border-radius: 20px;
+    background: #dfedf0;
+}
+
+.pagina-retos .barra-progreso-reto::-webkit-progress-value {
+    border-radius: 20px;
+    background: #459579;
+}
+
+.pagina-retos .barra-progreso-reto::-moz-progress-bar {
+    border-radius: 20px;
+    background: #459579;
+}
+
+/* Completado */
+.pagina-retos .reto-completado {
+    padding: 16px;
+    border: 1px solid #c9e2d1;
+    border-radius: 14px;
+    background: #edf7ef;
+}
+
+.pagina-retos .estado-completado {
+    margin: 0;
+    color: var(--verde);
+    font-size: 14px;
     font-weight: bold;
-    box-shadow: 0 4px 12px #23434c12;
 }
 
-.eco-flotante:hover img {
-    transform: translateY(-5px);
+.pagina-retos .reto-completado p:last-child {
+    margin: 6px 0 0;
+    color: var(--gris);
+    font-size: 12px;
 }
 
-/* Espacio para que Eco no tape el contenido al final */
-.pagina {
-    padding-bottom: 160px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .eco-flotante img {
-        transition: none;
-    }
-
-    .eco-flotante:hover img {
-        transform: none;
-    }
+/* Sin retos */
+.pagina-retos .lista-vacia {
+    margin: 0;
+    padding: 28px;
+    border: 1px dashed #bedee8;
+    border-radius: 22px;
+    background: white;
+    color: var(--gris);
+    text-align: center;
 }
