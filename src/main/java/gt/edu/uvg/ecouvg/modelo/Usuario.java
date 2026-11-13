@@ -2,6 +2,7 @@ package gt.edu.uvg.ecouvg.modelo;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 import jakarta.persistence.Column;
@@ -11,13 +12,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint; 
+import jakarta.persistence.UniqueConstraint;
 
-@Entity 
-@Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(name = "uk_usuario_carnet", columnNames = "carnet")})
+@Entity
+@Table(
+    name = "usuarios",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_usuario_carnet",
+            columnNames = "carnet"
+        )
+    }
+)
 public class Usuario implements Comparable<Usuario> {
 
-    private static final int[] UMBRALES_NIVEL = {0, 100, 250, 500, 1000, 10000};
+    private static final int[] UMBRALES_NIVEL = {
+        0, 100, 250, 500, 1000, 10000
+    };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,25 +48,23 @@ public class Usuario implements Comparable<Usuario> {
     private int puntos;
     private int puntosTotales;
     private int semanasRacha;
+
     @Column(name = "last_actividad_valida")
-    private LocalDate lastActividadValida; 
+    private LocalDate lastActividadValida;
+
     private int nivel = 1;
     private int horasBeca;
     private String fotoPerfil;
 
-    public String getFotoPerfil() {
-        return fotoPerfil;
-    }
-
-    public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
-    }
-
-
     public Usuario() {
     }
 
-    public Usuario(String nombre, String carnet, String correo, String contrasena) {
+    public Usuario(
+            String nombre,
+            String carnet,
+            String correo,
+            String contrasena) {
+
         this.nombre = nombre;
         this.carnet = carnet;
         this.correo = correo;
@@ -83,6 +92,26 @@ public class Usuario implements Comparable<Usuario> {
         return contrasena;
     }
 
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
+
     public int getPuntos() {
         return puntos;
     }
@@ -95,6 +124,10 @@ public class Usuario implements Comparable<Usuario> {
         return semanasRacha;
     }
 
+    public int getHorasBeca() {
+        return horasBeca;
+    }
+
     public int getNivel() {
         return Math.clamp(nivel, 1, UMBRALES_NIVEL.length);
     }
@@ -104,102 +137,161 @@ public class Usuario implements Comparable<Usuario> {
     }
 
     public int getMetaNivel() {
-        return UMBRALES_NIVEL[isNivelMaximo() ? getNivel() - 1 : getNivel()];
+        return UMBRALES_NIVEL[
+            isNivelMaximo() ? getNivel() - 1 : getNivel()
+        ];
     }
 
     public int getPorcentajeNivel() {
         if (isNivelMaximo()) {
             return 100;
         }
+
         int inicio = UMBRALES_NIVEL[getNivel() - 1];
-        return (int) Math.clamp((puntosTotales - (long) inicio) * 100 / (getMetaNivel() - inicio), 0, 100);
+
+        return (int) Math.clamp(
+            (puntosTotales - (long) inicio) * 100
+                / (getMetaNivel() - inicio),
+            0,
+            100
+        );
     }
 
-    public int getHorasBeca() {
-        return horasBeca;
+    @Transient
+    public String getNombreNivel() {
+        CalculadorNivel calculador = new CalculadorNivel();
+        return calculador.nombreNivel(getNivel());
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public void sumarPuntos (int cantidad){
-        if (cantidad<= 0) {
-            throw new IllegalArgumentException("La cantidad tiene que ser positiva"); 
+    public void sumarPuntos(int cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException(
+                "La cantidad tiene que ser positiva"
+            );
         }
+
         this.puntos += cantidad;
-        this.puntosTotales += cantidad; 
-        CalculadorNivel calculador = new CalculadorNivel(); 
-        this.nivel = calculador.calculadorNivel(this.puntosTotales); 
-    }
-    @Transient 
-    public String getNombreNivel(){
-        CalculadorNivel calculador = new CalculadorNivel(); 
-        return calculador.nombreNivel(getNivel()); 
+        this.puntosTotales += cantidad;
+
+        CalculadorNivel calculador = new CalculadorNivel();
+
+        this.nivel = calculador.calculadorNivel(
+            this.puntosTotales
+        );
     }
 
-    public void registroActividadValida(LocalDate fechaActividad){
-        if (fechaActividad == null){
-            throw new IllegalArgumentException("La actividad debe contar con fecha -_-"); 
-
+    // Registra actividad sin sumar más de una semana
+    // por cada semana calendario.
+    public void registroActividadValida(LocalDate fechaActividad) {
+        if (fechaActividad == null) {
+            throw new IllegalArgumentException(
+                "La actividad debe contar con fecha"
+            );
         }
-        LocalDate semanaActual = fechaActividad.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY) );
 
-        if (lastActividadValida == null){
-            semanasRacha = 1; 
-        }else {
-            LocalDate semanaAnterior = lastActividadValida.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            if (semanaActual.equals(semanaAnterior)){
-                    return; 
-                } else if (semanaActual.equals(semanaAnterior.plusWeeks(1))) {
-                    semanasRacha++;
+        if (lastActividadValida != null
+                && fechaActividad.isBefore(lastActividadValida)) {
+            return;
+        }
 
-                } else if (semanaActual.isAfter(semanaAnterior)) {
-                    semanasRacha = 1;
+        LocalDate semanaActual = fechaActividad.with(
+            TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+        );
 
-                } else {
-                    return;
-                }
+        if (lastActividadValida == null) {
+            semanasRacha = 1;
+        } else {
+            LocalDate ultimaSemana = lastActividadValida.with(
+                TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+            );
+
+            if (semanaActual.equals(ultimaSemana.plusWeeks(1))) {
+                semanasRacha++;
+            } else if (semanaActual.isAfter(ultimaSemana)) {
+                semanasRacha = 1;
             }
-            
-    
-        lastActividadValida = fechaActividad; 
+
+            // Si sigue en la misma semana, conserva el contador.
+        }
+
+        // Actualiza la fecha incluso dentro de la misma semana.
+        lastActividadValida = fechaActividad;
     }
 
-
-    public int obtenerRacha(LocalDate hoy){
-        if(hoy == null){
-            throw new IllegalArgumentException("La fecha actual es obligatoria ://// ");
-
+    public int obtenerRacha(LocalDate hoy) {
+        if (hoy == null) {
+            throw new IllegalArgumentException(
+                "La fecha actual es obligatoria"
+            );
         }
-        if (lastActividadValida ==null){
 
-            return 0; 
+        if (lastActividadValida == null) {
+            return 0;
         }
-        LocalDate semanaActual = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate ultimaSemana = lastActividadValida.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
-        if (ultimaSemana.equals(semanaActual)|| ultimaSemana.equals(semanaActual.minusWeeks(1))) {
-        return semanasRacha;
+        LocalDate semanaActual = hoy.with(
+            TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+        );
+
+        LocalDate ultimaSemana = lastActividadValida.with(
+            TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+        );
+
+        if (ultimaSemana.equals(semanaActual)
+                || ultimaSemana.equals(semanaActual.minusWeeks(1))) {
+            return semanasRacha;
         }
-        return 0; 
+
+        return 0;
+    }
+
+    // Selecciona la imagen sin modificar la racha.
+    public String obtenerImagenEco(LocalDate hoy) {
+        if (hoy == null) {
+            throw new IllegalArgumentException(
+                "La fecha actual es obligatoria"
+            );
+        }
+
+        // Usuario que todavía no comienza una racha.
+        if (lastActividadValida == null) {
+            return "Eco sentada feliz.png";
+        }
+
+        // Si perdió la racha, Eco permanece muerto
+        // hasta que registre otra actividad válida.
+        if (obtenerRacha(hoy) == 0) {
+            return "Eco muerto.png";
+        }
+
+        long diasTranscurridos = Math.max(
+            0,
+            ChronoUnit.DAYS.between(lastActividadValida, hoy)
+        );
+
+        // Día 1: hoy.
+        if (diasTranscurridos == 0) {
+            return "Eco sentada feliz.png";
+        }
+
+        // Día 2: racha 2, día 3: racha 3...
+        // Conserva racha 6 mientras la racha semanal siga vigente.
+        long diaImagen = Math.min(diasTranscurridos + 1, 6);
+
+        return "Eco racha " + diaImagen + ".png";
     }
 
     @Override
     public int compareTo(Usuario otro) {
-        return Integer.compare(otro.puntosTotales, this.puntosTotales);
+        return Integer.compare(
+            otro.puntosTotales,
+            this.puntosTotales
+        );
     }
 
     public void calcularNivel() {
         nivel = 1;
+
         for (int i = 1; i < UMBRALES_NIVEL.length; i++) {
             if (puntosTotales >= UMBRALES_NIVEL[i]) {
                 nivel = i + 1;
@@ -207,19 +299,19 @@ public class Usuario implements Comparable<Usuario> {
         }
     }
 
-
-    //para el canje de puntos
     public void gastarEcoPuntos(int cantidad) {
-
         if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser positiva");
+            throw new IllegalArgumentException(
+                "La cantidad debe ser positiva"
+            );
         }
 
         if (cantidad > puntos) {
-            throw new IllegalStateException("EcoPuntos insuficientes");
+            throw new IllegalArgumentException(
+                "EcoPuntos insuficientes"
+            );
         }
 
-        this.puntos -= cantidad;
+        puntos -= cantidad;
     }
-
 }

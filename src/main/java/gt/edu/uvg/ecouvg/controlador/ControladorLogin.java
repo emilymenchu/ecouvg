@@ -81,7 +81,8 @@ public class ControladorLogin {
 
         LocalDate hoy = LocalDate.now(ZoneId.of("America/Guatemala"));
         int rachaVigente = usuario.obtenerRacha(hoy);
-
+        
+        model.addAttribute("imagenEco", usuario.obtenerImagenEco(hoy));
         model.addAttribute("usuario", usuario);
         model.addAttribute("rachaVigente", rachaVigente);
 
