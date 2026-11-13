@@ -1,6 +1,6 @@
 /** La confirmación visible procede del servidor; el contador de juego es local. */
 export class MisionRacha {
-    constructor({url,csrf,header,notificar,solicitar=fetch}) {
+    constructor({url,csrf,header,notificar,solicitar=(url,opciones)=>globalThis.fetch(url,opciones)}) {
         this.url=url;this.csrf=csrf;this.header=header;this.notificar=notificar;this.solicitar=solicitar;
         this.vistas=new WeakSet();this.estado=null;this.pendiente=null;this.enviando=false;this.error=false;
     }

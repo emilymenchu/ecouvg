@@ -1,4 +1,4 @@
-import {MisionRacha} from './mision.mjs';
+import {MisionRacha} from './mision.mjs?v=2';
 import {EcoRun,EcoSnake,EcoBreakout} from './modelo.mjs';
 import {Dibujante,PALETA} from './vista.mjs';
 const CONFIG={

@@ -38,6 +38,7 @@ class ControladorArcadeTest {
             .andExpect(content().string(containsString("aria-current=\"page\"")))
             .andExpect(content().string(containsString("/css/inicio.css")))
             .andExpect(content().string(containsString("/css/arcade.css?v=2")))
+            .andExpect(content().string(containsString("/js/arcade/app.mjs?v=2")))
             .andExpect(content().string(containsString("data-mision-url=\"/api/arcade/mision\"")))
             .andExpect(content().string(containsString("id=\"aciertos-mision\"")))
             .andExpect(content().string(containsString("id=\"estado-mision\"")))
